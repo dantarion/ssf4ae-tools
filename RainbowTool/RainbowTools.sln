@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnoEdit", "OnoEdit\OnoEdit.csproj", "{1267CCCB-65B1-4D07-9810-D3EB330D7579}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainbowLib", "RainbowLib\RainbowLib.csproj", "{038A20F7-3BD6-450E-AFAE-02489217CEBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1267CCCB-65B1-4D07-9810-D3EB330D7579}.Debug|x86.ActiveCfg = Debug|x86
+		{1267CCCB-65B1-4D07-9810-D3EB330D7579}.Debug|x86.Build.0 = Debug|x86
+		{1267CCCB-65B1-4D07-9810-D3EB330D7579}.Release|x86.ActiveCfg = Release|x86
+		{1267CCCB-65B1-4D07-9810-D3EB330D7579}.Release|x86.Build.0 = Release|x86
+		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Debug|x86.ActiveCfg = Debug|x86
+		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Debug|x86.Build.0 = Debug|x86
+		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Release|x86.ActiveCfg = Release|x86
+		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

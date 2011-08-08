@@ -1,0 +1,23 @@
+﻿<Window x:Class="OnoEdit.HitboxDataWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HitboxDataWindow" Height="300" Width="700">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Left">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Click="AddHB">Add New</Button>
+                <Button Click="RemoveHB">Remove</Button>
+                <Button IsEnabled="False">Import...</Button>
+                <Button IsEnabled="False">Export...</Button>
+            </StackPanel>
+            <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" Width="240" />
+        </DockPanel>
+        <GroupBox Header="Move Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}">
+            <DockPanel>
+                <Label DockPanel.Dock="Top" Height="30" Content="{Binding Path=UsageString}"/>
+                <CheckBox DockPanel.Dock="Top" Name="RawDisplayCheckbox">Raw Display?</CheckBox>
+                <DataGrid Name="myDataGrid" ItemsSource="{Binding Path=Data}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+            </DockPanel>
+            </GroupBox>
+    </DockPanel>
+</Window>

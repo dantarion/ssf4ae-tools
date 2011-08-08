@@ -1,0 +1,50 @@
+﻿<Window x:Class="OnoEdit.MainWindow"   
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ono! - Dantarion" Height="380" Width="210" Loaded="Window_Loaded" Closing="Window_Closing" xmlns:my="clr-namespace:OnoEdit">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Column="0" Grid.Row="0">
+
+            <MenuItem Header="_File">
+                <MenuItem Header="Open..." Command="Open"/>
+                <Separator />
+                <MenuItem Header="Save" Command="Save"/>
+                <MenuItem Header="Save As.." Command="SaveAs"/>
+            </MenuItem>
+            <MenuItem Header="_Etc">
+                <MenuItem Header="Remove All AIData"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.Row="1" IsEnabled="{Binding Source={StaticResource OpenedFiles}, Path=FilesOpened}">
+            <StackPanel.Resources>
+                <Style TargetType="GroupBox">
+                    <Setter Property="FontSize" Value="18"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+            </StackPanel.Resources>
+            <Label Name="BuildTime"/>
+            <GroupBox Header="BCM">
+                <StackPanel>
+                    <Button Content="Charges" Click="ClickCharges"/>
+                    <Button Content="Input Motions" Click="ClickInputs" />
+                    <Button Content="Moves" Click="ClickMoves"/>
+                    <Button Content="Cancels" Click="ClickCancels"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="BAC">
+                <StackPanel>
+                    <Button Content="Scripts" Click="ClickScripts"/>
+                    <Button Content="VFX Scripts" Click="ClickVFXScripts"/>
+                    <Button Content="Hitbox Table" Click="ClickHitboxTable"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>

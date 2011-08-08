@@ -1,0 +1,54 @@
+﻿<Window x:Class="OnoEdit.MoveWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MoveWindow" Height="500" Width="500">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Left">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Click="AddMove">Add New</Button>
+                <Button Click="RemoveMove">Remove</Button>
+                <Button IsEnabled="False">Import...</Button>
+                <Button IsEnabled="False">Export...</Button>
+            </StackPanel>
+            <ListBox Name="ListBox" ItemsSource="{Binding Path=BCMFile.Moves, Source={StaticResource OpenedFiles}}" DisplayMemberPath="Name" SelectedIndex="0"/>
+        </DockPanel>
+        <GroupBox Header="Move Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}">
+            <TabControl>
+                <TabItem Header="Main">
+                    <ScrollViewer>
+                    <StackPanel>
+                        <Label>Input</Label>
+                        <TextBox Text="{Binding Path=Input}"/>
+                        <Label>Input Motion</Label>
+                        <ComboBox ItemsSource="{Binding Path=BCMFile.InputMotions, Source={StaticResource OpenedFiles}}" SelectedValue="{Binding Path=InputMotion}" IsEditable="True" />
+                        <Label>Move Flags</Label>
+                        <TextBox Text="{Binding Path=MoveFlags}"/>
+                        <Label>Restriction</Label>
+                        <TextBox Text="{Binding Path=Restriction}"/>
+                        <Label>State Restriction</Label>
+                        <TextBox Text="{Binding Path=StateRestriction}"/>
+                        <Label>Ultra Restriction</Label>
+                        <TextBox Text="{Binding Path=UltraRestriction}"/>
+                        <Label>Position Restriction</Label>
+                        <TextBox Text="{Binding Path=PositionRestriction}"/>
+                        <Label>Position Restriction Distance</Label>
+                        <TextBox Text="{Binding Path=PositionRestrictionDistance}"/>
+                    </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Meter Req/Usage/Gain">
+                    <StackPanel>
+                        <Label>EX Requirement</Label>
+                        <TextBox Text="{Binding Path=EXRequirement}"/>
+                        <Label>EX Cost</Label>
+                        <TextBox Text="{Binding Path=EXCost}"/>
+                        <Label>Ultra Requirement</Label>
+                        <TextBox Text="{Binding Path=UltraRequirement}"/>
+                        <Label>Ultra Cost</Label>
+                        <TextBox Text="{Binding Path=UltraCost}"/>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </GroupBox>
+    </DockPanel>
+</Window>
