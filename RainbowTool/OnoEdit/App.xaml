@@ -6,6 +6,11 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:RainbowLib;assembly=RainbowLib">
     <Application.Resources>
+        <!--start anotak-->
+        <Style TargetType = "TextBox"  x:Key="RawStringBox">
+            <Setter Property="AcceptsReturn" Value="true"/>
+        </Style>
+        <!--end anotak-->
         <my:OpenedFiles x:Key="OpenedFiles" />
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="InputTypeValues">
             <ObjectDataProvider.MethodParameters>

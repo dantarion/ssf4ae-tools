@@ -125,6 +125,20 @@ namespace OnoEdit
                 e.Column.Header = "E";
                 e.Column.DisplayIndex = 1;
             }
+            // start anotak
+            if (e.PropertyName == "RawString")
+            {
+                // this hurt my braaaaaaiinnnsss
+                var col = new DataGridTextColumn();
+                var b = new Binding(e.PropertyName);
+                col.Binding = b;
+                col.EditingElementStyle = (Style)Application.Current.Resources["RawStringBox"];
+                if (col.EditingElementStyle == null)
+                    throw new Exception("rawstring style problem");
+                col.Header = "RawString";
+                e.Column = col;
+            }
+            // end anotak
         }
 
         private void AddCommand(object sender, RoutedEventArgs e)

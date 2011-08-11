@@ -31,6 +31,7 @@ namespace OnoEdit
                         //CommandManager.AddExecutedHandler(ApplicationCommands.Open, ClickOpen);
             BuildTime.Content = "Build Date: "+buildDateTime.ToShortDateString();
 
+            AELogger.Log("Build Date: " + buildDateTime.ToShortDateString(), false);
         }
 
         private void FilesOpened(object sender, CanExecuteRoutedEventArgs e)
