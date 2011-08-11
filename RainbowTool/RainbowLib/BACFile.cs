@@ -98,7 +98,7 @@ namespace RainbowLib
                     data.Damage = inFile.ReadInt16();
                     data.Stun = inFile.ReadInt16();
                     data.Effect = (HitBoxData.HitBoxEffect)inFile.ReadUInt16();
-                    var index = inFile.ReadInt16();
+                    var index = inFile.ReadInt16()+HitBoxData.getIndexOffset(data.Effect);
                     if (index > -1)
                         data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
                     else data.OnHit = new Script(index);
@@ -415,7 +415,7 @@ namespace RainbowLib
                     outFile.Write(data.Stun);
                     outFile.Write((ushort)data.Effect);
                     if (data.OnHit != null)
-                        outFile.Write((short)data.OnHit.Index);
+                        outFile.Write((short)data.OnHit.Index-HitBoxData.getIndexOffset(data.Effect));
                     else
                         outFile.Write((short)-1);
                     //0x8

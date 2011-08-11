@@ -39,13 +39,13 @@
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0">Name</Label>
                     <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=Name}"/>
-                    <Label Grid.Column="0" Grid.Row="1">First Hitbox Frame</Label>
+                    <Label Grid.Column="0" Grid.Row="1">First Hitbox Frame?</Label>
                     <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=FirstHitboxFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="2">Last Hitbox Frame</Label>
+                    <Label Grid.Column="0" Grid.Row="2">Last Hitbox Frame?</Label>
                     <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=LastHitboxFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="3">Last Cancelable Frame</Label>
+                    <Label Grid.Column="0" Grid.Row="3">Interrupt at Frame:</Label>
                     <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=LastCancelableFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="4">Total Frames</Label>
+                    <Label Grid.Column="0" Grid.Row="4">Total Duration</Label>
                     <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=TotalFrames}"/>
                 </Grid>
             </Expander>

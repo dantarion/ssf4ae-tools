@@ -123,5 +123,10 @@ namespace OnoEdit
                 BACFile.ToFilename(sb.FileName.Replace(".bcm", ".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
             }
         }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("#sf4-modding@irc.synirc.net\n code.google.com/p/ssf4ae-tools/");
+        }
     }
 }

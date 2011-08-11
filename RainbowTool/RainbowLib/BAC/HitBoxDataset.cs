@@ -41,11 +41,25 @@ namespace RainbowLib.BAC
         [Flags]
         public enum HitBoxEffect : ushort
         {
-            NORMAL = 0,
-            RUN_SCRIPT = 1,
-            NO_REACTION = 2,
-            JUGGLE = 4,
-
+            HIT = 0,
+            SCRIPT = 1,
+            BLOCK = 2,
+            HIT2 = 3,
+            KNOCKDOWN = 4,
+            KNOCKDOWN2 = 5,
+            KNOCKDOWN3 = 6
+        }
+        public static int getIndexOffset(HitBoxEffect effect)
+        {
+            if (effect == HitBoxEffect.HIT)
+                return 0x83;
+            if (effect == HitBoxEffect.BLOCK)
+                return 0x44;
+            if (effect == HitBoxEffect.KNOCKDOWN)
+                return 0xC0;
+            if (effect == HitBoxEffect.KNOCKDOWN3)
+                return 0x1A;
+            return 0;
         }
         private HitBoxEffect _Effect;
         public HitBoxEffect Effect

@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnoEdit", "OnoEdit\OnoEdit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainbowLib", "RainbowLib\RainbowLib.csproj", "{038A20F7-3BD6-450E-AFAE-02489217CEBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainbowScript", "RainbowScript\RainbowScript.csproj", "{9FE57AFE-BB3A-4B4A-81F5-97C7D06BC0F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,6 +21,10 @@ Global
 		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Debug|x86.Build.0 = Debug|x86
 		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Release|x86.ActiveCfg = Release|x86
 		{038A20F7-3BD6-450E-AFAE-02489217CEBC}.Release|x86.Build.0 = Release|x86
+		{9FE57AFE-BB3A-4B4A-81F5-97C7D06BC0F6}.Debug|x86.ActiveCfg = Debug|x86
+		{9FE57AFE-BB3A-4B4A-81F5-97C7D06BC0F6}.Debug|x86.Build.0 = Debug|x86
+		{9FE57AFE-BB3A-4B4A-81F5-97C7D06BC0F6}.Release|x86.ActiveCfg = Release|x86
+		{9FE57AFE-BB3A-4B4A-81F5-97C7D06BC0F6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
