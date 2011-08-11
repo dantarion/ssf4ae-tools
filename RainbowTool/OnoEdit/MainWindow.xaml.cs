@@ -5,6 +5,7 @@ using RainbowLib;
 using System.Windows.Input;
 using System.Reflection;
 using System;
+using System.Threading;
 namespace OnoEdit
 {
 
@@ -15,6 +16,9 @@ namespace OnoEdit
     {
         public MainWindow()
         {
+            // start anotak
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
+            // end anotak
             InitializeComponent();
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, ClickOpen));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, ClickSave, FilesOpened));
@@ -50,10 +54,18 @@ namespace OnoEdit
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var result = MessageBox.Show("Are you sure you want to quit Ono!?", "Quitting?", MessageBoxButton.YesNo);
+
+            // start anotak edit
             if (result == MessageBoxResult.Yes)
+            {
+                AELogger.WriteLog();
                 App.Current.Shutdown();
+            }
             else
+            {
                 e.Cancel = true;
+            }
+            // end anotak edit
         }
 
         private void ClickCancels(object sender, RoutedEventArgs e)
@@ -128,5 +140,31 @@ namespace OnoEdit
         {
             MessageBox.Show("#sf4-modding@irc.synirc.net\n code.google.com/p/ssf4ae-tools/");
         }
+
+        // start anotak
+        public void ApplicationThreadException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (((Exception)e.ExceptionObject) != null)
+            {
+                AELogger.Log("Exception: " + ((Exception)e.ExceptionObject).Message);
+
+                AELogger.Log("Exception: " + ((Exception)e.ExceptionObject).StackTrace);
+
+                if (((Exception)e.ExceptionObject).InnerException != null)
+                {
+                    AELogger.Log("InnerException: " + ((Exception)e.ExceptionObject).InnerException.ToString());
+                }
+                MessageBox.Show(((Exception)e.ExceptionObject).Message, "Exception!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                AELogger.Log("ERROR THROWING EXCEPTION EVERYTHING IS BROKEN");
+                MessageBox.Show("error properly displaying the error, something really bad happened.", "Exception!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            AELogger.WriteLog();
+            Application.Current.Shutdown();
+        }
+        // end anotak
     }
 }

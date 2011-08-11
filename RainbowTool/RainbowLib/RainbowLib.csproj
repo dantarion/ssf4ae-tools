@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AELogger.cs" />
     <Compile Include="BACFile.cs" />
     <Compile Include="BAC\AnimationCommand.cs" />
     <Compile Include="BAC\BaseCommand.cs" />
