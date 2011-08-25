@@ -106,16 +106,17 @@ namespace RainbowLib
                     data.AttackerShaking = inFile.ReadUInt16();
                     data.VictimHitstop = inFile.ReadUInt16();
                     data.VictimShaking = inFile.ReadUInt16();
-                    data.HitGFX = inFile.ReadUInt32();
-                    data.Unknown1 = inFile.ReadInt16();
+                    data.HitGFX = inFile.ReadInt16();
+                    data.Unknown1 = inFile.ReadInt32();
                     data.Unknown2_1 = inFile.ReadInt16();
                     data.Unknown2_2 = inFile.ReadInt16();
-                    data.HitSFX = inFile.ReadUInt16();
-                    data.HitSFX2 = inFile.ReadUInt16();
-                    data.VictimSFX = inFile.ReadUInt16();
                     data.Unknown3 = inFile.ReadUInt16();
                     data.Unknown4 = inFile.ReadInt16();
                     data.Unknown5 = inFile.ReadInt16();
+                    data.HitSFX = inFile.ReadInt16();
+                    data.HitSFX2 = inFile.ReadInt16();
+                    data.VictimSFX = inFile.ReadInt16();
+
                     data.Unknown6 = inFile.ReadUInt16();
                     data.Unknown7 = inFile.ReadUInt16();
                     data.Unknown8 = inFile.ReadUInt16();
@@ -415,7 +416,7 @@ namespace RainbowLib
                     outFile.Write(data.Stun);
                     outFile.Write((ushort)data.Effect);
                     if (data.OnHit != null)
-                        outFile.Write((short)data.OnHit.Index-HitBoxData.getIndexOffset(data.Effect));
+                        outFile.Write((short)(data.OnHit.Index-HitBoxData.getIndexOffset(data.Effect)));
                     else
                         outFile.Write((short)-1);
                     //0x8
@@ -429,12 +430,13 @@ namespace RainbowLib
                     outFile.Write(data.Unknown2_1);
                     outFile.Write(data.Unknown2_2);
                     //20
-                    outFile.Write(data.HitSFX);
-                    outFile.Write(data.HitSFX2);
-                    outFile.Write(data.VictimSFX);
                     outFile.Write(data.Unknown3);
                     outFile.Write(data.Unknown4);
                     outFile.Write(data.Unknown5);
+                    outFile.Write(data.HitSFX);
+                    outFile.Write(data.HitSFX2);
+                    outFile.Write(data.VictimSFX);
+
                     outFile.Write(data.Unknown6);
                     outFile.Write(data.Unknown7);
                     outFile.Write(data.Unknown8);

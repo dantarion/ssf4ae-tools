@@ -45,5 +45,30 @@
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <my:IndexReferenceTypeConverter x:Key="IRTC"/>
+        <my:AnimationTypeConverter x:Key="TTL"/>
+        <DataTemplate x:Key="AnimationViewTemplate">
+                <Label Margin="0" Padding="0">
+                    <Label.Content>
+                        <MultiBinding  Converter="{StaticResource IRTC}">
+                            <Binding Path="Type" Mode="OneWay"/>
+                            <Binding Path="Animation" />
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+        </DataTemplate>
+        <DataTemplate x:Key="AnimationEditTemplate">
+            <ComboBox>
+                <ComboBox.ItemsSource>
+                    <Binding Path="Type" Converter="{StaticResource TTL}" Mode="OneWay"/>
+                </ComboBox.ItemsSource>
+                <ComboBox.SelectedValue>
+                    <MultiBinding  Converter="{StaticResource IRTC}">
+                        <Binding Path="Type" Mode="OneWay"/>
+                        <Binding Path="Animation" />
+                    </MultiBinding>
+                </ComboBox.SelectedValue>
+            </ComboBox>
+        </DataTemplate>
     </Application.Resources>
 </Application>

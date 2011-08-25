@@ -93,6 +93,7 @@
     <Compile Include="IronPythonHelper.cs" />
     <Compile Include="Reference.cs" />
     <Compile Include="BAC\Script.cs" />
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="TrackingStream.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

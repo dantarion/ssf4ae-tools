@@ -31,7 +31,7 @@ namespace RainbowLib
         {
             get { return _CancelLists; }
         }
-        public void ToFilename(string filename)
+        public static void ToFilename(string filename, BCMFile bcm)
         {
             var inFile = new BinaryWriter(File.Create(filename));
             //Header
@@ -39,10 +39,10 @@ namespace RainbowLib
             inFile.Write(2686974);
             inFile.Write(65537);
             inFile.Write(0);
-            inFile.Write((ushort)Charges.Count());
-            inFile.Write((ushort)InputMotions.Count());
-            inFile.Write((ushort)Moves.Count());
-            inFile.Write((ushort)CancelLists.Count());
+            inFile.Write((ushort)bcm.Charges.Count());
+            inFile.Write((ushort)bcm.InputMotions.Count());
+            inFile.Write((ushort)bcm.Moves.Count());
+            inFile.Write((ushort)bcm.CancelLists.Count());
             //TODO WRITE OFFSETS
             int offsets = (int)inFile.BaseStream.Position;
             inFile.Write(0);
@@ -57,9 +57,9 @@ namespace RainbowLib
             inFile.Write(0);
             inFile.Write(0);
             int ChargeOffset = (int)inFile.BaseStream.Position;
-            if (Charges.Count == 0)
+            if (bcm.Charges.Count == 0)
                 ChargeOffset = 0;
-            foreach (Charge c in Charges)
+            foreach (Charge c in bcm.Charges)
             {
                 inFile.Write((uint)c.Input);
                 inFile.Write(c.Buffer);
@@ -70,12 +70,12 @@ namespace RainbowLib
                 inFile.Write(c.Unknown4);
             }
             int ChargeNamesOffset = (int)inFile.BaseStream.Position;
-            if (Charges.Count == 0)
+            if (bcm.Charges.Count == 0)
                 ChargeNamesOffset = 0;
-            foreach(Charge c in Charges)
+            foreach (Charge c in bcm.Charges)
                 inFile.Write(0);
             int InputOffset = (int)inFile.BaseStream.Position;
-            foreach (InputMotion i in InputMotions)
+            foreach (InputMotion i in bcm.InputMotions)
             {
                 inFile.Write(i.Entries.Count());
                 foreach (InputMotionEntry entry in i.Entries)
@@ -83,7 +83,7 @@ namespace RainbowLib
                     inFile.Write((ushort)entry.Type);
                     inFile.Write((ushort)entry.Buffer);
                     if (entry.Type == InputType.CHARGE)
-                        inFile.Write((ushort)Charges.IndexOf(entry.Charge));
+                        inFile.Write((ushort)bcm.Charges.IndexOf(entry.Charge));
                     else
                         inFile.Write((ushort)entry.Input);
                     inFile.Write((ushort)entry.Unknown1);
@@ -98,10 +98,10 @@ namespace RainbowLib
                 }
             }
             int InputNamesOffset = (int)inFile.BaseStream.Position;
-            foreach (InputMotion c in InputMotions)
+            foreach (InputMotion c in bcm.InputMotions)
                 inFile.Write(0);
             int MoveOffset = (int)inFile.BaseStream.Position;
-            foreach (Move m in Moves)
+            foreach (Move m in bcm.Moves)
             {
                 inFile.Write((ushort)m.Input);
                 inFile.Write((ushort)m.MoveFlags);
@@ -115,7 +115,7 @@ namespace RainbowLib
                  inFile.Write((short)m.UltraRequirement);
                  inFile.Write((short)m.UltraCost);
                  if (m.InputMotion != null)
-                     inFile.Write(InputMotions.IndexOf(m.InputMotion));
+                     inFile.Write(bcm.InputMotions.IndexOf(m.InputMotion));
                  else
                      inFile.Write(-1);
                  inFile.Write(m.ScriptIndex);
@@ -123,44 +123,44 @@ namespace RainbowLib
 
             }
             int MovesNameOffset = (int)inFile.BaseStream.Position;
-            foreach (Move m in Moves)
+            foreach (Move m in bcm.Moves)
                 inFile.Write(0);
             int CancelListOffset = (int)inFile.BaseStream.Position;
-            int off = CancelLists.Count*12;
-            foreach (CancelList cl in CancelLists)
+            int off = bcm.CancelLists.Count * 12;
+            foreach (CancelList cl in bcm.CancelLists)
             {
                 inFile.Write(cl.Moves.Count);
                 inFile.Write(off);
                 off = off - 8 + cl.Moves.Count * 2;
             }
             int CancelListNameOffset = (int)inFile.BaseStream.Position;
-            foreach (CancelList cl in CancelLists)
+            foreach (CancelList cl in bcm.CancelLists)
                 inFile.Write(0);
-            foreach (CancelList cl in CancelLists)
+            foreach (CancelList cl in bcm.CancelLists)
             {
                 foreach (Move m in cl.Moves)
                 {
-                    inFile.Write((short)Moves.IndexOf(m));
+                    inFile.Write((short)bcm.Moves.IndexOf(m));
                 }
             }
             //Names Time!
             List<string> strings = new List<string>();
-            foreach (Charge tmp in Charges)
+            foreach (Charge tmp in bcm.Charges)
                 strings.Add(tmp.Name);
             Util.writeStringTable(inFile, ChargeNamesOffset, strings);
 
             strings.Clear();
-            foreach (InputMotion tmp in InputMotions)
+            foreach (InputMotion tmp in bcm.InputMotions)
                 strings.Add(tmp.Name);
             Util.writeStringTable(inFile, InputNamesOffset, strings);
 
             strings.Clear();
-            foreach (Move tmp in Moves)
+            foreach (Move tmp in bcm.Moves)
                 strings.Add(tmp.Name);
             Util.writeStringTable(inFile, MovesNameOffset, strings);
 
             strings.Clear();
-            foreach (CancelList tmp in CancelLists)
+            foreach (CancelList tmp in bcm.CancelLists)
                 strings.Add(tmp.Name);
             Util.writeStringTable(inFile, CancelListNameOffset, strings);
 

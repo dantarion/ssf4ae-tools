@@ -33,6 +33,7 @@ namespace RainbowLib.BAC
             {
                 _Type = value;
                 OnPropertyChanged("Type");
+                OnPropertyChanged("Animation");
             }
         }
               

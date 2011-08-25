@@ -1,0 +1,332 @@
+VFX = {}
+VFX[0x026C] = "SAtk_Bas_S" #620
+VFX[0x0262] = "Rst_Impt" #610
+VFX[0x0263] = "Rst_tail" #611
+VFX[0x0208] = "Stk_Hits" #520
+VFX[0x0209] = "Stk_Finish" #521
+VFX[0x020A] = "Stk_1Hit" #522
+VFX[0x020B] = "Stk_Hits2" #523
+VFX[0x012C] = "Hrk_Bas" #300
+VFX[0x026D] = "SAtk_Bas_K" #621
+VFX[0x0190] = "Zne_hit" #400
+VFX[0x0191] = "Zne_tail" #401
+VFX[0x0212] = "Tig_Start" #530
+VFX[0x0213] = "Tig_Bas" #531
+VFX[0x01F4] = "Zte_FirstHit" #500
+VFX[0x01F5] = "Zte_Hit" #501
+VFX[0x01F6] = "Zte_FinshHit" #502
+VFX[0x0214] = "Tig_FinBas" #532
+VFX[0x019A] = "Jlh_hit" #410
+VFX[0x01FE] = "Rkh_Storm" #510
+VFX[0x0215] = "Tig_Fog" #533
+VFX2 = {}
+VFX2[0x0208] = "Stk_Hit" #520
+VFX2[0x0212] = "Tig_Hit" #530
+VFX2[0x0213] = "Tig_Grd" #531
+VFX2[0x0214] = "Tig_FinishHit" #532
+VFX2[0x0215] = "Tig_FirstHit" #533
+OBJ = []
+OBJ.append("GEN_BAS_STAND_S")# 00
+OBJ.append("GEN_BAS_CROUCH_S")# 01
+OBJ.append("GEN_BAS_STAND_K")# 02
+OBJ.append("GEN_BAS_CROUCH_K")# 03
+OBJ.append("GEN_BAS_TURN_STAND")# 04
+OBJ.append("GEN_BAS_TURN_CROUCH")# 05
+OBJ.append("GEN_BAS_STAND_CROUCH")# 06
+OBJ.append("GEN_BAS_CROUCH_STAND")# 07
+OBJ.append("GEN_BAS_FORWARD")# 08
+OBJ.append("GEN_BAS_BACKWARD")# 09
+OBJ.append("GEN_BAS_STAND_JUMP")# 10
+OBJ.append("GEN_BAS_JUMP")# 11
+OBJ.append("GEN_BAS_JUMP_LAND")# 12
+OBJ.append("GEN_BAS_STAND_JUMP_FRONT")# 13
+OBJ.append("GEN_BAS_JUMP_FRONT")# 14
+OBJ.append("GEN_BAS_JUMP_LAND_FRONT")# 15
+OBJ.append("GEN_BAS_STAND_JUMP_BACK")# 16
+OBJ.append("GEN_BAS_JUMP_BACK")# 17
+OBJ.append("GEN_BAS_JUMP_LAND_BACK")# 18
+OBJ.append("GEN_BAS_DASH_FRONT")# 19
+OBJ.append("GEN_BAS_DASH_BACK")# 20
+OBJ.append("GEN_BAS_DOWN_AOMUKE")# 21
+OBJ.append("GEN_BAS_DOWN_UTSUBUSE")# 22
+OBJ.append("GEN_BAS_DOWN_STAND_AOMUKE")# 23
+OBJ.append("GEN_BAS_DOWN_STAND_UTSUBUSE")# 24
+OBJ.append("GEN_BAS_DOWN_STUN_AOMUKE")# 25
+OBJ.append("GEN_BAS_DOWN_STUN_UTSUBUSE")# 26
+OBJ.append("GEN_BAS_STUN")# 27
+OBJ.append("GEN_BAS_NAGE_FAILED")# 28
+OBJ.append("GEN_BAS_NAGE_ESCAPE")# 29
+OBJ.append("GEN_GRD_START")# 30
+OBJ.append("GEN_GRD_START_C")# 31
+OBJ.append("GEN_GRD_HL")# 32
+OBJ.append("GEN_GRD_HH")# 33
+OBJ.append("GEN_GRD_ML")# 34
+OBJ.append("GEN_GRD_MH")# 35
+OBJ.append("GEN_GRD_LL")# 36
+OBJ.append("GEN_GRD_LH")# 37
+OBJ.append("GEN_GRD_CL")# 38
+OBJ.append("GEN_GRD_CH")# 39
+OBJ.append("GEN_GRD_END")# 40
+OBJ.append("GEN_GRD_END_C")# 41
+OBJ.append("GEN_DMG_HL")# 42
+OBJ.append("GEN_DMG_HM")# 43
+OBJ.append("GEN_DMG_HH")# 44
+OBJ.append("GEN_DMG_ML")# 45
+OBJ.append("GEN_DMG_MM")# 46
+OBJ.append("GEN_DMG_MH")# 47
+OBJ.append("GEN_DMG_LL")# 48
+OBJ.append("GEN_DMG_LM")# 49
+OBJ.append("GEN_DMG_LH")# 50
+OBJ.append("GEN_DMG_UP")# 51
+OBJ.append("GEN_DMG_DOWN")# 52
+OBJ.append("GEN_DMG_CL")# 53
+OBJ.append("GEN_DMG_CM")# 54
+OBJ.append("GEN_DMG_CH")# 55
+OBJ.append("GEN_DMG_HJ")# 56
+OBJ.append("GEN_DMG_HJ_FUKKI")# 57
+OBJ.append("GEN_DMG_MJ")# 58
+OBJ.append("GEN_DMG_MJ_FUKKI")# 59
+OBJ.append("GEN_DMG_TURN_L")# 60
+OBJ.append("GEN_DMG_TURN_R")# 61
+OBJ.append("GEN_DMG_BLOW")# 62
+OBJ.append("GEN_DMG_BLOW_UP")# 63
+OBJ.append("GEN_DMG_SPIN")# 64
+OBJ.append("GEN_DMG_ASHIBARAI")# 65
+OBJ.append("GEN_DMG_BLOW_BOUND")# 66
+OBJ.append("GEN_DMG_BOUND_S_AOMUKE")# 67
+OBJ.append("GEN_DMG_BOUND_L_AOMUKE")# 68
+OBJ.append("GEN_DMG_BOUND_S_UTSUBUSE")# 69
+OBJ.append("GEN_DMG_BOUND_L_UTSUBUSE")# 70
+OBJ.append("GEN_DMG_WALL_BLOW")# 71
+OBJ.append("GEN_DMG_WALL_BOUND_KUZURE")# 72
+OBJ.append("GEN_DMG_WALL_BOUND_UTSUBUSE")# 73
+OBJ.append("DSM_DMG_BURN_CROUCH")# 74
+OBJ.append("RYU_DMG_BURN_JUMP")# 75
+OBJ.append("GEN_DMG_BOUND_S_AOMUKE")# 76
+OBJ.append("GEN_DMG_KUZURE_STAND")# 77
+OBJ.append("GEN_DMG_KUZURE_CROUCH")# 78
+OBJ.append("GEN_ATK_5LP_S")# 79
+OBJ.append("GEN_ATK_5LP_K")# 80
+OBJ.append("GEN_ATK_5MP_S")# 81
+OBJ.append("GEN_ATK_5MP_K")# 82
+OBJ.append("GEN_ATK_5HP_S")# 83
+OBJ.append("GEN_ATK_5HP_K")# 84
+OBJ.append("GEN_ATK_5LK_S")# 85
+OBJ.append("GEN_ATK_5LK_K")# 86
+OBJ.append("GEN_ATK_5MK_S")# 87
+OBJ.append("GEN_ATK_5MK_K")# 88
+OBJ.append("GEN_ATK_5HK_S")# 89
+OBJ.append("GEN_ATK_5HK_K")# 90
+OBJ.append("GEN_ATK_2LP_S")# 91
+OBJ.append("GEN_ATK_2MP_S")# 92
+OBJ.append("GEN_ATK_2HP_S")# 93
+OBJ.append("GEN_ATK_2LK_S")# 94
+OBJ.append("GEN_ATK_2MK_S")# 95
+OBJ.append("GEN_ATK_2HK_S")# 96
+OBJ.append("GEN_ATK_2LP_K")# 97
+OBJ.append("GEN_ATK_2MP_K")# 98
+OBJ.append("GEN_ATK_2HP_K")# 99
+OBJ.append("GEN_ATK_2LK_K")# 100
+OBJ.append("GEN_ATK_2MK_K")# 101
+OBJ.append("GEN_ATK_2HK_K")# 102
+OBJ.append("GEN_ATK_8LP_S")# 103
+OBJ.append("GEN_ATK_8LP_K")# 104
+OBJ.append("GEN_ATK_8MP_S")# 105
+OBJ.append("GEN_ATK_8MP_K")# 106
+OBJ.append("GEN_ATK_8HP_S")# 107
+OBJ.append("GEN_ATK_8HP_K")# 108
+OBJ.append("GEN_ATK_8LK_S")# 109
+OBJ.append("GEN_ATK_8LK_K")# 110
+OBJ.append("GEN_ATK_8MK_S")# 111
+OBJ.append("GEN_ATK_8MK_K")# 112
+OBJ.append("GEN_ATK_8HK_S")# 113
+OBJ.append("GEN_ATK_8HK_K")# 114
+OBJ.append("GEN_ATK_8HKK_K")# 115
+OBJ.append("RYU_ATK_6HP")# 116
+OBJ.append("GEN_ATK_SAVING_K")# 117
+OBJ.append("GEN_ATK_SAVING_S")# 118
+OBJ.append("GEN_ATK_LMHK")# 119
+OBJ.append("GEN_ATK_2LMHK")# 120
+OBJ.append("GEN_ATK_LMHP")# 121
+OBJ.append("GEN_ATK_2LMHP")# 122
+OBJ.append("GEN_NGA_SUKARI")# 123
+OBJ.append("GEN_NGA_6")# 124
+OBJ.append("GEN_NGA_4")# 125
+OBJ.append("GEN_NGD_6")# 126
+OBJ.append("GEN_NGD_4")# 127
+OBJ.append("GEN_SPA_HYAKURENKOU")# 128
+OBJ.append("GEN_SPA_GEKIROU_01")# 129
+OBJ.append("GEN_SPA_GEKIROU_02")# 130
+OBJ.append("GEN_SPA_GEKIROU_03")# 131
+OBJ.append("GEN_SPA_GEKIROU_04")# 132
+OBJ.append("GEN_SPA_GEKIROU_05")# 133
+OBJ.append("GEN_SPA_GEKIROU_06")# 134
+OBJ.append("GEN_SPA_GEKIROU_07")# 135
+OBJ.append("GEN_SPA_JASEN_01")# 136
+OBJ.append("GEN_SPA_JASEN_02")# 137
+OBJ.append("GEN_SPA_OUGA_01")# 138
+OBJ.append("GEN_SPA_OUGA_02")# 139
+OBJ.append("GEN_SPA_OUGA_03")# 140
+OBJ.append("GEN_SPA_OUGA_04")# 141
+OBJ.append("GEN_SPA_OUGA_05")# 142
+OBJ.append("GEN_SPA_OUGA_06")# 143
+OBJ.append("GEN_SPA_OUGA_07")# 144
+OBJ.append("GEN_SPA_OUGA_08")# 145
+OBJ.append("GEN_SPA_OUGA_09")# 146
+OBJ.append("GEN_SPA_OUGA_10")# 147
+OBJ.append("GEN_SPA_OUGA_11")# 148
+OBJ.append("GEN_SPA_OUGA_12")# 149
+OBJ.append("GEN_SCA_ZANEI_01")# 150
+OBJ.append("GEN_SCA_ZANEI_02")# 151
+OBJ.append("GEN_SCA_JAKOUHA_01")# 152
+OBJ.append("GEN_SCA_JAKOUHA_02")# 153
+OBJ.append("GEN_SCA_JAKOUHA_03")# 154
+OBJ.append("GEN_SCA_JAKOUHA_04")# 155
+OBJ.append("GEN_SCD_JAKOUHA_03")# 156
+OBJ.append("GEN_SCD_JAKOUHA_04")# 157
+OBJ.append("GEN_DEM_START_01_01")# 158
+OBJ.append("GEN_DEM_START_01_02")# 159
+OBJ.append("GEN_DEM_START_01_03")# 160
+OBJ.append("GEN_DEM_WIN_01")# 161
+OBJ.append("GEN_DEM_WIN_02")# 162
+OBJ.append("GEN_DEM_WIN_03")# 163
+OBJ.append("GEN_DEM_WIN_04")# 164
+OBJ.append("RYU_DEM_MIDDLE_WIN")# 165
+OBJ.append("RYU_DEM_MIDDLE_LOSE_AOMUKE")# 166
+OBJ.append("RYU_DEM_MIDDLE_LOSE_UTSUBUSE")# 167
+OBJ.append("RYU_DEM_DRAW")# 168
+OBJ.append("GEN_DEM_LOSE_01")# 169
+OBJ.append("GEN_DEM_LOSE_02")# 170
+OBJ.append("RYU_DEM_RESULT")# 171
+OBJ.append("GEN_DEM_RESLUT_01_01")# 172
+OBJ.append("GEN_DEM_RESLUT_01_02")# 173
+OBJ.append("GEN_DEM_RESLUT_01_03")# 174
+OBJ.append("GEN_DEM_RESLUT_01_04")# 175
+OBJ.append("GEN_DEM_APEAL_01")# 176
+OBJ.append("GEN_DEM_APEAL_02")# 177
+OBJ.append("GEN_DEM_APEAL_03")# 178
+OBJ.append("GEN_DEM_APEAL_04")# 179
+OBJ.append("GEN_DEM_APEAL_05")# 180
+OBJ.append("GEN_DEM_APEAL_06")# 181
+OBJ.append("GEN_DEM_APEAL_07")# 182
+OBJ.append("GEN_DEM_CONTINUE_01")# 183
+OBJ.append("GEN_DEM_CONTINUE_02")# 184
+OBJ.append("GEN_DEM_CONTINUE_03")# 185
+OBJ.append("GEN_DEM_BOSS_START_STAND")# 186
+OBJ.append("GEN_DEM_RIVAL_01_01_GEN")# 187
+OBJ.append("GEN_DEM_RIVAL_01_01_CNL")# 188
+OBJ.append("GEN_DEM_RIVAL_01_02_GEN")# 189
+OBJ.append("GEN_DEM_RIVAL_01_02_CNL")# 190
+OBJ.append("GEN_DEM_RIVAL_01_03_GEN")# 191
+OBJ.append("GEN_DEM_RIVAL_01_03_CNL")# 192
+OBJ.append("GEN_DEM_RIVAL_01_04_GEN")# 193
+OBJ.append("GEN_DEM_RIVAL_01_04_CNL")# 194
+OBJ.append("GEN_DEM_RIVAL_01_05_GEN")# 195
+OBJ.append("GEN_DEM_RIVAL_01_05_CNL")# 196
+OBJ.append("GEN_DEM_RIVAL_01_06_GEN")# 197
+OBJ.append("GEN_DEM_RIVAL_01_06_CNL")# 198
+OBJ.append("GEN_DEM_RIVAL_01_07_GEN")# 199
+OBJ.append("GEN_DEM_RIVAL_01_07_CNL")# 200
+OBJ.append("GEN_SPA_OUGA_02_B")# 201
+OBJ.append("GEN_SPA_OUGA_04_B")# 202
+OBJ.append("GEN_SPA_OUGA_09_B")# 203
+OBJ.append("GEN_SPA_OUGA_11_B")# 204
+OBJ.append("GEN_SPA_OUGA_12_B")# 205
+OBJ.append("GEN_NGA_6_S")# 206
+OBJ.append("GEN_NGA_6_K")# 207
+OBJ.append("GEN_NGA_4_S")# 208
+OBJ.append("GEN_NGA_4_K")# 209
+OBJ.append("GEN_SPA_HYAKURENKOU_2")# 210
+FCE = []
+FCE.append("GEN_FCE_DEFAULT")# 00
+FCE.append("GEN_FCE_SPK_A")# 01
+FCE.append("GEN_FCE_SPK_I")# 02
+FCE.append("GEN_FCE_SPK_U")# 03
+FCE.append("GEN_FCE_SPK_E")# 04
+FCE.append("GEN_FCE_SPK_O")# 05
+FCE.append("GEN_FCE_SPK_N")# 06
+FCE.append("GEN_FCE_SPK_A_ACCENT")# 07
+FCE.append("GEN_FCE_SPK_I_ACCENT")# 08
+FCE.append("GEN_FCE_SPK_U_ACCENT")# 09
+FCE.append("GEN_FCE_SPK_E_ACCENT")# 10
+FCE.append("GEN_FCE_SPK_O_ACCENT")# 11
+FCE.append("GEN_FCE_SPK_N_ACCENT")# 12
+FCE.append("GEN_FCE_BHV_BLINK")# 13
+FCE.append("_blank")# 14
+FCE.append("_blank1")# 15
+FCE.append("_blank2")# 16
+FCE.append("_blank3")# 17
+FCE.append("GEN_FCE_EMO_ANGER")# 18
+FCE.append("GEN_FCE_EMO_SHOUT")# 19
+FCE.append("GEN_FCE_EMO_HATE")# 20
+FCE.append("GEN_FCE_EMO_JOY")# 21
+FCE.append("GEN_FCE_EMO_SMILE")# 22
+FCE.append("GEN_FCE_EMO_FEAR")# 23
+FCE.append("GEN_FCE_EMO_SORROW")# 24
+FCE.append("GEN_FCE_EMO_CRY")# 25
+FCE.append("GEN_FCE_EMO_SURPRISE")# 26
+FCE.append("GEN_FCE_EMO_TIREDNESS")# 27
+FCE.append("GEN_FCE_EMO_ATACK")# 28
+FCE.append("GEN_FCE_EMO_ATACK_ACCENT")# 29
+FCE.append("GEN_FCE_EMO_AWAKENING")# 30
+FCE.append("_blank4")# 31
+FCE.append("_blank5")# 32
+FCE.append("GEN_FCE_DMG_HEAD_R")# 33
+FCE.append("GEN_FCE_DMG_HEAD_L")# 34
+FCE.append("GEN_FCE_DMG_HEAD_ACCENT_R")# 35
+FCE.append("GEN_FCE_DMG_HEAD_ACCENT_L")# 36
+FCE.append("GEN_FCE_DMG_UPPER")# 37
+FCE.append("GEN_FCE_DMG_UPPER_ACCENT")# 38
+FCE.append("GEN_FCE_DMG_BODY")# 39
+FCE.append("GEN_FCE_DMG_VOMIT")# 40
+FCE.append("GEN_FCE_DMG_THUNDER")# 41
+FCE.append("GEN_FCE_DMG_DOWN")# 42
+FCE.append("GEN_FCE_DMG_DOWN_ACCENT")# 43
+FCE.append("_blank6")# 44
+FCE.append("_blank7")# 45
+FCE.append("_blank8")# 46
+FCE.append("GEN_FCE_EMO_SMILE_FINISH_")# 47
+FCE.append("_blank9")# 48
+CAM = []
+CAM.append("GEN_CAM_START_01_01")# 00
+CAM.append("GEN_CAM_START_01_02")# 01
+CAM.append("GEN_CAM_START_01_03")# 02
+CAM.append("GEN_CAM_ULTRA_01")# 03
+CAM.append("GEN_CAM_ULTRA_02")# 04
+CAM.append("GEN_CAM_JAKOUHA_01")# 05
+CAM.append("GEN_CAM_JAKOUHA_03")# 06
+CAM.append("GEN_CAM_RESULT_01_01")# 07
+CAM.append("GEN_CAM_RESULT_01_02")# 08
+CAM.append("GEN_CAM_RESULT_01_03")# 09
+CAM.append("GEN_CAM_RESULT_01_04")# 10
+CAM.append("GEN_CAM_RIVAL_01_01")# 11
+CAM.append("GEN_CAM_RIVAL_01_02")# 12
+CAM.append("GEN_CAM_RIVAL_01_03")# 13
+CAM.append("GEN_CAM_RIVAL_01_04")# 14
+CAM.append("GEN_CAM_RIVAL_01_05")# 15
+CAM.append("GEN_CAM_RIVAL_01_06")# 16
+CAM.append("GEN_CAM_RIVAL_01_07")# 17
+CAM.append("GEN_CAM_CONTINUE_01")# 18
+CAM.append("GEN_CAM_CONTINUE_02")# 19
+CAM.append("GEN_CAM_CONTINUE_03")# 20
+CAM.append("GEN_CAM_JAKOUHA_SC_03")# 21
+CAM.append("GEN_CAM_JAKOUHA_SC_04")# 22
+CAM.append("GEN_CAM_TEIGA_SUKA")# 23
+CAM.append("GEN_CAM_TEIGA")# 24
+CAM.append("GEN_CAM_SHITENKETU_SUKARI")# 25
+CAM.append("GEN_CAM_SHITENKETU")# 26
+UC1 = []
+UC1.append("GEN_UCA_ULTRA_01")# 00
+UC1.append("GEN_UCA_ULTRA_02")# 01
+UC1.append("GEN_UCD_ULTRA_02")# 02
+UC1.append("GEN_UCA_JAKOUHA_01")# 03
+UC1.append("GEN_UCA_JAKOUHA_02")# 04
+UC1.append("GEN_UCA_JAKOUHA_03")# 05
+UC1.append("GEN_UCD_JAKOUHA_03")# 06
+UC2 = []
+UC2.append("GEN_UCA_TEIGA_SUKA")# 00
+UC2.append("GEN_UCA_TEIGA")# 01
+UC2.append("GEN_UCD_TEIGA")# 02
+UC2.append("GEN_UCA_SHITENKETU_SUKARI")# 03
+UC2.append("GEN_UCA_SHITENKETU")# 04
+UC2.append("GEN_UCD_SHITENKETU")# 05

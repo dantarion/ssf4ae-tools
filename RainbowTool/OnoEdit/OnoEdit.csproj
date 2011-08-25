@@ -86,6 +86,7 @@
     <Compile Include="ScriptWindow.xaml.cs">
       <DependentUpon>ScriptWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplateSelectors.cs" />
     <Page Include="CancelListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MoveWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="myResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

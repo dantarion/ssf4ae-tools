@@ -122,8 +122,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("VictimShaking");
             }
         }
-        private uint _HitGFX;
-        public uint HitGFX
+        private short _HitGFX;
+        public short HitGFX
         {
             get { return _HitGFX; }
             set
@@ -132,8 +132,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("HitGFX");
             }
         }
-        private short _Unknown1;
-        public short Unknown1
+        private int _Unknown1;
+        public int Unknown1
         {
             get { return _Unknown1; }
             set
@@ -160,36 +160,6 @@ namespace RainbowLib.BAC
             {
                 _Unknown2_2 = value;
                 OnPropertyChanged("Unknown2_2");
-            }
-        }
-        private ushort _HitSFX;
-        public ushort HitSFX
-        {
-            get { return _HitSFX; }
-            set
-            {
-                _HitSFX = value;
-                OnPropertyChanged("HitSFX");
-            }
-        }
-        private ushort _HitSFX2;
-        public ushort HitSFX2
-        {
-            get { return _HitSFX2; }
-            set
-            {
-                _HitSFX2 = value;
-                OnPropertyChanged("HitSFX2");
-            }
-        }
-        private ushort _VictimSFX;
-        public ushort VictimSFX
-        {
-            get { return _VictimSFX; }
-            set
-            {
-                _VictimSFX = value;
-                OnPropertyChanged("VictimSFX");
             }
         }
         private ushort _Unknown3;
@@ -222,6 +192,37 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown5");
             }
         }
+        private short _HitSFX;
+        public short HitSFX
+        {
+            get { return _HitSFX; }
+            set
+            {
+                _HitSFX = value;
+                OnPropertyChanged("HitSFX");
+            }
+        }
+        private short _HitSFX2;
+        public short HitSFX2
+        {
+            get { return _HitSFX2; }
+            set
+            {
+                _HitSFX2 = value;
+                OnPropertyChanged("HitSFX2");
+            }
+        }
+        private short _VictimSFX;
+        public short VictimSFX
+        {
+            get { return _VictimSFX; }
+            set
+            {
+                _VictimSFX = value;
+                OnPropertyChanged("VictimSFX");
+            }
+        }
+
         private ushort _Unknown6;
         public ushort Unknown6
         {

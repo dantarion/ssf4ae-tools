@@ -125,6 +125,30 @@ namespace OnoEdit
                 e.Column.Header = "E";
                 e.Column.DisplayIndex = 1;
             }
+            if (e.PropertyName == "Animation" && !raw.IsChecked.Value)
+            {
+                var column = new DataGridTemplateColumn();
+                column.CellTemplate = App.Current.Resources["AnimationViewTemplate"] as DataTemplate;
+                column.CellEditingTemplate = App.Current.Resources["AnimationEditTemplate"] as DataTemplate;
+                column.Header = e.PropertyName;
+                e.Column = column;
+
+            }
+            if (e.PropertyName == "HitGFX" && !raw.IsChecked.Value)
+            {
+                var c = new DataGridComboBoxColumn();
+                var b = new Binding(e.PropertyName);
+                
+                b.Converter = new IndexReferenceTypeConverter();
+                var data = RainbowLib.ResourceManager.Load("VFX2");
+                b.ConverterParameter = data;
+                c.ItemsSource = data.Values;
+                c.Header = e.PropertyName;
+                //c.SelectedValuePath = "Value";
+                c.DisplayMemberPath = "Name";
+                c.SelectedValueBinding = b;
+                e.Column = c;
+            }
             // start anotak
             if (e.PropertyName == "RawString")
             {
@@ -233,6 +257,7 @@ namespace OnoEdit
 
         }
     }
+
     public class HexConverter : IValueConverter
     {
         public object Convert(object value, Type targetType,

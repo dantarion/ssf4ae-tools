@@ -20,10 +20,13 @@ namespace OnoEdit
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
             // end anotak
             InitializeComponent();
+            //CommandBindings
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, ClickOpen));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, ClickSave, FilesOpened));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.SaveAs, ClickSaveAs, FilesOpened));
+
             this.Title = "Ono! " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            //Build Timestamp
             var version = Assembly.GetEntryAssembly().GetName().Version;
             var buildDateTime = new DateTime(2000, 1, 1).Add(new TimeSpan(
             TimeSpan.TicksPerDay * version.Build + // days since 1 January 2000
@@ -101,6 +104,7 @@ namespace OnoEdit
                 string bacfile = sb.FileName.Replace(".bcm", ".bac");
                 App.OpenedFiles.BACFile = BACFile.FromFilename(bacfile, App.OpenedFiles.BCMFile);
                 opened = sb.FileName;
+                RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(opened));
                 App.OpenedFiles.FilesOpened = true;
             }
 
@@ -116,7 +120,7 @@ namespace OnoEdit
             var result = MessageBox.Show("Are you sure you want to overwrite \""+opened+"\" ?", "Overwrite File", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                App.OpenedFiles.BCMFile.ToFilename(opened);
+                BCMFile.ToFilename(opened, App.OpenedFiles.BCMFile);
                 BACFile.ToFilename(opened.Replace(".bcm",".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
             }
         }
@@ -132,7 +136,7 @@ namespace OnoEdit
             if (result)
             {
                 opened = sb.FileName;
-                App.OpenedFiles.BCMFile.ToFilename(sb.FileName);
+                BCMFile.ToFilename(sb.FileName,App.OpenedFiles.BCMFile);
                 BACFile.ToFilename(sb.FileName.Replace(".bcm", ".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
             }
         }
