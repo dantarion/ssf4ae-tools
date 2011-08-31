@@ -10,13 +10,28 @@ def ripBVS2File(bvs,log):
     log.write("VFX2 = {}\n")
     for key in data[1].keys():
         log.write("VFX2[0x%04X] = \"%s\" #%d\n"%(key,data[1][key],key))
+def ripBVS2FileAppend(bvs,log):
+    data = ripBVS(bvs)
+    #log.write("VFX = {}\n")
+    for key in data[0].keys():
+        log.write("VFX[0x%04X] = \"%s\" #%d\n"%(key,data[0][key],key))
+    #log.write("VFX2 = {}\n")
+    for key in data[1].keys():
+        log.write("VFX2[0x%04X] = \"%s\" #%d\n"%(key,data[1][key],key))
 def ripEMS2File(bvs,name,log):
     log.write(name+" = []\n")
     for i,vfx in enumerate(ripEMA(bvs)):
         log.write("%s.append(\"%s\")# %02d\n"%(name,vfx,i))  
 #Global Data
+stages = []
+for entry in os.listdir(INSTALL_DIR+"resource\\battle\\stage\\"):
+    if entry.find(".bvs") > 0:
+        stages.append(entry)
 with open("out/global.py","w") as log:
     ripBVS2File(INSTALL_DIR+"resource\\battle\\vfx\\CMN.vfx.bvs",log)
+    for stage in stages:
+        log.write("#"+stage+"\n")
+        ripBVS2FileAppend(INSTALL_DIR+"resource\\battle\\stage\\"+stage,log)
 
 #Character Data
 BASE = INSTALL_DIR+"resource\\battle\\chara\\"

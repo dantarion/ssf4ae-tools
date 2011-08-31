@@ -149,6 +149,14 @@ namespace OnoEdit
                 c.SelectedValueBinding = b;
                 e.Column = c;
             }
+            if (e.PropertyName == "ShortParam" && !raw.IsChecked.Value)
+            {
+                var column = new DataGridTemplateColumn();
+                column.CellTemplateSelector = new EtcTemplateSelector(false);
+                column.CellEditingTemplateSelector = new EtcTemplateSelector(true);
+                column.Header = e.PropertyName;
+                e.Column = column;
+            }
             // start anotak
             if (e.PropertyName == "RawString")
             {

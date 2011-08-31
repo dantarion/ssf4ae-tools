@@ -70,5 +70,8 @@
                 </ComboBox.SelectedValue>
             </ComboBox>
         </DataTemplate>
+        <DataTemplate x:Key="DumbEditTemplate">
+            <TextBox Text="{Binding ShortParam}"/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

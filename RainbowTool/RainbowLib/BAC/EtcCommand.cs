@@ -12,6 +12,14 @@ namespace RainbowLib.BAC
         {
             CONTROL = 0,
             GFX = 5,
+            GFX2 = 6
+        }
+        [Flags]
+        public enum EtcControlType : short
+        {
+            UNKNOWN = 0,
+            PROJECTILE = 2,
+            SUPERFLASH = 5
         }
         private EtcCommandType _Type;
         public EtcCommandType Type
@@ -108,7 +116,7 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("RawParams");
             }
         }
-        
-        
+
+
     }
 }
