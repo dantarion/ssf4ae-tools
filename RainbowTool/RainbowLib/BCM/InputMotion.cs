@@ -7,9 +7,10 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 namespace RainbowLib.BCM
 {
-
+    [Serializable]
     public class InputMotion : INotifyPropertyChanged
     {
+        public static InputMotion NONE = new InputMotion("NONE");
         private string _name="";
         public string Name
         {
@@ -23,9 +24,13 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("Name");
             }
         }
+        public InputMotion(string name)
+        {
+            Name = name;
+        }
         private ObservableCollection<InputMotionEntry> _Entries = new ObservableCollection<InputMotionEntry>();
         public ObservableCollection<InputMotionEntry> Entries{get{return _Entries;}}
-
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {
@@ -33,7 +38,7 @@ namespace RainbowLib.BCM
                 PropertyChanged(this, new PropertyChangedEventArgs(Name));
         }
         public override string ToString()
-        {
+        {/*
             var sb = new StringBuilder();
             sb.Append(Name + " - ");
             foreach(InputMotionEntry entry in Entries)
@@ -43,6 +48,8 @@ namespace RainbowLib.BCM
                     sb.Append(", ");
             }
             return sb.ToString();
+          */
+            return Name;
         }
     }
     public enum InputType
@@ -59,6 +66,7 @@ namespace RainbowLib.BCM
         STRICT = 2,
         MASH = 16
     }
+    [Serializable]
     public class InputMotionEntry : INotifyPropertyChanged
     {
         private InputType _type;
@@ -72,7 +80,7 @@ namespace RainbowLib.BCM
             {
                 _type = value;
                 if (this.Type == InputType.CHARGE)
-                    Input = Input.NONE;
+                    Input = 0;
                 else if (this.Type != InputType.CHARGE)
                     Charge = null;
                 OnPropertyChanged("Type");
@@ -102,9 +110,10 @@ namespace RainbowLib.BCM
                 return Input.ToString();
             }
         }
-        public ushort Unknown1{get;set;}
+        public MoveFlags MoveFlags{get;set;}
         public InputReqType Flags { get; set; }
         public ushort Requirement{get;set;}
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {

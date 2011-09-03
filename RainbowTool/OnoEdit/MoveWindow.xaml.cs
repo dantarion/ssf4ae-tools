@@ -21,6 +21,7 @@ namespace OnoEdit
         public MoveWindow()
         {
             InitializeComponent();
+
         }
 
         private void AddMove(object sender, RoutedEventArgs e)

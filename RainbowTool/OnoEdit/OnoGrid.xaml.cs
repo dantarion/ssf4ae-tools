@@ -9,49 +9,37 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Globalization;
+using System.Collections;
+
 namespace OnoEdit
 {
     /// <summary>
-    /// Interaction logic for ScriptWindow.xaml
+    /// Interaction logic for OnoGrid.xaml
     /// </summary>
-    public partial class ScriptWindow : Window
+    public partial class OnoGrid : UserControl
     {
-        void myFilter(object sender, FilterEventArgs e)
+        private object copy;
+        public OnoGrid()
         {
-            RainbowLib.BAC.Script script = e.Item as RainbowLib.BAC.Script;
-            e.Accepted = script != RainbowLib.BAC.Script.NullScript;
-
-        }
-        public ScriptWindow(String path)
-        {
-            var binding = new Binding(path);
-            binding.Source = App.OpenedFiles.BACFile;
-            this.SetBinding(Window.DataContextProperty, binding);
-            InitializeComponent(); ;
-        }
-        private int nextIndex = 0;
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.RemovedItems.Count > 0)
-                nextIndex = (int)((dynamic)(e.RemovedItems[0])).Type;
+            InitializeComponent();
         }
 
-        private void ListBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        public int FrozenColumns
         {
-            if (e.AddedItems.Count > 0 && ComboBox != null)
-                ComboBox.SelectedIndex = nextIndex;
-        }
-        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            processColumns(e,DataGrid,RawEnumCheckbox);
+            get { return (int)GetValue(FrozenColumnsProperty); }
+            set { SetValue(FrozenColumnsProperty, value); }
         }
 
-        public static void processColumns(DataGridAutoGeneratingColumnEventArgs e, DataGrid myDataGrid, CheckBox RawCheckbox)
+        // Using a DependencyProperty as the backing store for FrozenColumns.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FrozenColumnsProperty =
+            DependencyProperty.Register("FrozenColumns", typeof(int), typeof(OnoGrid), new UIPropertyMetadata(0));
+
+
+
+        private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             //Change to a fixed width font
             myDataGrid.FontFamily = new FontFamily("Consolas");
@@ -189,114 +177,145 @@ namespace OnoEdit
                 e.Column = col;
             }
             // end anotak
+
         }
 
-        private void AddCommand(object sender, RoutedEventArgs e)
+        private void ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-           dynamic list = ComboBox.SelectedValue;
-           list.Commands.Add(list.GenerateCommand());
-           // DataGrid.ItemsSource as 
+
+        }
+
+        private void DuplicateCommand(object sender, RoutedEventArgs e)
+        {
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var clone = RainbowLib.Cloner.Clone(current);
+            var list = lc.SourceCollection as System.Collections.IList;
+            var index = list.IndexOf(current);
+            list.Insert(index+1, clone);
+
         }
 
         private void RemoveCommand(object sender, RoutedEventArgs e)
         {
-            List<object> tmpList = new List<object>();
-            foreach (object obj in DataGrid.SelectedItems)
-                tmpList.Add(obj);
-            foreach (object obj in tmpList)
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            if (lc.IsAddingNew)
+                lc.CancelNew();
+            else
             {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                list.Commands.Remove(item);
+                lc.CommitEdit();
+                lc.Remove(lc.CurrentItem);
             }
         }
+
         private void MoveToTopCommand(object sender, RoutedEventArgs e)
         {
-            List<object> tmpList = new List<object>();
-            foreach (object obj in DataGrid.SelectedItems)
-                tmpList.Add(obj);
-            foreach (object obj in tmpList)
-            {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                list.Commands.Remove(item);
-                list.Commands.Insert(0, item);
-            }
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var list = lc.SourceCollection as System.Collections.IList;
+            list.Remove(current);
+            list.Insert(0, current);
+            lc.MoveCurrentTo(current);
+            myDataGrid.ScrollIntoView(current);
         }
-        private void MoveToBottomCommand(object sender, RoutedEventArgs e)
-        {
-            List<object> tmpList = new List<object>();
-            foreach (object obj in DataGrid.SelectedItems)
-                tmpList.Add(obj);
-            foreach (object obj in tmpList)
-            {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                list.Commands.Remove(item);
-                list.Commands.Add(item);
-            }
-        }
-        private void MoveUpCommand(object sender, RoutedEventArgs e)
-        {
-            List<object> tmpList = new List<object>();
-            foreach (object obj in DataGrid.SelectedItems)
-                tmpList.Add(obj);
-            foreach (object obj in tmpList)
-            {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                var index = Math.Max(0, list.Commands.IndexOf(item) - 1);
-                list.Commands.Remove(item);
-                list.Commands.Insert(index, item);
-            }
-        }
+
         private void MoveDownCommand(object sender, RoutedEventArgs e)
         {
-            List<object> tmpList = new List<object>();
-            foreach (object obj in DataGrid.SelectedItems)
-                tmpList.Add(obj);
-            foreach (object obj in tmpList)
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var list = lc.SourceCollection as System.Collections.IList;
+            var index = list.IndexOf(current);
+            list.Remove(current);
+            list.Insert(index + 1, current);
+            lc.MoveCurrentTo(current);
+            myDataGrid.ScrollIntoView(current);
+        }
+
+        private void MoveUpCommand(object sender, RoutedEventArgs e)
+        {
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var list = lc.SourceCollection as System.Collections.IList;
+            var index = list.IndexOf(current);
+            list.Remove(current);
+            list.Insert(Math.Max(0, index - 1), current);
+            lc.MoveCurrentTo(current);
+            myDataGrid.ScrollIntoView(current);
+        }
+
+        private void MoveToBottomCommand(object sender, RoutedEventArgs e)
+        {
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var list = lc.SourceCollection as System.Collections.IList;
+            var index = list.IndexOf(current);
+            list.Remove(current);
+            list.Add(current);
+            lc.MoveCurrentTo(current);
+            myDataGrid.ScrollIntoView(current);
+        }
+
+        private void AddCommand(object sender, RoutedEventArgs e)
+        {
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            myDataGrid.ScrollIntoView(lc.AddNew());
+        }
+
+        private void myDataGrid_StylusEnter(object sender, StylusEventArgs e)
+        {
+
+        }
+
+        private void myDataGrid_Unloaded(object sender, RoutedEventArgs e)
+        {
+            myDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+            //myDataGrid.CancelEdit();
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            //myDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+            //myDataGrid.SelectedItem = null;
+        }
+
+        private void myDataGrid_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //myDataGrid.CommitEdit();
+        }
+
+        private void RawCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            myDataGrid.AutoGenerateColumns = false;
+            myDataGrid.AutoGenerateColumns = true;
+        }
+
+        private void PasteCommand(object sender, RoutedEventArgs e)
+        {
+            if (copy == null)
+                return;
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            var clone = RainbowLib.Cloner.Clone(copy);
+            var list = lc.SourceCollection as System.Collections.IList;
+            var index = list.IndexOf(current);
+            try
             {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                var index = Math.Min(list.Commands.Count - 1, list.Commands.IndexOf(item) + 1);
-                list.Commands.Remove(item);
-                list.Commands.Insert(index, item);
+                list.Insert(index+1, clone);
             }
-        }
-        private void DuplicateCommand(object sender, RoutedEventArgs e)
-        {
-            int startindex = DataGrid.Items.IndexOf(DataGrid.SelectedItems[DataGrid.SelectedItems.Count - 1]);
-            foreach (object obj in DataGrid.SelectedItems)
+            catch (Exception)
             {
-                dynamic list = ComboBox.SelectedValue;
-                dynamic item = obj;
-                var index = startindex+DataGrid.SelectedItems.IndexOf(obj);
-                dynamic clone = item.Clone();
-                list.Commands.Insert(index, clone);
+                MessageBox.Show("Cannot paste that here!");
             }
-        }
-        private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            if (DataGrid.SelectedValue == null)
-                e.Handled = true;
 
         }
-    }
 
-    public class HexConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType,
-            object parameter, CultureInfo culture)
+        private void CopyCommand(object sender, RoutedEventArgs e)
         {
-            return string.Format("{0:X}",value);
+            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
+            var current = lc.CurrentItem;
+            copy = current;
         }
 
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            var val = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
-            return val;
-        }
+
     }
 }

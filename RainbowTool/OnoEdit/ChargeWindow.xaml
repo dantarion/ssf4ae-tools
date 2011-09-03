@@ -1,25 +1,7 @@
 ﻿<Window x:Class="OnoEdit.ChargeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ChargeWindow" Height="300" Width="300">
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Click="AddCharge">Add New</Button>
-            <Button Click="RemoveCharge">Remove</Button>
-            <Button IsEnabled="False">Import...</Button>
-            <Button IsEnabled="False">Export...</Button>
-        </StackPanel>
-        <DataGrid Name="ChargesGrid" CanUserAddRows="False" CanUserDeleteRows="True" ItemsSource="{Binding Path=BCMFile.Charges, Source={StaticResource OpenedFiles}}" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserResizeColumns="True" CanUserReorderColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" />
-                <DataGridTextColumn Binding="{Binding Path=Input}" Header="Input"/>
-                <DataGridTextColumn Binding="{Binding Path=Buffer}" Header="Buffer" />
-                <DataGridTextColumn Binding="{Binding Path=Frames}" Header="Frames" />
-                <DataGridTextColumn Binding="{Binding Path=Unknown1}" Header="Unknown1" />
-                <DataGridTextColumn Binding="{Binding Path=Unknown2}" Header="Unknown2" />
-                <DataGridTextColumn Binding="{Binding Path=Unknown3}" Header="Unknown3" />
-                <DataGridTextColumn Binding="{Binding Path=Unknown4}" Header="Unknown4" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </DockPanel>
+        xmlns:ono="clr-namespace:OnoEdit"
+        Title="ChargeWindow" Height="300" Width="500">
+        <ono:OnoGrid DataContext="{Binding Path=BCMFile.Charges, Source={StaticResource OpenedFiles}}"/>
 </Window>

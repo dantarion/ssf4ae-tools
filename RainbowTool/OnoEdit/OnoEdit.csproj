@@ -44,7 +44,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -80,8 +80,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EnumTemplateGenerator.cs" />
     <Compile Include="HitboxDataWindow.xaml.cs">
       <DependentUpon>HitboxDataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OnoGrid.xaml.cs">
+      <DependentUpon>OnoGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScriptWindow.xaml.cs">
       <DependentUpon>ScriptWindow.xaml</DependentUpon>
@@ -129,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="myResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OnoGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

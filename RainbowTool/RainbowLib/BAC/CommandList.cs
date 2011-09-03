@@ -80,7 +80,7 @@ namespace RainbowLib.BAC
             get { return _Commands; }
         }
 
-
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {

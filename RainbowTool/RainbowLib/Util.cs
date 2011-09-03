@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 namespace RainbowLib
 {
     [Flags]
-    public enum Input
+    public enum Input : ushort
     {
-        NONE = 0x0,
         NEUTRAL = 0x1,
         UP = 0x2,
         DOWN = 0x4,
@@ -33,7 +33,15 @@ namespace RainbowLib
             IFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, lol);
             stream.Seek(0);
+            
             var obj = formatter.Deserialize(stream);
+            foreach (PropertyInfo pinfo in lol.GetType().GetProperties())
+            {
+                if (!pinfo.PropertyType.IsClass || !pinfo.CanWrite)
+                    continue;
+                var val = pinfo.GetValue(lol, null);
+                pinfo.SetValue(obj, val, null);
+            }
             return obj;
         }
     }

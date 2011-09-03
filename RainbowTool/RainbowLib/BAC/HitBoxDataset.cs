@@ -354,6 +354,7 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("ForceUnknown5");
             }
         }
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {
@@ -398,7 +399,7 @@ namespace RainbowLib.BAC
         {
             get { return _Data; }
         }
-
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {

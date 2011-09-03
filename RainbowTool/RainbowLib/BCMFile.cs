@@ -40,7 +40,7 @@ namespace RainbowLib
             inFile.Write(65537);
             inFile.Write(0);
             inFile.Write((ushort)bcm.Charges.Count());
-            inFile.Write((ushort)bcm.InputMotions.Count());
+            inFile.Write((ushort)(bcm.InputMotions.Count()-1));
             inFile.Write((ushort)bcm.Moves.Count());
             inFile.Write((ushort)bcm.CancelLists.Count());
             //TODO WRITE OFFSETS
@@ -61,13 +61,12 @@ namespace RainbowLib
                 ChargeOffset = 0;
             foreach (Charge c in bcm.Charges)
             {
-                inFile.Write((uint)c.Input);
-                inFile.Write(c.Buffer);
-                inFile.Write(c.Frames);
+                inFile.Write((ushort)c.Input);
                 inFile.Write(c.Unknown1);
-                inFile.Write(c.Unknown2);
+                inFile.Write((ushort)c.MoveFlags);
+                inFile.Write(c.Frames);
                 inFile.Write(c.Unknown3);
-                inFile.Write(c.Unknown4);
+                inFile.Write(c.StorageIndex);
             }
             int ChargeNamesOffset = (int)inFile.BaseStream.Position;
             if (bcm.Charges.Count == 0)
@@ -77,6 +76,8 @@ namespace RainbowLib
             int InputOffset = (int)inFile.BaseStream.Position;
             foreach (InputMotion i in bcm.InputMotions)
             {
+                if (i == InputMotion.NONE)
+                    continue;
                 inFile.Write(i.Entries.Count());
                 foreach (InputMotionEntry entry in i.Entries)
                 {
@@ -86,7 +87,7 @@ namespace RainbowLib
                         inFile.Write((ushort)bcm.Charges.IndexOf(entry.Charge));
                     else
                         inFile.Write((ushort)entry.Input);
-                    inFile.Write((ushort)entry.Unknown1);
+                    inFile.Write((ushort)entry.MoveFlags);
                     inFile.Write((ushort)entry.Flags);
                     inFile.Write((ushort)entry.Requirement);
                 }
@@ -99,27 +100,28 @@ namespace RainbowLib
             }
             int InputNamesOffset = (int)inFile.BaseStream.Position;
             foreach (InputMotion c in bcm.InputMotions)
+            {
+                if (c == InputMotion.NONE)
+                    continue;
                 inFile.Write(0);
+            }
             int MoveOffset = (int)inFile.BaseStream.Position;
             foreach (Move m in bcm.Moves)
             {
                 inFile.Write((ushort)m.Input);
                 inFile.Write((ushort)m.MoveFlags);
                 inFile.Write((ushort)m.PositionRestriction);
-                 inFile.Write((ushort)m.Restriction);
-                 inFile.Write((uint)m.StateRestriction);
-                 inFile.Write((ulong)m.UltraRestriction);
-                 inFile.Write(m.PositionRestrictionDistance);
-                 inFile.Write((short)m.EXRequirement);
-                 inFile.Write((short)m.EXCost);
-                 inFile.Write((short)m.UltraRequirement);
-                 inFile.Write((short)m.UltraCost);
-                 if (m.InputMotion != null)
-                     inFile.Write(bcm.InputMotions.IndexOf(m.InputMotion));
-                 else
-                     inFile.Write(-1);
-                 inFile.Write(m.ScriptIndex);
-                 inFile.Write(m.AIData);
+                inFile.Write((ushort)m.Restriction);
+                inFile.Write((uint)m.StateRestriction);
+                inFile.Write((ulong)m.UltraRestriction);
+                inFile.Write(m.PositionRestrictionDistance);
+                inFile.Write((short)m.EXRequirement);
+                inFile.Write((short)m.EXCost);
+                inFile.Write((short)m.UltraRequirement);
+                inFile.Write((short)m.UltraCost);
+                inFile.Write(bcm.InputMotions.IndexOf(m.InputMotion) - 1);
+                inFile.Write(m.Script.Index);
+                inFile.Write(m.AIData);
 
             }
             int MovesNameOffset = (int)inFile.BaseStream.Position;
@@ -151,7 +153,11 @@ namespace RainbowLib
 
             strings.Clear();
             foreach (InputMotion tmp in bcm.InputMotions)
+            {
+                if (tmp == InputMotion.NONE)
+                    continue;
                 strings.Add(tmp.Name);
+            }
             Util.writeStringTable(inFile, InputNamesOffset, strings);
 
             strings.Clear();
@@ -199,7 +205,7 @@ namespace RainbowLib
                 bcm.CancelLists.Add(new CancelList());
             var ChargeOffset = inFile.ReadUInt32();
             var ChargeNamesOffset = inFile.ReadUInt32();
-            
+
             var InputOffset = inFile.ReadUInt32();
             var InputNamesOffset = inFile.ReadUInt32();
 
@@ -216,26 +222,24 @@ namespace RainbowLib
                 inFile.BaseStream.Seek(ChargeNamesOffset + i * 4);
                 inFile.BaseStream.Seek(inFile.ReadUInt32());
                 charge.Name = inFile.ReadCString();
-                
-
-                inFile.BaseStream.Seek(ChargeOffset+i*16);
-                charge.Input = (Input)inFile.ReadUInt32();
-                charge.Buffer = inFile.ReadUInt16();
-                charge.Frames = inFile.ReadUInt16();
+                inFile.BaseStream.Seek(ChargeOffset + i * 16);
+                charge.Input = (Input)inFile.ReadUInt16();
                 charge.Unknown1 = inFile.ReadUInt16();
-                charge.Unknown2 = inFile.ReadUInt16();
+                charge.MoveFlags = (MoveFlags)inFile.ReadUInt16();
+                charge.Frames = inFile.ReadUInt32();
                 charge.Unknown3 = inFile.ReadUInt16();
-                charge.Unknown4 = inFile.ReadUInt16();
+                charge.StorageIndex = inFile.ReadUInt32();
                 //Console.WriteLine(charge);
                 bcm.Charges.Add(charge);
             }
             #endregion
             #region Read Inputs
             tracker.SetLabel("Inputs");
+            bcm.InputMotions.Add(InputMotion.NONE);
             for (int i = 0; i < InputCount; i++)
             {
-                var inputMotion = new InputMotion();
-                inFile.BaseStream.Seek(InputNamesOffset+i*4);
+                var inputMotion = new InputMotion("tmp");
+                inFile.BaseStream.Seek(InputNamesOffset + i * 4);
                 inFile.BaseStream.Seek(inFile.ReadUInt32());
                 inputMotion.Name = inFile.ReadCString();
                 //Console.WriteLine(inputMotion.Name);
@@ -251,13 +255,12 @@ namespace RainbowLib
                         entry.Charge = bcm.Charges[inFile.ReadUInt16()];
                     else
                         entry.Input = (Input)inFile.ReadUInt16();
-
-                    entry.Unknown1 = inFile.ReadUInt16();
+                    entry.MoveFlags = (MoveFlags)inFile.ReadUInt16();
                     entry.Flags = (InputReqType)inFile.ReadUInt16();
                     entry.Requirement = inFile.ReadUInt16();
                     inputMotion.Entries.Add(entry);
                     //Console.WriteLine(entry);
-                    
+
                 }
                 tracker.IgnoreBytes(12 * (16 - cnt));
                 bcm.InputMotions.Add(inputMotion);
@@ -276,22 +279,24 @@ namespace RainbowLib
                 inFile.BaseStream.Seek(MoveOffset + i * 0x54);
 
                 move.Input = (Input)inFile.ReadUInt16();
-                move.MoveFlags =  (MoveFlags)inFile.ReadUInt16();
-                move.PositionRestriction =  (PositionRestriction)inFile.ReadUInt16();
+                move.MoveFlags = (MoveFlags)inFile.ReadUInt16();
+                move.PositionRestriction = (PositionRestriction)inFile.ReadUInt16();
                 move.Restriction = (MoveRestriction)inFile.ReadUInt16();
-                move.StateRestriction = inFile.ReadUInt32();
-                move.UltraRestriction = inFile.ReadUInt64();
+                move.StateRestriction = (Move.MoveStateRestriction)inFile.ReadUInt32();
+                move.UltraRestriction = (Move.MoveUltraRestriction)inFile.ReadUInt64();
                 move.PositionRestrictionDistance = inFile.ReadSingle();
                 move.EXRequirement = inFile.ReadInt16();
                 move.EXCost = inFile.ReadInt16();
                 move.UltraRequirement = inFile.ReadInt16();
                 move.UltraCost = inFile.ReadInt16();
                 var index = inFile.ReadInt32();
-                if(index != -1 && index < bcm.InputMotions.Count)
-                    move.InputMotion = bcm.InputMotions[index];
+                if (index != -1 && index < bcm.InputMotions.Count)
+                    move.InputMotion = bcm.InputMotions[index + 1];
+                else
+                    move.InputMotion = InputMotion.NONE;
                 move.ScriptIndex = inFile.ReadInt32();
                 move.AIData = inFile.ReadBytes(44);
-                
+
 
                 /*
                 inFile.ReadUInt32();      
@@ -323,7 +328,7 @@ namespace RainbowLib
             }
             #endregion
             #region ReadCancels
-             tracker.SetLabel("Cancels");
+            tracker.SetLabel("Cancels");
             for (int i = 0; i < CancelListCount; i++)
             {
                 var cl = bcm.CancelLists[i];
@@ -334,7 +339,7 @@ namespace RainbowLib
 
                 inFile.BaseStream.Seek(CancelListOffset + i * 0x8);
                 var count = inFile.ReadUInt32();
-                var  off = inFile.ReadUInt32();
+                var off = inFile.ReadUInt32();
                 inFile.BaseStream.Seek(off - 8, SeekOrigin.Current);
                 for (int j = 0; j < count; j++)
                 {
@@ -345,7 +350,7 @@ namespace RainbowLib
                     else cl.Moves.Add(Move.NULL);
                 }
             }
-                #endregion
+            #endregion
             ////Console.WriteLine(tracker.Report());
             inFile.Close();
             tracker.Close();

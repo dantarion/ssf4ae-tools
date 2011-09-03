@@ -7,8 +7,10 @@ namespace RainbowLib
 {
     /* This class is used for when part of a file references another thing in the file.
      * TODO: Make this class where the Reference comes from so it can be serialized properly */
+    [Serializable]
     public class Reference<T>
     {
+        [NonSerialized]
         private WeakReference r;
         private Reference(T obj)
         {

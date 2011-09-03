@@ -168,7 +168,10 @@ namespace OnoEdit
             }
 
             AELogger.WriteLog();
+            #if (DEBUG)
+            #else
             Application.Current.Shutdown();
+            #endif
         }
         // end anotak
     }

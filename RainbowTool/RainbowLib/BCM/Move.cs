@@ -27,26 +27,34 @@ namespace RainbowLib.BCM
     [Flags]
     public enum MoveFlags : ushort
     {
-        ONE_BUTTON = 0x10,
+        LAZY_STICK = 0x1,
+        STRICT_STICK = 0x2,
+        BUTTONS = 0x10,
         ALL_BUTTONS = 0x20,
-        ANY_TWO = 0x50,
-        LAZY_STICK = 0x401,
-        STRICT_STICK = 0x402,
+        ANY_TWO = 0x40,
+        STICK = 0x400,
         ON_PRESS = 0x1000,
         ON_RELEASE = 0x2000
     }
     [Flags]
-    enum StateRestriction : uint
+    public enum StateRestriction : uint
     {
         NONE = 0,
         AIR = 4
     }
+    [Serializable]
     public class Move : INotifyPropertyChanged
     {
         public static Move NULL = new Move("NULL");
+        public Move()
+            : this("NEW")
+        {
+        }
         public Move(string name = null)
         {
             Name = name;
+            InputMotion = InputMotion.NONE;
+            Script = BAC.Script.NullScript;
         }
         private string _name;
 
@@ -162,13 +170,15 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("InputMotion");
             }
         }
-        private ObservableCollection<Reference<CancelList>> _CancelLists = new ObservableCollection<Reference<CancelList>>();
-        public ObservableCollection<Reference<CancelList>> CancelLists
+        public enum MoveStateRestriction : uint
         {
-            get { return _CancelLists; }
+            THROW = 0x10000,
+            GROUND_NORMAL = 0x30000,
+            AIR_NORMAL = 0x40000,
+            SPECIAL = 0x70000,
         }
-        private uint _StateRestriction;
-        public uint StateRestriction
+        private MoveStateRestriction _StateRestriction;
+        public MoveStateRestriction StateRestriction
         {
             get { return _StateRestriction; }
             set
@@ -177,8 +187,13 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("StateRestriction");
             }
         }
-        private ulong _UltraRestriction;
-        public ulong UltraRestriction
+        public enum MoveUltraRestriction : ulong
+        {
+            NONE = 0,
+            ULTRA2 = 0x0000000100000000,
+        }
+        private MoveUltraRestriction _UltraRestriction;
+        public MoveUltraRestriction UltraRestriction
         {
             get { return _UltraRestriction; }
             set
@@ -218,8 +233,8 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("AIData");
             }
         }
-        
-        
+
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 namespace RainbowLib.BCM
 {
+    [Serializable]
     public class CancelList : INotifyPropertyChanged
     {
         private string _Name;
@@ -28,8 +29,8 @@ namespace RainbowLib.BCM
             get {
                 return _Moves; }
         }
-        
 
+         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {

@@ -56,6 +56,11 @@ namespace RainbowLib
         }
         public static void LoadCharacterData(string s)
         {
+            string baseDir = "../../../python_scripts/out/";
+            if (!System.IO.Directory.Exists(baseDir))
+                baseDir = "data/";
+            if (!System.IO.Directory.Exists(baseDir))
+                System.Windows.Forms.MessageBox.Show("Couldn't find data dir!!");
             IronPythonHelper.Reset();
             _data["VFX"] = initDictionary();
             _data["VFX2"] = initDictionary();
@@ -64,16 +69,16 @@ namespace RainbowLib
             _data["CAM"] = initDictionary();
             _data["UC1"] = initDictionary();
             _data["UC2"] = initDictionary();
-            if (System.IO.File.Exists("../../../python_scripts/out/global.py"))
+            if (System.IO.File.Exists(baseDir + "global.py"))
             {
-                IronPythonHelper.RunFile("../../../python_scripts/out/global.py");
+                IronPythonHelper.RunFile(baseDir + "global.py");
 
                 importIntoDictionary(_data["VFX"], IronPythonHelper.Import<PythonDictionary>("VFX"));
                 importIntoDictionary(_data["VFX2"], IronPythonHelper.Import<PythonDictionary>("VFX2"));
             }
-            if (System.IO.File.Exists("../../../python_scripts/out/" + s + ".py"))
+            if (System.IO.File.Exists(baseDir + "" + s + ".py"))
             {
-                IronPythonHelper.RunFile("../../../python_scripts/out/" + s + ".py");
+                IronPythonHelper.RunFile(baseDir + "" + s + ".py");
                 importIntoDictionary(_data["VFX"], IronPythonHelper.Import<PythonDictionary>("VFX"));
                 importIntoDictionary(_data["VFX2"], IronPythonHelper.Import<PythonDictionary>("VFX2"));
                 importIntoDictionary(_data["OBJ"], IronPythonHelper.Import<List>("OBJ"));

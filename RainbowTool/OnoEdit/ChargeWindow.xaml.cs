@@ -21,22 +21,5 @@ namespace OnoEdit
         {
             InitializeComponent();
         }
-
-        private void AddCharge(object sender, RoutedEventArgs e)
-        {
-            var tmp = new RainbowLib.BCM.Charge();
-            tmp.Name = "NEW";
-            App.OpenedFiles.BCMFile.Charges.Add(tmp);
-        }
-
-        private void RemoveCharge(object sender, RoutedEventArgs e)
-        {
-            var charge = ChargesGrid.SelectedValue as RainbowLib.BCM.Charge;
-            App.OpenedFiles.BCMFile.Charges.Remove(charge);
-            foreach (RainbowLib.BCM.InputMotion motion in App.OpenedFiles.BCMFile.InputMotions.Where(x => x.Entries.Where(y => y.Charge == charge).Count() != 0))
-            {
-                MessageBox.Show(string.Format("You deleted {0} which was still referenced by {1}. This needs to be fixed before saving", charge.Name, motion.Name));
-            }
-        }
     }
 }
