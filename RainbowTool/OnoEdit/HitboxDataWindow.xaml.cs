@@ -34,7 +34,7 @@ namespace OnoEdit
         }
         private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            ScriptWindow.processColumns(e, myDataGrid, RawDisplayCheckbox);
+            //ScriptWindow.processColumns(e, myDataGrid, RawDisplayCheckbox);
         }
     }
 }

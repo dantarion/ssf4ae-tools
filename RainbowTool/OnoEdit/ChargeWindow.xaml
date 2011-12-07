@@ -2,6 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="ChargeWindow" Height="300" Width="500">
+        Title="ChargeWindow" Height="350" Width="550">
         <ono:OnoGrid DataContext="{Binding Path=BCMFile.Charges, Source={StaticResource OpenedFiles}}"/>
 </Window>

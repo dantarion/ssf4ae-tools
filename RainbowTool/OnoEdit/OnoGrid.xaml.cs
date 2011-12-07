@@ -18,26 +18,12 @@ namespace OnoEdit
     /// <summary>
     /// Interaction logic for OnoGrid.xaml
     /// </summary>
-    public partial class OnoGrid : UserControl
+    public partial class OnoGrid : OnoEditControl
     {
-        private object copy;
         public OnoGrid()
         {
             InitializeComponent();
-        }
-
-
-        public int FrozenColumns
-        {
-            get { return (int)GetValue(FrozenColumnsProperty); }
-            set { SetValue(FrozenColumnsProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FrozenColumns.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FrozenColumnsProperty =
-            DependencyProperty.Register("FrozenColumns", typeof(int), typeof(OnoGrid), new UIPropertyMetadata(0));
-
-
+        }       
 
         private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
@@ -57,6 +43,7 @@ namespace OnoEdit
                 col.Header = "Cancel";
                 e.Column = col;
             }
+            //InputMotions
             if (e.PropertyType == typeof(RainbowLib.BCM.InputMotion))
             {
                 var col = new DataGridComboBoxColumn();
@@ -64,6 +51,15 @@ namespace OnoEdit
                 col.SelectedItemBinding = new Binding(e.PropertyName);
                 col.DisplayMemberPath = "Name";
                 col.Header = "InputMotion";
+                e.Column = col;
+            }
+            //HitBoxDataset
+            if (e.PropertyType == typeof(RainbowLib.BAC.HitBoxDataset))
+            {
+                var col = new DataGridComboBoxColumn();
+                col.ItemsSource = App.OpenedFiles.BACFile.HitboxTable;
+                col.SelectedItemBinding = new Binding(e.PropertyName);
+                col.Header = "HitboxData";
                 e.Column = col;
             }
             //Scripts
@@ -119,7 +115,7 @@ namespace OnoEdit
                     col.Header = e.PropertyName;
                     e.Column = col;
                 }
-            if (e.PropertyName == "Raw" || e.PropertyName == "ScriptIndex")
+            if (e.PropertyName == "Raw" || e.PropertyName == "ScriptIndex"||(e.Column.IsReadOnly && e.PropertyName != "Name"))
                 e.Cancel = true;
             if (e.PropertyName == "StartFrame")
             {
@@ -180,142 +176,36 @@ namespace OnoEdit
 
         }
 
-        private void ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        public override ListCollectionView ListCollectionView()
         {
-
+            return (ListCollectionView)myDataGrid.ItemsSource;
         }
-
-        private void DuplicateCommand(object sender, RoutedEventArgs e)
+        public override void ScrollCurrent()
         {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var clone = RainbowLib.Cloner.Clone(current);
-            var list = lc.SourceCollection as System.Collections.IList;
-            var index = list.IndexOf(current);
-            list.Insert(index+1, clone);
-
+            myDataGrid.ScrollIntoView(ListCollectionView().CurrentItem);
         }
-
-        private void RemoveCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            if (lc.IsAddingNew)
-                lc.CancelNew();
-            else
-            {
-                lc.CommitEdit();
-                lc.Remove(lc.CurrentItem);
-            }
-        }
-
-        private void MoveToTopCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var list = lc.SourceCollection as System.Collections.IList;
-            list.Remove(current);
-            list.Insert(0, current);
-            lc.MoveCurrentTo(current);
-            myDataGrid.ScrollIntoView(current);
-        }
-
-        private void MoveDownCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var list = lc.SourceCollection as System.Collections.IList;
-            var index = list.IndexOf(current);
-            list.Remove(current);
-            list.Insert(index + 1, current);
-            lc.MoveCurrentTo(current);
-            myDataGrid.ScrollIntoView(current);
-        }
-
-        private void MoveUpCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var list = lc.SourceCollection as System.Collections.IList;
-            var index = list.IndexOf(current);
-            list.Remove(current);
-            list.Insert(Math.Max(0, index - 1), current);
-            lc.MoveCurrentTo(current);
-            myDataGrid.ScrollIntoView(current);
-        }
-
-        private void MoveToBottomCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var list = lc.SourceCollection as System.Collections.IList;
-            var index = list.IndexOf(current);
-            list.Remove(current);
-            list.Add(current);
-            lc.MoveCurrentTo(current);
-            myDataGrid.ScrollIntoView(current);
-        }
-
-        private void AddCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            myDataGrid.ScrollIntoView(lc.AddNew());
-        }
-
-        private void myDataGrid_StylusEnter(object sender, StylusEventArgs e)
-        {
-
-        }
-
-        private void myDataGrid_Unloaded(object sender, RoutedEventArgs e)
-        {
-            myDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-            //myDataGrid.CancelEdit();
-        }
-
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-        {
-            //myDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-            //myDataGrid.SelectedItem = null;
-        }
-
-        private void myDataGrid_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //myDataGrid.CommitEdit();
-        }
-
         private void RawCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             myDataGrid.AutoGenerateColumns = false;
             myDataGrid.AutoGenerateColumns = true;
         }
+        public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
+  "SelectionChanged", RoutingStrategy.Bubble, typeof(SelectionChangedEventHandler), typeof(OnoGrid));
 
-        private void PasteCommand(object sender, RoutedEventArgs e)
+        public event SelectionChangedEventHandler SelectionChanged
         {
-            if (copy == null)
-                return;
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            var clone = RainbowLib.Cloner.Clone(copy);
-            var list = lc.SourceCollection as System.Collections.IList;
-            var index = list.IndexOf(current);
-            try
-            {
-                list.Insert(index+1, clone);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Cannot paste that here!");
-            }
-
+            add { myDataGrid.SelectionChanged += value; }
+            remove { myDataGrid.SelectionChanged -= value; }
+        }
+        public object SelectedValue
+        {
+            get { return (object)GetValue(SelectedValueProperty); }
+            set { SetValue(SelectedValueProperty, value); }
         }
 
-        private void CopyCommand(object sender, RoutedEventArgs e)
-        {
-            ListCollectionView lc = myDataGrid.ItemsSource as ListCollectionView;
-            var current = lc.CurrentItem;
-            copy = current;
-        }
-
+        // Using a DependencyProperty as the backing store for SelectedValue.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedValueProperty =
+            DependencyProperty.Register("SelectedValue", typeof(object), typeof(OnoGrid), new UIPropertyMetadata(null));
 
     }
 }

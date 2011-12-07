@@ -40,3 +40,20 @@ def ripEMA(filename):
 		NAMES.append(f.read(count))
 	f.close()
 	return NAMES
+def ripEMABones(filename):
+    NAMES = {}
+    f = open(filename,"rb")
+    f.seek(12)
+    skeletonOff = struct.unpack("I",f.read(0x4))[0]
+    #print hex(skeletonOff)
+    f.seek(skeletonOff)
+    boneCount = struct.unpack("H",f.read(0x2))[0]
+    f.seek(skeletonOff+0xC)
+    boneNameOff = struct.unpack("I",f.read(0x4))[0]
+    for i in range(0,boneCount):
+        f.seek(skeletonOff+boneNameOff+i*4)
+        strOff = struct.unpack("I",f.read(0x4))[0]
+        f.seek(skeletonOff+strOff)
+        NAMES[i] = read_cstring(f)
+    f.close()
+    return NAMES

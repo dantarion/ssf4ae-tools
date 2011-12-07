@@ -159,7 +159,7 @@ namespace OnoEdit
                 {
                     AELogger.Log("InnerException: " + ((Exception)e.ExceptionObject).InnerException.ToString());
                 }
-                MessageBox.Show(((Exception)e.ExceptionObject).Message, "Exception!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(((Exception)e.ExceptionObject).Message + "\n" + ((Exception)e.ExceptionObject).StackTrace, "Exception!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -172,6 +172,16 @@ namespace OnoEdit
             #else
             Application.Current.Shutdown();
             #endif
+        }
+
+        private void IRC_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://widget.mibbit.com/?server=irc.synirc.net&nick=ono_user%3F%3F%3F&channel=%23sf4-modding");
+        }
+
+        private void GC_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://code.google.com/p/ssf4ae-tools/");
         }
         // end anotak
     }

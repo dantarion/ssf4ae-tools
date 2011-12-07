@@ -59,8 +59,10 @@ namespace RainbowScript
         private static void RunScriptAll(string dir, string script)
         {
             var charnames = Directory.EnumerateDirectories(dir).ToList();
+            File.Delete("output/" + Path.GetFileNameWithoutExtension(script) + ".html");
             foreach (string charname in charnames)
                 RunScript(dir, script, Path.GetFileName(charname));
+
         }
         private static void RunScript(string dir, string script,string charname)
         {
@@ -75,9 +77,12 @@ namespace RainbowScript
             var bac = BACFile.FromFilename(dir + "/" + charname + "/" + charname + ".bac", bcm);
             IronPythonHelper.Export("bcm", bcm);
             IronPythonHelper.Export("bac", bac);
+            IronPythonHelper.Export("charName", charname);
             IronPythonHelper.RunFile(script);
-            
-            File.WriteAllText("output/"+charname+"."+str+".txt",sw.ToString());
+            Directory.CreateDirectory("output/" + str + "/");
+
+            File.WriteAllText("output/" + str + "/" + charname + ".html", sw.ToString());
+            File.AppendAllText("output/" + str + ".html",sw.ToString());
             //Console.SetOut(oldout);
             //Console.ReadLine();
         }

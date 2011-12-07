@@ -202,6 +202,7 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("UltraRestriction");
             }
         }
+        [NonSerialized]
         private int _ScriptIndex;
         public int ScriptIndex
         {

@@ -32,6 +32,7 @@ namespace RainbowLib
             catch (Exception e)
             {
                 Console.Write(e.Message);
+                Console.Write(e.TargetSite);
             }
         }
         public static void Export(string name, object obj)
@@ -40,7 +41,15 @@ namespace RainbowLib
         }
         public static T Import<T>(string name)
         {
-            return (T)m_scope.GetVariable(name);
+            try
+            {
+                return (T)m_scope.GetVariable(name);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+           
         }
     }
 }

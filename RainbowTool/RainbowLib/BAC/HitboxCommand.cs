@@ -217,7 +217,7 @@ namespace RainbowLib.BAC
             }
         }
         [NonSerialized]
-        private Reference<HitBoxDataset> _HitboxDataSet;
+        private HitBoxDataset _HitboxDataSet;
         public HitBoxDataset HitboxDataSet
         {
             get { return _HitboxDataSet; }

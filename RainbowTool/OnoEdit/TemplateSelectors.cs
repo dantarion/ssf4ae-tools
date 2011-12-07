@@ -60,7 +60,7 @@ namespace OnoEdit
             if (value == null)
                 return null;
             var obj = new object[2];
-            obj[0] = parameter;
+            obj[0] = Binding.DoNothing;
             var val = (RainbowLib.IndexReference)value;
             obj[1] = val.Value;
             return obj;

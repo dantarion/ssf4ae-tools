@@ -20,11 +20,13 @@ namespace RainbowLib
         public ObservableCollection<Script> Scripts
         {
             get { return _Scripts; }
+            internal set { _Scripts = value; }
         }
         private ObservableCollection<Script> _VFXScripts = new ObservableCollection<Script>();
         public ObservableCollection<Script> VFXScripts
         {
             get { return _VFXScripts; }
+            internal set { _VFXScripts = value; }
         }
         private ObservableCollection<HitBoxDataset> _HitboxTable = new ObservableCollection<HitBoxDataset>();
         public ObservableCollection<HitBoxDataset> HitboxTable
@@ -187,7 +189,7 @@ namespace RainbowLib
 
             script.FirstHitboxFrame = inFile.ReadUInt16();
             script.LastHitboxFrame = inFile.ReadUInt16();
-            script.LastCancelableFrame = inFile.ReadUInt16();
+            script.IASAFrame = inFile.ReadUInt16();
             script.TotalFrames = inFile.ReadUInt16();
 
             script.UnknownFlags1 = inFile.ReadUInt32();
@@ -205,18 +207,18 @@ namespace RainbowLib
                 int cnt = inFile.ReadUInt16();
                 for (int o = 0; o < cnt; o++)
                 {
-                    cl.Commands.Add(cl.GenerateCommand());
+                    cl.Add(cl.GenerateCommand());
                 }
                 int frameoff = inFile.ReadInt32();
                 int dataoff = inFile.ReadInt32();
                 inFile.BaseStream.Seek(baseoff + frameoff + 12 * j);
-                foreach (BaseCommand cmd in cl.Commands)
+                foreach (BaseCommand cmd in cl)
                 {
                     cmd.StartFrame = inFile.ReadUInt16();
                     cmd.EndFrame = inFile.ReadUInt16();
                 }
                 inFile.BaseStream.Seek(baseoff + dataoff + 12 * j);
-                foreach (BaseCommand cmd in cl.Commands)
+                foreach (BaseCommand cmd in cl)
                 {
                     switch ((CommandListType)cl.Type)
                     {
@@ -334,6 +336,10 @@ namespace RainbowLib
         {
             bac.Scripts.Remove(Script.NullScript);
             bac.VFXScripts.Remove(Script.NullScript);
+
+            bac.Scripts = new ObservableCollection<Script>(bac.Scripts.OrderBy(x => x.Index));
+            bac.VFXScripts = new ObservableCollection<Script>(bac.VFXScripts.OrderBy(x => x.Index));
+
             var outFile = new BinaryWriter(File.Create(name));
             outFile.Write(1128350243);
             outFile.Write(2686974);
@@ -499,22 +505,22 @@ namespace RainbowLib
         {
             outFile.Write(script.FirstHitboxFrame);
             outFile.Write(script.LastHitboxFrame);
-            outFile.Write(script.LastCancelableFrame);
+            outFile.Write(script.IASAFrame);
             outFile.Write(script.TotalFrames);
 
             outFile.Write(script.UnknownFlags1);
             outFile.Write(script.UnknownFlags2);
             outFile.Write(script.UnknownFlags3);
-            outFile.Write((ushort)script.CommandLists.Where(x => x.Commands.Count > 0).Count());
+            outFile.Write((ushort)script.CommandLists.Where(x => x.Count > 0).Count());
             outFile.Write(0x18);
 
             int baseOff = (int)outFile.BaseStream.Position;
-            var clists = script.CommandLists.Where(x => x.Commands.Count > 0).ToList();
+            var clists = script.CommandLists.Where(x => x.Count > 0).ToList();
             for (int i = 0; i < clists.Count; i++)
             {
                 dynamic cl = clists[i];
                 outFile.Write((ushort)cl.Type);
-                outFile.Write((ushort)cl.Commands.Count);
+                outFile.Write((ushort)cl.Count);
                 outFile.Write(0);
                 outFile.Write(0);
             }
@@ -523,7 +529,7 @@ namespace RainbowLib
                 dynamic cl = clists[i];
                 int frameoff = (int)outFile.BaseStream.Position - baseOff - 12 * i;
                 outFile.Seek(0, SeekOrigin.End);
-                foreach (BaseCommand cmd in cl.Commands)
+                foreach (BaseCommand cmd in cl)
                 {
                     outFile.Write((ushort)cmd.StartFrame);
                     outFile.Write((ushort)cmd.EndFrame);
@@ -533,7 +539,7 @@ namespace RainbowLib
                 outFile.Write(frameoff);
                 outFile.Write(dataoff);
                 outFile.Seek(0, SeekOrigin.End);
-                foreach (BaseCommand cmd in cl.Commands)
+                foreach (BaseCommand cmd in cl)
                 {
                     if (cmd is FlowCommand)
                     {

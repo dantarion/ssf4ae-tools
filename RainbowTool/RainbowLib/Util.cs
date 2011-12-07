@@ -37,11 +37,13 @@ namespace RainbowLib
             var obj = formatter.Deserialize(stream);
             foreach (PropertyInfo pinfo in lol.GetType().GetProperties())
             {
-                if (!pinfo.PropertyType.IsClass || !pinfo.CanWrite)
+                if (!pinfo.PropertyType.IsClass || !pinfo.CanWrite || pinfo.IsDefined(typeof(SerializableAttribute),true))
                     continue;
                 var val = pinfo.GetValue(lol, null);
                 pinfo.SetValue(obj, val, null);
             }
+            if (obj.GetType() == typeof(RainbowLib.BAC.Script))
+                (obj as RainbowLib.BAC.Script).Name = (lol as RainbowLib.BAC.Script).Name + "_COPY";
             return obj;
         }
     }

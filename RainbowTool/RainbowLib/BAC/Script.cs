@@ -9,7 +9,7 @@ namespace RainbowLib.BAC
     [Serializable]
     public class Script : INotifyPropertyChanged
     {
-        public int Index { get; private set; }
+        public int Index { get; set; }
 
         public static Script NullScript = new Script(-1,"NONE");
         public Script(int index,string Name = null)
@@ -52,7 +52,7 @@ namespace RainbowLib.BAC
             }
         }
         private ushort _LastCancelableFrame;
-        public ushort LastCancelableFrame
+        public ushort IASAFrame
         {
             get { return _LastCancelableFrame; }
             set

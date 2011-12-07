@@ -38,7 +38,6 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Stun");
             }
         }
-        [Flags]
         public enum HitBoxEffect : ushort
         {
             HIT = 0,

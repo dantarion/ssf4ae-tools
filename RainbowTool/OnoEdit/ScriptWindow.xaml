@@ -11,20 +11,32 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Gray"/>
             </Style.Resources>
         </Style>
+        <local:RealFrameConverter Target="{Binding ElementName=ListBox,Path=SelectedValue}" x:Key="FRC"/>
     </Window.Resources>
     <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" >
+            <Label MinWidth="400" Height="20" HorizontalAlignment="Stretch"  Content="{Binding ElementName=DataGrid,Path=SelectedValue,Converter={StaticResource ResourceKey=FRC}}"/>
+        </StatusBar>
         <GroupBox DockPanel.Dock="Left" Header="Script">
-            <ListBox Width="150" Name="ListBox" ItemsSource="{Binding Source={StaticResource myView}}" DisplayMemberPath="Name" SelectedIndex="0" SelectionChanged="ListBox2_SelectionChanged">
-
-            </ListBox>
+            <local:OnoList SelectionChanged="ScriptSelectionChanged"  Width="180" x:Name="ListBox" DataContext="{Binding}"/>
         </GroupBox>
         <GroupBox DockPanel.Dock="Left" Header="CommandList">
-            <ListBox Width="90" Name="ComboBox" ItemsSource="{Binding ElementName=ListBox,Path=SelectedItem.CommandLists}" SelectedIndex="0" 
-                      SelectionChanged="ComboBox_SelectionChanged">
+            <ListBox Width="90" Name="ComboBox" ItemsSource="{Binding ElementName=ListBox,Path=SelectedValue.CommandLists}" DisplayMemberPath="Type" SelectedIndex="0" 
+                      SelectionChanged="ComboBox_SelectionChanged" FontWeight="Bold">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Count}" Value="0">
+                                <Setter Property="ListBoxItem.FontStyle"  Value="Italic" />
+                                <Setter Property="ListBoxItem.FontWeight"  Value="Normal" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
         </GroupBox>
         <DockPanel>
-            <Expander IsExpanded="False" DockPanel.Dock="Top" Header="Script Header Data" DataContext="{Binding ElementName=ListBox,Path=SelectedItem}">
+            <Expander IsExpanded="False" DockPanel.Dock="Top" Header="Script Header Data" DataContext="{Binding ElementName=ListBox,Path=SelectedValue}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -44,43 +56,14 @@
                     <Label Grid.Column="0" Grid.Row="2">Last Hitbox Frame?</Label>
                     <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=LastHitboxFrame}"/>
                     <Label Grid.Column="0" Grid.Row="3">Interrupt at Frame:</Label>
-                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=LastCancelableFrame}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=IASAFrame}"/>
                     <Label Grid.Column="0" Grid.Row="4">Total Duration</Label>
                     <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=TotalFrames}"/>
                 </Grid>
             </Expander>
-            <GroupBox DockPanel.Dock="Top" Header="Display Options">
-                <CheckBox Name="RawEnumCheckbox">Raw</CheckBox>
-            </GroupBox>
+            
             <GroupBox Header="Commands">
-                <DockPanel>
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">                   
-                        <Button Click="AddCommand">Add New</Button>
-                        <Button IsEnabled="False">Import...</Button>
-                        <Button IsEnabled="False">Export...</Button>
-                    </StackPanel>
-                    <DataGrid Name="DataGrid" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" ItemsSource="{Binding ElementName=ComboBox,Path=SelectedItem.Commands}" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="2" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="10" ColumnWidth="SizeToCells" ContextMenuOpening="DataGrid_ContextMenuOpening">
-                        <DataGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Duplicate" Click="DuplicateCommand">
-                                    <MenuItem.Icon>
-                                        <Image Source="/OnoEdit;component/Images/application_double.png" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="Remove" Click="RemoveCommand">
-                                    <MenuItem.Icon>
-                                        <Image Source="/OnoEdit;component/Images/delete.png" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <Separator />
-                                <MenuItem Header="Move to Top" Click="MoveToTopCommand"/>
-                                <MenuItem Header="Move Up" Click="MoveUpCommand"/>
-                                <MenuItem Header="Move Down" Click="MoveDownCommand"/>
-                                <MenuItem Header="Move to Bottom" Click="MoveToBottomCommand"/>
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-                    </DataGrid>
-                </DockPanel>
+                <local:OnoGrid x:Name="DataGrid" FrozenColumns="2" DataContext="{Binding ElementName=ComboBox,Path=SelectedItem}"/>
             </GroupBox>
         </DockPanel>
     </DockPanel>

@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OnoEdit")]
+[assembly: AssemblyTitle("Ono!")]
 [assembly: AssemblyDescription("A moveset editor for Super Street Fighter 4: Arcade Edition for PC")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("dantarion.com")]
-[assembly: AssemblyProduct("OnoEdit")]
-[assembly: AssemblyCopyright("Copyright © Dantarion 2011")]
+[assembly: AssemblyProduct("Ono!")]
+[assembly: AssemblyCopyright("Copyright © dantarion,anotak 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.1.*")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

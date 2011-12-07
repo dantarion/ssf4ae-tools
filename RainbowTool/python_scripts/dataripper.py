@@ -21,7 +21,11 @@ def ripBVS2FileAppend(bvs,log):
 def ripEMS2File(bvs,name,log):
     log.write(name+" = []\n")
     for i,vfx in enumerate(ripEMA(bvs)):
-        log.write("%s.append(\"%s\")# %02d\n"%(name,vfx,i))  
+        log.write("%s.append(\"%s\")# %02d\n"%(name,vfx,i))
+def ripEMABones2File(bvs,log):
+    log.write("BONES = {}\n")
+    for i,name in ripEMABones(bvs).items():
+        log.write("BONES[%d] = \"%s\"\n"%(i,name))
 #Global Data
 stages = []
 for entry in os.listdir(INSTALL_DIR+"resource\\battle\\stage\\"):
@@ -52,6 +56,7 @@ for i,char in enumerate(chars):
     print char
     log = open("out/"+char+".py","w")
     ripBVS2File(dirs[i]+"/"+char+".vfx.bvs",log)
+    ripEMABones2File(dirs[i]+"/"+char+".obj.ema",log)
     ripEMS2File(dirs[i]+"/"+char+".obj.ema","OBJ",log)
     ripEMS2File(dirs[i]+"/"+char+".fce.ema","FCE",log)
     ripEMS2File(dirs[i]+"/"+char+".cam.ema","CAM",log)

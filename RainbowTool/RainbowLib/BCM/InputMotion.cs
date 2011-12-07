@@ -24,6 +24,10 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("Name");
             }
         }
+        public InputMotion()
+            : this("NEW")
+        {
+        }
         public InputMotion(string name)
         {
             Name = name;
@@ -106,7 +110,7 @@ namespace RainbowLib.BCM
             get
             {
                 if (IsCharge)
-                    return "CHARGE "+Charge.ToString();
+                    return "CHARGE["+Charge.ToString()+"]";
                 return Input.ToString();
             }
         }

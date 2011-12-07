@@ -47,14 +47,15 @@ namespace RainbowLib.BAC
             return new CommandList<BaseCommand>();
         }
     }
-    public class CommandList<T> where T:BaseCommand, INotifyPropertyChanged
+    [Serializable]
+    public class CommandList<T> : ObservableCollection<T> where T:BaseCommand, INotifyPropertyChanged 
     {
         internal CommandList()
         {
         }
         public override string ToString()
         {
-            if (Commands.Count == 0)
+            if (Count == 0)
                 return Type.ToString() + "*";
             else
                 return Type.ToString();
@@ -74,14 +75,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Type");
             }
         }
-        private ObservableCollection<T> _Commands = new ObservableCollection<T>();
-        public ObservableCollection<T> Commands
-        {
-            get { return _Commands; }
-        }
-
          [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string Name)
         {
             if (PropertyChanged != null)

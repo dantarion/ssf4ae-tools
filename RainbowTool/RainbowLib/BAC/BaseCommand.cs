@@ -52,6 +52,8 @@ namespace RainbowLib.BAC
             }
             set
             {
+                if (value == null)
+                    return;
                 value = value.Replace("\n", "");
                 var arr = new byte[value.Length / 2];
                 try

@@ -35,7 +35,7 @@ namespace RainbowTests
                 {
                     if (script.Name == "NONE")
                         continue;
-                    foreach (HitboxCommand hitbox in script.CommandLists[(int)CommandListType.HITBOX].Commands)
+                    foreach (HitboxCommand hitbox in script.CommandLists[(int)CommandListType.HITBOX])
                     {
                         //hitbox.Juggle = 1;
                         hitbox.JugglePotential = 20;
@@ -44,11 +44,11 @@ namespace RainbowTests
                         if (hitbox.HitLevel == HitboxCommand.HitLevelType.AIR_ONLY)
                             hitbox.HitLevel = HitboxCommand.HitLevelType.MID;
                     }
-                    foreach (SpeedCommand speed in script.CommandLists[(int)CommandListType.SPEED].Commands)
+                    foreach (SpeedCommand speed in script.CommandLists[(int)CommandListType.SPEED])
                     {
                         speed.Multiplier = (float)(speed.Multiplier * 1.7);
                     }
-                    foreach (CancelCommand cancel in script.CommandLists[(int)CommandListType.CANCELS].Commands)
+                    foreach (CancelCommand cancel in script.CommandLists[(int)CommandListType.CANCELS])
                     {
                         if(cancel.Type == CancelCommand.CancelType.ON_HIT)
                             cancel.Type = CancelCommand.CancelType.START;

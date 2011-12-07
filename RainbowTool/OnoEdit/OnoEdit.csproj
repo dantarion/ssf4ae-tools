@@ -84,8 +84,12 @@
     <Compile Include="HitboxDataWindow.xaml.cs">
       <DependentUpon>HitboxDataWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OnoEditControl.cs" />
     <Compile Include="OnoGrid.xaml.cs">
       <DependentUpon>OnoGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OnoList.xaml.cs">
+      <DependentUpon>OnoList.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScriptWindow.xaml.cs">
       <DependentUpon>ScriptWindow.xaml</DependentUpon>
@@ -140,6 +144,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OnoList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScriptWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +176,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -208,6 +217,12 @@
       <Project>{038A20F7-3BD6-450E-AFAE-02489217CEBC}</Project>
       <Name>RainbowLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\paste_plain.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
