@@ -48,6 +48,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0">Name</Label>
                     <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=Name}"/>
@@ -59,6 +62,12 @@
                     <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=IASAFrame}"/>
                     <Label Grid.Column="0" Grid.Row="4">Total Duration</Label>
                     <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=TotalFrames}"/>
+                    <Label Grid.Column="0" Grid.Row="5">UnknownFlags1</Label>
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Path=UnknownFlags1}"/>
+                    <Label Grid.Column="0" Grid.Row="6">UnknownFlags2</Label>
+                    <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Path=UnknownFlags2}"/>
+                    <Label Grid.Column="0" Grid.Row="7">UnknownFlags3</Label>
+                    <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Path=UnknownFlags3}"/>
                 </Grid>
             </Expander>
             
