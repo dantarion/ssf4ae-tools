@@ -11,9 +11,14 @@ namespace RainbowLib.BAC
         [Flags]
         public enum StateFlags : uint
         {
+            _1 = 0x01,
             CROUCHING =  0x02,
             AIRBOURNE =  0x04,
+            _8 = 0x08,
             COUNTERHIT = 0x10,
+            _20 = 0x20,
+            _40 = 0x40,
+            _80 = 0x80
         }
         private StateFlags _Flags;
         public StateFlags Flags
@@ -22,6 +27,10 @@ namespace RainbowLib.BAC
             set
             {
                 _Flags = value;
+                /*if(!StateFlags.IsDefined(typeof(StateFlags),_Flags))
+                {
+                    AELogger.Log("undefinied stateflags enum value: " + _Flags );
+                }*/
                 OnPropertyChanged("Flags");
             }
         }

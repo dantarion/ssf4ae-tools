@@ -83,10 +83,9 @@ namespace RainbowLib
                 {
                     inFile.Write((ushort)entry.Type);
                     inFile.Write((ushort)entry.Buffer);
-                    if (entry.Type == InputType.CHARGE)
-                        inFile.Write((ushort)bcm.Charges.IndexOf(entry.Charge));
-                    else
-                        inFile.Write((ushort)entry.Input);
+                    //if (entry.Type == InputType.CHARGE)
+                    //    inFile.Write((ushort)bcm.Charges.IndexOf(entry.Charge));
+                    inFile.Write((ushort)entry.Input);
                     inFile.Write((ushort)entry.MoveFlags);
                     inFile.Write((ushort)entry.Flags);
                     inFile.Write((ushort)entry.Requirement);
@@ -251,10 +250,10 @@ namespace RainbowLib
                     var entry = new InputMotionEntry();
                     entry.Type = (InputType)inFile.ReadUInt16();
                     entry.Buffer = inFile.ReadUInt16();
+                    UInt16 a = inFile.ReadUInt16();
                     if (entry.Type == InputType.CHARGE)
-                        entry.Charge = bcm.Charges[inFile.ReadUInt16()];
-                    else
-                        entry.Input = (Input)inFile.ReadUInt16();
+                        entry.Charge = bcm.Charges[a];
+                    entry.Input = (Input)a;
                     entry.MoveFlags = (MoveFlags)inFile.ReadUInt16();
                     entry.Flags = (InputReqType)inFile.ReadUInt16();
                     entry.Requirement = inFile.ReadUInt16();

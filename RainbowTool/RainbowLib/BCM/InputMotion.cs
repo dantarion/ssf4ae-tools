@@ -97,7 +97,10 @@ namespace RainbowLib.BCM
         public Input Input
         {
             get { return _input; }
-            set { _input = value; OnPropertyChanged("Input"); }
+            set { 
+                _input = value;
+                OnPropertyChanged("Input");
+            }
         }
         private Reference<Charge> _charge;
         public Charge Charge
