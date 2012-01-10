@@ -11,14 +11,14 @@ namespace RainbowLib.BAC
         [Flags]
         public enum StateFlags : uint
         {
-            _1 = 0x01,
+            UNK1 = 0x01,
             CROUCHING =  0x02,
             AIRBOURNE =  0x04,
-            _8 = 0x08,
+            UNK8 = 0x08,
             COUNTERHIT = 0x10,
-            _20 = 0x20,
-            _40 = 0x40,
-            _80 = 0x80
+            UNK20 = 0x20,
+            UNK40 = 0x40,
+            UNK80 = 0x80
         }
         private StateFlags _Flags;
         public StateFlags Flags

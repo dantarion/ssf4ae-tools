@@ -129,9 +129,9 @@ namespace RainbowLib.BAC
             UNKNOWN0 = 0x01,
             UNKNOWN1 = 0x02,
             UNKNOWN2 = 0x04,
-            UNKNOWN3 = 0x08,
-            BREAK_ARMOUR = 0x10,
-            UNKNOWN4 = 0x20,
+            BREAK_ARMOR = 0x08,
+            BREAK_ARMOR2 = 0x10,
+            CROSSUP = 0x20,
             UNKNOWN5 = 0x40,
             DONT_HIT_CROUCHING = 0x80
         }

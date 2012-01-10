@@ -240,7 +240,7 @@ namespace RainbowLib
                         case CommandListType.UNK02:
                             cmd.Raw = inFile.ReadBytes(0x1C);
                             break;
-                        case CommandListType.UNK03:
+                        case CommandListType.STATE:
                             var unk3 = cmd as StateCommand;
                             unk3.Flags = (StateCommand.StateFlags)inFile.ReadUInt32();
                             unk3.UnknownFlags2 = inFile.ReadUInt32();
@@ -307,7 +307,7 @@ namespace RainbowLib
                             if (!hit.HitboxDataSet.Usage.Contains(script) && hit.Type != HitboxCommand.HitboxType.PROXIMITY)
                                 hit.HitboxDataSet.Usage.Add(script);
                             break;
-                        case CommandListType.UNK08:
+                        case CommandListType.INVINC:
                         case CommandListType.UNK11:
                         case CommandListType.SFX:
                             cmd.Raw = inFile.ReadBytes(0x10);

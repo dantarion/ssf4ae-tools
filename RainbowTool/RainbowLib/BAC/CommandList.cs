@@ -13,12 +13,12 @@ namespace RainbowLib.BAC
         FLOW = 0,
         ANIMATION = 1,
         UNK02 = 2,
-        UNK03 = 3,
+        STATE = 3,
         SPEED = 4,
         PHYSICS = 5,
         CANCELS = 6,
         HITBOX = 7,
-        UNK08 = 8,
+        INVINC = 8,
         HURTBOX = 9,
         ETC = 10,
         UNK11 = 11,
@@ -32,7 +32,7 @@ namespace RainbowLib.BAC
                 return new CommandList<FlowCommand>();
             if (type == CommandListType.ANIMATION)
                 return new CommandList<AnimationCommand>();
-            if (type == CommandListType.UNK03)
+            if (type == CommandListType.STATE)
                 return new CommandList<StateCommand>();
             if (type == CommandListType.SPEED)
                 return new CommandList<SpeedCommand>();

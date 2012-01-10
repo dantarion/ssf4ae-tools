@@ -41,7 +41,8 @@ namespace OnoEdit
 
         private void RemoveMove(object sender, RoutedEventArgs e)
         {
-            (ListBox.SelectedValue as RainbowLib.BCM.CancelList).Moves.Remove(Grid.SelectedValue as RainbowLib.BCM.Move);
+            (ListBox.SelectedValue as RainbowLib.BCM.CancelList).Moves.Remove(
+                (Grid.SelectedValue as RainbowLib.Reference<RainbowLib.BCM.Move>));
         }
     }
 }

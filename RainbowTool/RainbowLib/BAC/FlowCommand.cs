@@ -18,8 +18,7 @@ namespace RainbowLib.BAC
             ON_WALL = 9,
             ON_COUNTER = 0xA,
             ON_RELEASE = 0xB,
-            ON_INPUT = 0xC,
-
+            ON_INPUT = 0xC
         }
         private FlowType _Type;
         public FlowType Type
