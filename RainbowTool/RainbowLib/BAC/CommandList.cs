@@ -36,6 +36,8 @@ namespace RainbowLib.BAC
                 return new CommandList<StateCommand>();
             if (type == CommandListType.SPEED)
                 return new CommandList<SpeedCommand>();
+            if (type == CommandListType.PHYSICS)
+                return new CommandList<PhysicsCommand>();
             if (type == CommandListType.CANCELS)
                 return new CommandList<CancelCommand>();
             if (type == CommandListType.HURTBOX)

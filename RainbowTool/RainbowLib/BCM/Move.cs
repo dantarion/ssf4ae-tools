@@ -224,7 +224,7 @@ namespace RainbowLib.BCM
             }
         }
 
-        private byte[] _AIData;
+        /*private byte[] _AIData;
         public byte[] AIData
         {
             get { return _AIData; }
@@ -232,6 +232,127 @@ namespace RainbowLib.BCM
             {
                 _AIData = value;
                 OnPropertyChanged("AIData");
+            }
+        }*/
+
+        private uint _AIData0; // 44 - 40
+        public uint AIData0
+        {
+            get { return _AIData0; }
+            set
+            {
+                _AIData0 = value;
+                OnPropertyChanged("AIData0");
+            }
+        }
+
+        private uint _AIData1; // 40 - 36
+        public uint AIData1
+        {
+            get { return _AIData1; }
+            set
+            {
+                _AIData1 = value;
+                OnPropertyChanged("AIData1");
+            }
+        }
+
+        private float _AIData2; // 36 - 32
+        public float AIData2
+        {
+            get { return _AIData2; }
+            set
+            {
+                _AIData2 = value;
+                OnPropertyChanged("AIData2");
+            }
+        }
+
+        private uint _AIData3; // 32 - 28
+        public uint AIData3
+        {
+            get { return _AIData3; }
+            set
+            {
+                _AIData3 = value;
+                OnPropertyChanged("AIData3");
+            }
+        }
+
+        private uint _AIData4; // 28 - 24
+        public uint AIData4
+        {
+            get { return _AIData4; }
+            set
+            {
+                _AIData4 = value;
+                OnPropertyChanged("AIData4");
+            }
+        }
+
+        private uint _AIData5; // 24 - 20
+        public uint AIData5
+        {
+            get { return _AIData5; }
+            set
+            {
+                _AIData5 = value;
+                OnPropertyChanged("AIData5");
+            }
+        }
+
+        private uint _AIData6; // 20 - 16
+        public uint AIData6
+        {
+            get { return _AIData6; }
+            set
+            {
+                _AIData6 = value;
+                OnPropertyChanged("AIData6");
+            }
+        }
+
+        private uint _AIData7; // 16 - 12
+        public uint AIData7
+        {
+            get { return _AIData7; }
+            set
+            {
+                _AIData7 = value;
+                OnPropertyChanged("AIData7");
+            }
+        }
+
+        private uint _AIData8; // 12 - 8
+        public uint AIData8
+        {
+            get { return _AIData8; }
+            set
+            {
+                _AIData8 = value;
+                OnPropertyChanged("AIData8");
+            }
+        }
+
+        private uint _AIData9; // 8 - 4
+        public uint AIData9
+        {
+            get { return _AIData9; }
+            set
+            {
+                _AIData9 = value;
+                OnPropertyChanged("AIData9");
+            }
+        }
+
+        private uint _AIDataA; // 4 - 0
+        public uint AIDataA
+        {
+            get { return _AIDataA; }
+            set
+            {
+                _AIDataA = value;
+                OnPropertyChanged("AIDataA");
             }
         }
 

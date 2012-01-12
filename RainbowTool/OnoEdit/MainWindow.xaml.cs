@@ -14,6 +14,15 @@ namespace OnoEdit
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static string _opened = null;
+        public static string Opened
+        {
+            get
+            {
+                return System.IO.Path.GetFileName(_opened);
+            }
+        }
+
         public MainWindow()
         {
             // start anotak
@@ -103,13 +112,15 @@ namespace OnoEdit
                 App.OpenedFiles.BCMFile = BCMFile.FromFilename(sb.FileName);
                 string bacfile = sb.FileName.Replace(".bcm", ".bac");
                 App.OpenedFiles.BACFile = BACFile.FromFilename(bacfile, App.OpenedFiles.BCMFile);
-                opened = sb.FileName;
-                RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(opened));
+                _opened = sb.FileName;
+                RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(_opened));
                 App.OpenedFiles.FilesOpened = true;
-            }
 
+                this.Title = "Ono! " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version + " - " +  System.IO.Path.GetFileName(_opened);
+            }
+            
         }
-        private string opened = null;
+        
         private void ClickSave(object sender, RoutedEventArgs e)
         {
             /*
@@ -117,25 +128,25 @@ namespace OnoEdit
             sb.InitialDirectory = System.IO.Path.GetDirectoryName(opened);
             bool result = sb.ShowDialog(this);
             if(result)*/
-            var result = MessageBox.Show("Are you sure you want to overwrite \""+opened+"\" ?", "Overwrite File", MessageBoxButton.YesNo);
+            var result = MessageBox.Show("Are you sure you want to overwrite \""+_opened+"\" ?", "Overwrite File", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                BCMFile.ToFilename(opened, App.OpenedFiles.BCMFile);
-                BACFile.ToFilename(opened.Replace(".bcm",".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
+                BCMFile.ToFilename(_opened, App.OpenedFiles.BCMFile);
+                BACFile.ToFilename(_opened.Replace(".bcm",".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
             }
         }
         private void ClickSaveAs(object sender, RoutedEventArgs e)
         {
             
             var sb = new SaveFileDialog();
-            sb.InitialDirectory = System.IO.Path.GetDirectoryName(opened);
+            sb.InitialDirectory = System.IO.Path.GetDirectoryName(_opened);
             sb.Filter = "SF4AE BCM Files|*.bcm";
             sb.AddExtension = true;
             sb.OverwritePrompt = true;
             bool result = (bool)sb.ShowDialog(this);
             if (result)
             {
-                opened = sb.FileName;
+                _opened = sb.FileName;
                 BCMFile.ToFilename(sb.FileName,App.OpenedFiles.BCMFile);
                 BACFile.ToFilename(sb.FileName.Replace(".bcm", ".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
             }

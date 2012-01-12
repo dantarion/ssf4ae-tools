@@ -120,7 +120,19 @@ namespace RainbowLib
                 inFile.Write((short)m.UltraCost);
                 inFile.Write(bcm.InputMotions.IndexOf(m.InputMotion) - 1);
                 inFile.Write(m.Script.Index);
-                inFile.Write(m.AIData);
+
+                inFile.Write(m.AIData0);
+                inFile.Write(m.AIData1);
+                inFile.Write(m.AIData2);
+                inFile.Write(m.AIData3);
+                inFile.Write(m.AIData4);
+                inFile.Write(m.AIData5);
+                inFile.Write(m.AIData6);
+                inFile.Write(m.AIData7);
+                inFile.Write(m.AIData8);
+                inFile.Write(m.AIData9);
+                inFile.Write(m.AIDataA);
+                //inFile.Write(m.AIData);
 
             }
             int MovesNameOffset = (int)inFile.BaseStream.Position;
@@ -294,8 +306,19 @@ namespace RainbowLib
                 else
                     move.InputMotion = InputMotion.NONE;
                 move.ScriptIndex = inFile.ReadInt32();
-                move.AIData = inFile.ReadBytes(44);
+                //move.AIData = inFile.ReadBytes(44);
 
+                move.AIData0 = inFile.ReadUInt32();
+                move.AIData1 = inFile.ReadUInt32();
+                move.AIData2 = inFile.ReadSingle();
+                move.AIData3 = inFile.ReadUInt32();
+                move.AIData4 = inFile.ReadUInt32();
+                move.AIData5 = inFile.ReadUInt32();
+                move.AIData6 = inFile.ReadUInt32();
+                move.AIData7 = inFile.ReadUInt32();
+                move.AIData8 = inFile.ReadUInt32();
+                move.AIData9 = inFile.ReadUInt32();
+                move.AIDataA = inFile.ReadUInt32();
 
                 /*
                 inFile.ReadUInt32();      

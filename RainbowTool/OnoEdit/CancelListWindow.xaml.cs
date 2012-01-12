@@ -21,6 +21,7 @@ namespace OnoEdit
         public CancelListWindow()
         {
             InitializeComponent();
+            this.Title = Title + " - " + MainWindow.Opened;
         }
         private void AddCancelList(object sender, RoutedEventArgs e)
         {

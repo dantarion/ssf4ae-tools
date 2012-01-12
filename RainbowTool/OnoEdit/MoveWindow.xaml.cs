@@ -21,7 +21,7 @@ namespace OnoEdit
         public MoveWindow()
         {
             InitializeComponent();
-
+            this.Title = Title + " - " + MainWindow.Opened;
         }
 
         private void AddMove(object sender, RoutedEventArgs e)

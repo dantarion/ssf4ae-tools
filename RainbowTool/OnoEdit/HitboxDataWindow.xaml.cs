@@ -21,6 +21,7 @@ namespace OnoEdit
         public HitboxDataWindow()
         {
             InitializeComponent();
+            this.Title = Title + " - " + MainWindow.Opened;
         }
 
         private void AddHB(object sender, RoutedEventArgs e)

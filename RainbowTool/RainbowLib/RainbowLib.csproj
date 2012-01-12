@@ -82,6 +82,7 @@
     <Compile Include="BAC\FlowCommand.cs" />
     <Compile Include="BAC\HitboxCommand.cs" />
     <Compile Include="BAC\HurtboxCommand.cs" />
+    <Compile Include="BAC\PhysicsCommand.cs" />
     <Compile Include="BAC\SpeedCommand.cs" />
     <Compile Include="BAC\StateCommand.cs" />
     <Compile Include="BCMFile.cs" />

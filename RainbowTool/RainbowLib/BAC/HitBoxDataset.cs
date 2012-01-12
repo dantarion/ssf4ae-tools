@@ -161,14 +161,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown2_2");
             }
         }
-        private ushort _Unknown3;
-        public ushort Unknown3
+        private ushort _HitSound;
+        public ushort HitSound
         {
-            get { return _Unknown3; }
+            get { return _HitSound; }
             set
             {
-                _Unknown3 = value;
-                OnPropertyChanged("Unknown3");
+                _HitSound = value;
+                OnPropertyChanged("HitSound");
             }
         }
         private short _Unknown4;
@@ -181,14 +181,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown4");
             }
         }
-        private short _Unknown5;
-        public short Unknown5
+        private short _PainSound;
+        public short PainSound
         {
-            get { return _Unknown5; }
+            get { return _PainSound; }
             set
             {
-                _Unknown5 = value;
-                OnPropertyChanged("Unknown5");
+                _PainSound = value;
+                OnPropertyChanged("PainSound");
             }
         }
         private short _HitSFX;
@@ -222,54 +222,54 @@ namespace RainbowLib.BAC
             }
         }
 
-        private ushort _Unknown6;
-        public ushort Unknown6
+        private ushort _ArcadeScore;
+        public ushort ArcadeScore
         {
-            get { return _Unknown6; }
+            get { return _ArcadeScore; }
             set
             {
-                _Unknown6 = value;
-                OnPropertyChanged("Unknown6");
+                _ArcadeScore = value;
+                OnPropertyChanged("ArcadeScore");
             }
         }
-        private ushort _Unknown7;
-        public ushort Unknown7
+        private ushort _AtkMeter;
+        public ushort AtkMeter
         {
-            get { return _Unknown7; }
+            get { return _AtkMeter; }
             set
             {
-                _Unknown7 = value;
-                OnPropertyChanged("Unknown7");
+                _AtkMeter = value;
+                OnPropertyChanged("AtkMeter");
             }
         }
-        private ushort _Unknown8;
-        public ushort Unknown8
+        private ushort _VctmMeter;
+        public ushort VctmMeter
         {
-            get { return _Unknown8; }
+            get { return _VctmMeter; }
             set
             {
-                _Unknown8 = value;
-                OnPropertyChanged("Unknown8");
+                _VctmMeter = value;
+                OnPropertyChanged("VctmMeter");
             }
         }
-        private short _Unknown9;
-        public short Unknown9
+        private short _JuggleStart;
+        public short JuggleStart
         {
-            get { return _Unknown9; }
+            get { return _JuggleStart; }
             set
             {
-                _Unknown9 = value;
-                OnPropertyChanged("Unknown9");
+                _JuggleStart = value;
+                OnPropertyChanged("JuggleStart");
             }
         }
-        private short _Unknown10;
-        public short Unknown10
+        private short _AnimTime;
+        public short AnimTime
         {
-            get { return _Unknown10; }
+            get { return _AnimTime; }
             set
             {
-                _Unknown10 = value;
-                OnPropertyChanged("Unknown10");
+                _AnimTime = value;
+                OnPropertyChanged("AnimTime");
             }
         }
         private float _ForceUnknown2;

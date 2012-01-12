@@ -112,18 +112,18 @@ namespace RainbowLib
                     data.Unknown1 = inFile.ReadInt32();
                     data.Unknown2_1 = inFile.ReadInt16();
                     data.Unknown2_2 = inFile.ReadInt16();
-                    data.Unknown3 = inFile.ReadUInt16();
+                    data.HitSound = inFile.ReadUInt16();
                     data.Unknown4 = inFile.ReadInt16();
-                    data.Unknown5 = inFile.ReadInt16();
+                    data.PainSound = inFile.ReadInt16();
                     data.HitSFX = inFile.ReadInt16();
                     data.HitSFX2 = inFile.ReadInt16();
                     data.VictimSFX = inFile.ReadInt16();
 
-                    data.Unknown6 = inFile.ReadUInt16();
-                    data.Unknown7 = inFile.ReadUInt16();
-                    data.Unknown8 = inFile.ReadUInt16();
-                    data.Unknown9 = inFile.ReadInt16();
-                    data.Unknown10 = inFile.ReadInt16();
+                    data.ArcadeScore = inFile.ReadUInt16();
+                    data.AtkMeter = inFile.ReadUInt16();
+                    data.VctmMeter = inFile.ReadUInt16();
+                    data.JuggleStart = inFile.ReadInt16();
+                    data.AnimTime = inFile.ReadInt16();
                     data.ForceUnknown2 = inFile.ReadSingle();
                     data.ForceX = inFile.ReadSingle();
                     data.ForceY = inFile.ReadSingle();
@@ -269,8 +269,15 @@ namespace RainbowLib
                             hurt.Unknown5 = inFile.ReadSByte();
                             break;
                         case CommandListType.PHYSICS:
-
-                            cmd.Raw = inFile.ReadBytes(0x20);
+                            var physics = cmd as PhysicsCommand;
+                            physics.XVel = inFile.ReadSingle();
+                            physics.YVel = inFile.ReadSingle();
+                            physics.Unk01 = inFile.ReadUInt32();
+                            physics.PhysicsFlags = (PhysicsCommand.PFlags)inFile.ReadUInt32();
+                            physics.XAccel = inFile.ReadSingle();
+                            physics.YAccel = inFile.ReadSingle();
+                            physics.Unk02 = inFile.ReadUInt64();
+                            //cmd.Raw = inFile.ReadBytes(0x20);
                             break;
                         case CommandListType.ETC:
                             var etc = cmd as EtcCommand;
@@ -299,7 +306,7 @@ namespace RainbowLib
                             hit.UnknownByte1 = inFile.ReadSByte();
                             hit.UnknownByte2 = inFile.ReadSByte();
                             hit.JugglePotential = inFile.ReadSByte();
-                            hit.UnknownByte4 = inFile.ReadSByte();
+                            hit.JuggleIncrement = inFile.ReadSByte();
                             hit.UnknownByte5 = inFile.ReadSByte();
                             hit.HitboxEffect = inFile.ReadInt32();
                             var index2 = inFile.ReadInt32();
@@ -436,18 +443,18 @@ namespace RainbowLib
                     outFile.Write(data.Unknown2_1);
                     outFile.Write(data.Unknown2_2);
                     //20
-                    outFile.Write(data.Unknown3);
+                    outFile.Write(data.HitSound);
                     outFile.Write(data.Unknown4);
-                    outFile.Write(data.Unknown5);
+                    outFile.Write(data.PainSound);
                     outFile.Write(data.HitSFX);
                     outFile.Write(data.HitSFX2);
                     outFile.Write(data.VictimSFX);
 
-                    outFile.Write(data.Unknown6);
-                    outFile.Write(data.Unknown7);
-                    outFile.Write(data.Unknown8);
-                    outFile.Write(data.Unknown9);
-                    outFile.Write(data.Unknown10);
+                    outFile.Write(data.ArcadeScore);
+                    outFile.Write(data.AtkMeter);
+                    outFile.Write(data.VctmMeter);
+                    outFile.Write(data.JuggleStart);
+                    outFile.Write(data.AnimTime);
                     outFile.Write(data.ForceUnknown2);
                     outFile.Write(data.ForceX);
                     outFile.Write(data.ForceY);
@@ -570,6 +577,17 @@ namespace RainbowLib
                     {
                         outFile.Write((cmd as SpeedCommand).Multiplier);
                     }
+                    else if (cmd is PhysicsCommand)
+                    {
+                        var physics = cmd as PhysicsCommand;
+                        outFile.Write(physics.XVel);
+                        outFile.Write(physics.YVel);
+                        outFile.Write((uint)physics.Unk01);
+                        outFile.Write((uint)physics.PhysicsFlags);
+                        outFile.Write(physics.XAccel);
+                        outFile.Write(physics.YAccel);
+                        outFile.Write((ulong)physics.Unk02);
+                    }
                     else if (cmd is CancelCommand)
                     {
                         var cancel = cmd as CancelCommand;
@@ -620,7 +638,7 @@ namespace RainbowLib
                         outFile.Write(hit.UnknownByte1);
                         outFile.Write(hit.UnknownByte2);
                         outFile.Write(hit.JugglePotential);
-                        outFile.Write(hit.UnknownByte4);
+                        outFile.Write(hit.JuggleIncrement);
                         outFile.Write(hit.UnknownByte5);
                         outFile.Write(hit.HitboxEffect);
                         outFile.Write((int)hit.HitboxDataSet.Index);

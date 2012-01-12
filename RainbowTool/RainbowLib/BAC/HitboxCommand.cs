@@ -186,14 +186,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("JugglePotential");
             }
         }
-        private sbyte _UnknownByte4;
-        public sbyte UnknownByte4
+        private sbyte _JuggleIncrement;
+        public sbyte JuggleIncrement
         {
-            get { return _UnknownByte4; }
+            get { return _JuggleIncrement; }
             set
             {
-                _UnknownByte4 = value;
-                OnPropertyChanged("UnknownByte4");
+                _JuggleIncrement = value;
+                OnPropertyChanged("JuggleIncrement");
             }
         }
         private sbyte _UnknownByte5;

@@ -21,6 +21,7 @@ namespace OnoEdit
         public InputWindow()
         {
             InitializeComponent();
+            this.Title = Title + " - " + MainWindow.Opened;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

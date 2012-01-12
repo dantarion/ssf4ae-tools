@@ -20,6 +20,7 @@ namespace OnoEdit
         public ChargeWindow()
         {
             InitializeComponent();
+            this.Title = Title + " - " + MainWindow.Opened;
         }
     }
 }
