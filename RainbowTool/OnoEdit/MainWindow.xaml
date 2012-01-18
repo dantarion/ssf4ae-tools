@@ -15,8 +15,8 @@
                 <MenuItem Header="Save" Command="Save"/>
                 <MenuItem Header="Save As.." Command="SaveAs"/>
             </MenuItem>
-            <MenuItem Header="_IRC" Click="IRC_Click"/>
-            <MenuItem Header="_Google Code" Click="GC_Click"/>
+            <MenuItem Header="_IRC" Click="IRC_Click" IsEnabled="False" />
+            <MenuItem Header="_Google Code" Click="GC_Click" IsEnabled="True" />
         </Menu>
         <StackPanel Grid.Row="1" IsEnabled="{Binding Source={StaticResource OpenedFiles}, Path=FilesOpened}">
             <StackPanel.Resources>

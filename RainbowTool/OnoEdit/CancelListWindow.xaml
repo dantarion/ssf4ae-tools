@@ -1,20 +1,22 @@
 ﻿<Window x:Class="OnoEdit.CancelListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ono="clr-namespace:OnoEdit"
         Title="CancelListWindow" Height="300" Width="450">
     <DockPanel>
         <DockPanel DockPanel.Dock="Left" >
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+            <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Click="AddCancelList">Add New</Button>
                 <Button Click="RemoveCancelList">Remove</Button>
             </StackPanel>
-            <ListBox Name="ListBox" ItemsSource="{Binding Path=BCMFile.CancelLists, Source={StaticResource OpenedFiles}}" DisplayMemberPath="Name" SelectedIndex="0" />
+            <ListBox Name="ListBox" ItemsSource="{Binding Path=BCMFile.CancelLists, Source={StaticResource OpenedFiles}}" DisplayMemberPath="Name" SelectedIndex="0" />-->
+            <ono:OnoList Width="150" DockPanel.Dock="Left" x:Name="ListBox" DataContext="{Binding Path=BCMFile.CancelLists, Source={StaticResource OpenedFiles}}"/>
         </DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Click="AddMove">Add New</Button>
             <Button Click="RemoveMove">Remove</Button>
         </StackPanel>    
-        <ListBox Name="Grid" ItemsSource="{Binding Path=SelectedItem.Moves,ElementName=ListBox}">
+        <ListBox Name="Grid" ItemsSource="{Binding Path=SelectedValue.Moves,ElementName=ListBox}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                 <ComboBox MinWidth="200" ItemsSource="{Binding Path=BCMFile.Moves, Source={StaticResource OpenedFiles}}" DisplayMemberPath="Name" SelectedValue="{Binding Path=Target}" HorizontalContentAlignment="Stretch" />

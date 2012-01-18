@@ -17,8 +17,8 @@ namespace RainbowLib.BAC
             UNK8 = 0x08,
             COUNTERHIT = 0x10,
             UNK20 = 0x20,
-            UNK40 = 0x40,
-            UNK80 = 0x80
+            FORCE_TURN = 0x40,
+            CAN_TURN = 0x80
         }
         private StateFlags _Flags;
         public StateFlags Flags

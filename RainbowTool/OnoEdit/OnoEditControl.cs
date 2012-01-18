@@ -154,6 +154,14 @@ namespace OnoEdit
             ListCollectionView lc = ListCollectionView();
             var current = lc.CurrentItem;
             var clone = RainbowLib.Cloner.Clone(Copy);
+            if ((Copy as RainbowLib.BCM.CancelList) != null)
+            {
+                RainbowLib.BCM.CancelList clist = clone as RainbowLib.BCM.CancelList;
+                for (int i = 0; i < clist.Moves.Count; i++)
+                {
+                    clist.Moves[i].Target = (Copy as RainbowLib.BCM.CancelList).Moves[i].Target;
+                }
+            }
             var list = lc.SourceCollection as System.Collections.IList;
             var index = list.IndexOf(current);
             try
