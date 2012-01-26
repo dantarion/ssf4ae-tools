@@ -92,7 +92,9 @@ namespace RainbowLib.BAC
         {
             PROXIMITY = 0,
             NORMAL = 1,
-            GRAB = 2
+            GRAB = 2,
+            PROJECTILE = 3,
+            REFLECT = 4
         }
         private HitboxType _Type;
         public HitboxType Type
