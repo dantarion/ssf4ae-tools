@@ -190,7 +190,8 @@ namespace RainbowLib.BCM
         public enum MoveUltraRestriction : ulong
         {
             NONE = 0,
-            ULTRA2 = 0x0000000100000000,
+            ULTRA2 =        0x0000000100000000,
+            ANGRY_SCAR =    0x0000000001000000
         }
         private MoveUltraRestriction _UltraRestriction;
         public MoveUltraRestriction UltraRestriction
