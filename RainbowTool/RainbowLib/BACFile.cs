@@ -36,112 +36,115 @@ namespace RainbowLib
         #region Reading Functions
         public static BACFile FromFilename(string name, BCMFile bcm)
         {
-            var tracker = new TrackingStream(File.OpenRead(name));
-            tracker.SetLabel("Header");
-            var inFile = new BinaryReader(tracker);
-
-            if (new String(inFile.ReadChars(4)) != "#BAC")
-                throw new IOException("Not a valid BAC file");
-            tracker.IgnoreBytes(8);
-            inFile.BaseStream.Seek(12);
-
-            ushort ScriptCount = inFile.ReadUInt16();
-            ushort VFXScriptCount = inFile.ReadUInt16();
-            uint HitboxTableSize = inFile.ReadUInt32();
-            int ScriptOffset = inFile.ReadInt32();
-            int VFXScriptOffset = inFile.ReadInt32();
-            int ScriptNameOffset = inFile.ReadInt32();
-            int VFXScriptNameOffset = inFile.ReadInt32();
-            int HitboxTableOffset = inFile.ReadInt32();
-
-            var bac = new BACFile();
-            for (int i = 0; i < 0x1c; i++)
+            using (var fs = File.OpenRead(name))
+            using (var tracker = new TrackingStream(fs))
+            using (var inFile = new BinaryReader(tracker))
             {
-                var list = new ObservableCollection<float>();
-                for (int j = 0; j < 6; j++)
+                tracker.SetLabel("Header");
+
+                if (new String(inFile.ReadChars(4)) != "#BAC")
+                    throw new IOException("Not a valid BAC file");
+                tracker.IgnoreBytes(8);
+                inFile.BaseStream.Seek(12);
+
+                ushort ScriptCount = inFile.ReadUInt16();
+                ushort VFXScriptCount = inFile.ReadUInt16();
+                uint HitboxTableSize = inFile.ReadUInt32();
+                int ScriptOffset = inFile.ReadInt32();
+                int VFXScriptOffset = inFile.ReadInt32();
+                int ScriptNameOffset = inFile.ReadInt32();
+                int VFXScriptNameOffset = inFile.ReadInt32();
+                int HitboxTableOffset = inFile.ReadInt32();
+
+                var bac = new BACFile();
+                for (int i = 0; i < 0x1c; i++)
                 {
-                    list.Add(inFile.ReadSingle());
+                    var list = new ObservableCollection<float>();
+                    for (int j = 0; j < 6; j++)
+                    {
+                        list.Add(inFile.ReadSingle());
+                    }
+                    bac.UnknownFloatData.Add(list);
                 }
-                bac.UnknownFloatData.Add(list);
-            }
 
-            for (int i = 0; i < ScriptCount; i++)
-                bac.Scripts.Add(new Script(i));
-            for (int i = 0; i < VFXScriptCount; i++)
-                bac.VFXScripts.Add(new Script(i));
-            for (int i = 0; i < HitboxTableSize; i++)
-                bac.HitboxTable.Add(new HitBoxDataset(i));
+                for (int i = 0; i < ScriptCount; i++)
+                    bac.Scripts.Add(new Script(i));
+                for (int i = 0; i < VFXScriptCount; i++)
+                    bac.VFXScripts.Add(new Script(i));
+                for (int i = 0; i < HitboxTableSize; i++)
+                    bac.HitboxTable.Add(new HitBoxDataset(i));
 
-            //Link BCM
-            if (bcm != null)
-            {
-                foreach (BCM.Move move in bcm.Moves)
-                    if (move.ScriptIndex != -1)
-                        move.Script = bac.Scripts[move.ScriptIndex];
-            }
-            //Read Scripts
-            readScripts(inFile, bac.Scripts, bcm, ScriptCount, ScriptOffset, ScriptNameOffset, bac);
-            readScripts(inFile, bac.VFXScripts, bcm, VFXScriptCount, VFXScriptOffset, VFXScriptNameOffset, bac);
-            //Read Hitbox Table
-            for (int i = 0; i < HitboxTableSize; i++)
-            {
-                tracker.SetLabel("HitboxTable#" + i.ToString());
-                inFile.BaseStream.Seek(HitboxTableOffset + i * 4);
-                inFile.BaseStream.Seek(inFile.ReadUInt32());
-                if (inFile.BaseStream.Position == 0)
+                //Link BCM
+                if (bcm != null)
                 {
-                    continue;
+                    foreach (BCM.Move move in bcm.Moves)
+                        if (move.ScriptIndex != -1)
+                            move.Script = bac.Scripts[move.ScriptIndex];
                 }
-                var dataset = bac.HitboxTable[i];
-                for (int j = 0; j < 12; j++)
+                //Read Scripts
+                readScripts(inFile, bac.Scripts, bcm, ScriptCount, ScriptOffset, ScriptNameOffset, bac);
+                readScripts(inFile, bac.VFXScripts, bcm, VFXScriptCount, VFXScriptOffset, VFXScriptNameOffset, bac);
+                //Read Hitbox Table
+                for (int i = 0; i < HitboxTableSize; i++)
                 {
-                    HitBoxData data = new HitBoxData(j);
-                    dataset.Data.Add(data);
-                    data.Damage = inFile.ReadInt16();
-                    data.Stun = inFile.ReadInt16();
-                    data.Effect = (HitBoxData.HitBoxEffect)inFile.ReadUInt16();
-                    var index = inFile.ReadInt16()+HitBoxData.getIndexOffset(data.Effect);
-                    if (index > -1)
-                        data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
-                    else data.OnHit = new Script(index);
-                    data.AttackerHitstop = inFile.ReadUInt16();
-                    data.AttackerShaking = inFile.ReadUInt16();
-                    data.VictimHitstop = inFile.ReadUInt16();
-                    data.VictimShaking = inFile.ReadUInt16();
-                    data.HitGFX = inFile.ReadInt16();
-                    data.Unknown1 = inFile.ReadInt32();
-                    data.Unknown2_1 = inFile.ReadInt16();
-                    data.Unknown2_2 = inFile.ReadInt16();
-                    data.HitSound = inFile.ReadUInt16();
-                    data.Unknown4 = inFile.ReadInt16();
-                    data.PainSound = inFile.ReadInt16();
-                    data.HitSFX = inFile.ReadInt16();
-                    data.HitSFX2 = inFile.ReadInt16();
-                    data.VictimSFX = inFile.ReadInt16();
+                    tracker.SetLabel("HitboxTable#" + i.ToString());
+                    inFile.BaseStream.Seek(HitboxTableOffset + i*4);
+                    inFile.BaseStream.Seek(inFile.ReadUInt32());
+                    if (inFile.BaseStream.Position == 0)
+                    {
+                        continue;
+                    }
+                    var dataset = bac.HitboxTable[i];
+                    for (int j = 0; j < 12; j++)
+                    {
+                        HitBoxData data = new HitBoxData(j);
+                        dataset.Data.Add(data);
+                        data.Damage = inFile.ReadInt16();
+                        data.Stun = inFile.ReadInt16();
+                        data.Effect = (HitBoxData.HitBoxEffect)inFile.ReadUInt16();
+                        var index = inFile.ReadInt16() + HitBoxData.getIndexOffset(data.Effect);
+                        if (index > -1)
+                            data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
+                        else data.OnHit = new Script(index);
+                        data.AttackerHitstop = inFile.ReadUInt16();
+                        data.AttackerShaking = inFile.ReadUInt16();
+                        data.VictimHitstop = inFile.ReadUInt16();
+                        data.VictimShaking = inFile.ReadUInt16();
+                        data.HitGFX = inFile.ReadInt16();
+                        data.Unknown1 = inFile.ReadInt32();
+                        data.Unknown2_1 = inFile.ReadInt16();
+                        data.Unknown2_2 = inFile.ReadInt16();
+                        data.HitSound = inFile.ReadUInt16();
+                        data.Unknown4 = inFile.ReadInt16();
+                        data.PainSound = inFile.ReadInt16();
+                        data.HitSFX = inFile.ReadInt16();
+                        data.HitSFX2 = inFile.ReadInt16();
+                        data.VictimSFX = inFile.ReadInt16();
 
-                    data.ArcadeScore = inFile.ReadUInt16();
-                    data.AtkMeter = inFile.ReadUInt16();
-                    data.VctmMeter = inFile.ReadUInt16();
-                    data.JuggleStart = inFile.ReadInt16();
-                    data.AnimTime = inFile.ReadInt16();
-                    data.ForceUnknown2 = inFile.ReadSingle();
-                    data.ForceX = inFile.ReadSingle();
-                    data.ForceY = inFile.ReadSingle();
+                        data.ArcadeScore = inFile.ReadUInt16();
+                        data.AtkMeter = inFile.ReadUInt16();
+                        data.VctmMeter = inFile.ReadUInt16();
+                        data.JuggleStart = inFile.ReadInt16();
+                        data.AnimTime = inFile.ReadInt16();
+                        data.ForceUnknown2 = inFile.ReadSingle();
+                        data.ForceX = inFile.ReadSingle();
+                        data.ForceY = inFile.ReadSingle();
 
-                    data.ForceUnknown3 = inFile.ReadSingle();
-                    data.ForceXAcceleration = inFile.ReadSingle();
-                    data.ForceYAcceleration = inFile.ReadSingle();
-                    data.ForceUnknown4 = inFile.ReadSingle();
-                    data.ForceUnknown5 = inFile.ReadSingle();
+                        data.ForceUnknown3 = inFile.ReadSingle();
+                        data.ForceXAcceleration = inFile.ReadSingle();
+                        data.ForceYAcceleration = inFile.ReadSingle();
+                        data.ForceUnknown4 = inFile.ReadSingle();
+                        data.ForceUnknown5 = inFile.ReadSingle();
+                    }
                 }
+                List<HitBoxDataset> nullHitboxData = bac.HitboxTable.Where(x => x.Data.Count() == 0).ToList();
+                foreach (HitBoxDataset tmp in nullHitboxData)
+                    bac.HitboxTable.Remove(tmp);
+                FilterScripts(bac.Scripts);
+                FilterScripts(bac.VFXScripts);
+                
+                return bac;
             }
-            List<HitBoxDataset> nullHitboxData = bac.HitboxTable.Where(x => x.Data.Count() == 0).ToList();
-            foreach (HitBoxDataset tmp in nullHitboxData)
-                bac.HitboxTable.Remove(tmp);
-            FilterScripts(bac.Scripts);
-            FilterScripts(bac.VFXScripts);
-            inFile.Close();
-            return bac;
         }
         private static void readScripts(BinaryReader inFile, ObservableCollection<Script> list, BCMFile bcm, int Count, int Offset, int NameOffset, BACFile bac)
         {
@@ -347,165 +350,172 @@ namespace RainbowLib
             bac.Scripts = new ObservableCollection<Script>(bac.Scripts.OrderBy(x => x.Index));
             bac.VFXScripts = new ObservableCollection<Script>(bac.VFXScripts.OrderBy(x => x.Index));
 
-            var outFile = new BinaryWriter(File.Create(name));
-            outFile.Write(1128350243);
-            outFile.Write(2686974);
-            outFile.Write(65537);
-
-            outFile.Write((short)(bac.Scripts.Last().Index + 1));
-            if (bac.VFXScripts.Count > 0)
-                outFile.Write((short)(bac.VFXScripts.Last().Index + 1));
-            else
-                outFile.Write((short)0);
-            outFile.Write(bac.HitboxTable.Last().Index + 1);
-
-            int OffsetOffset = (int)outFile.BaseStream.Position;
-
-            outFile.Write(0);
-            outFile.Write(0);
-            outFile.Write(0);
-            outFile.Write(0);
-            outFile.Write(0);
-            foreach (ObservableCollection<float> list in bac.UnknownFloatData)
-                foreach (float entry in list)
-                    outFile.Write(entry);
-
-            /* Scripts */
-            int ScriptOffset = (int)outFile.BaseStream.Position;
-            for (int i = 0; i < bac.Scripts.Last().Index + 1; i++)
-                outFile.Write(0);
-            /* VFX Scripts */
-            int VFXScriptOffset = (int)outFile.BaseStream.Position;
-            if (bac.VFXScripts.Count != 0)
-                for (int i = 0; i < bac.VFXScripts.Last().Index + 1; i++)
-                    outFile.Write(0);
-            else
-                VFXScriptOffset = 0;
-
-            /* Script Name Offsets */
-            int ScriptNameOffset = (int)outFile.BaseStream.Position;
-            for (int i = 0; i < bac.Scripts.Last().Index + 1; i++)
-                outFile.Write(0);
-
-            /* VFX Script Name Offsets */
-            int VFXScriptNameOffset = (int)outFile.BaseStream.Position;
-            if (bac.VFXScripts.Count == 0)
-                VFXScriptNameOffset = 0;
-            else
-                for (int i = 0; i < bac.VFXScripts.Last().Index + 1; i++)
-                    outFile.Write(0);
-            /* Hitbox Table */
-            int HitboxTableOffset = (int)outFile.BaseStream.Position;
-            for (int i = 0; i < bac.HitboxTable.Last().Index + 1; i++)
-                outFile.Write(0);
-            outFile.BaseStream.Seek(0, SeekOrigin.End);
-
-            foreach (Script script in bac.Scripts)
+            using (var ms = new MemoryStream())
+            using (var outFile = new BinaryWriter(ms))
             {
-                int tmp = (int)outFile.BaseStream.Position;
-                writeScript(bac, bcm, outFile, script);
-                outFile.BaseStream.Seek(ScriptOffset + script.Index * 4);
-                outFile.Write(tmp);
-                outFile.Seek(0, SeekOrigin.End);
-            }
-            foreach (Script script in bac.VFXScripts)
-            {
-                int tmp = (int)outFile.BaseStream.Position;
-                writeScript(bac, bcm, outFile, script);
-                outFile.BaseStream.Seek(VFXScriptOffset + script.Index * 4);
-                outFile.Write(tmp);
-                outFile.Seek(0, SeekOrigin.End);
-            }
-            /* Hitbox Table */
-            foreach (HitBoxDataset dataset in bac.HitboxTable)
-            {
-                int tmp = (int)outFile.BaseStream.Position;
-                outFile.BaseStream.Seek(HitboxTableOffset + dataset.Index * 4);
-                outFile.Write(tmp);
-                outFile.Seek(0, SeekOrigin.End);
-                foreach (HitBoxData data in dataset.Data)
-                {
-                    outFile.Write(data.Damage);
-                    outFile.Write(data.Stun);
-                    outFile.Write((ushort)data.Effect);
-                    if (data.OnHit != null)
-                        outFile.Write((short)(data.OnHit.Index-HitBoxData.getIndexOffset(data.Effect)));
-                    else
-                        outFile.Write((short)-1);
-                    //0x8
-                    outFile.Write(data.AttackerHitstop);
-                    outFile.Write(data.AttackerShaking);
-                    outFile.Write(data.VictimHitstop);
-                    outFile.Write(data.VictimShaking);
-                    //010
-                    outFile.Write(data.HitGFX);
-                    outFile.Write(data.Unknown1);
-                    outFile.Write(data.Unknown2_1);
-                    outFile.Write(data.Unknown2_2);
-                    //20
-                    outFile.Write(data.HitSound);
-                    outFile.Write(data.Unknown4);
-                    outFile.Write(data.PainSound);
-                    outFile.Write(data.HitSFX);
-                    outFile.Write(data.HitSFX2);
-                    outFile.Write(data.VictimSFX);
+                outFile.Write(1128350243);
+                outFile.Write(2686974);
+                outFile.Write(65537);
 
-                    outFile.Write(data.ArcadeScore);
-                    outFile.Write(data.AtkMeter);
-                    outFile.Write(data.VctmMeter);
-                    outFile.Write(data.JuggleStart);
-                    outFile.Write(data.AnimTime);
-                    outFile.Write(data.ForceUnknown2);
-                    outFile.Write(data.ForceX);
-                    outFile.Write(data.ForceY);
-
-                    outFile.Write(data.ForceUnknown3);
-                    outFile.Write(data.ForceXAcceleration);
-                    outFile.Write(data.ForceYAcceleration);
-                    outFile.Write(data.ForceUnknown4);
-                    outFile.Write(data.ForceUnknown5);
-                }
-            }
-            /* Script Names+Offsets */
-
-            List<string> strings = new List<string>();
-            int index = 0;
-            foreach (Script tmp in bac.Scripts)
-            {
-                while (index != tmp.Index)
-                {
-                    strings.Add(null);
-                    index++;
-                }
-                index++;
-                if (tmp.Name != "null")
-                    strings.Add(tmp.Name);
+                outFile.Write((short)(bac.Scripts.Last().Index + 1));
+                if (bac.VFXScripts.Count > 0)
+                    outFile.Write((short)(bac.VFXScripts.Last().Index + 1));
                 else
-                    strings.Add(null);
-            }
-            Util.writeStringTable(outFile, ScriptNameOffset, strings);
+                    outFile.Write((short)0);
+                outFile.Write(bac.HitboxTable.Last().Index + 1);
 
-            strings.Clear();
-            index = 0;
-            foreach (Script tmp in bac.VFXScripts)
-            {
-                while (index != tmp.Index)
+                int OffsetOffset = (int)outFile.BaseStream.Position;
+
+                outFile.Write(0);
+                outFile.Write(0);
+                outFile.Write(0);
+                outFile.Write(0);
+                outFile.Write(0);
+                foreach (ObservableCollection<float> list in bac.UnknownFloatData)
+                    foreach (float entry in list)
+                        outFile.Write(entry);
+
+                /* Scripts */
+                int ScriptOffset = (int)outFile.BaseStream.Position;
+                for (int i = 0; i < bac.Scripts.Last().Index + 1; i++)
+                    outFile.Write(0);
+                /* VFX Scripts */
+                int VFXScriptOffset = (int)outFile.BaseStream.Position;
+                if (bac.VFXScripts.Count != 0)
+                    for (int i = 0; i < bac.VFXScripts.Last().Index + 1; i++)
+                        outFile.Write(0);
+                else
+                    VFXScriptOffset = 0;
+
+                /* Script Name Offsets */
+                int ScriptNameOffset = (int)outFile.BaseStream.Position;
+                for (int i = 0; i < bac.Scripts.Last().Index + 1; i++)
+                    outFile.Write(0);
+
+                /* VFX Script Name Offsets */
+                int VFXScriptNameOffset = (int)outFile.BaseStream.Position;
+                if (bac.VFXScripts.Count == 0)
+                    VFXScriptNameOffset = 0;
+                else
+                    for (int i = 0; i < bac.VFXScripts.Last().Index + 1; i++)
+                        outFile.Write(0);
+                /* Hitbox Table */
+                int HitboxTableOffset = (int)outFile.BaseStream.Position;
+                for (int i = 0; i < bac.HitboxTable.Last().Index + 1; i++)
+                    outFile.Write(0);
+                outFile.BaseStream.Seek(0, SeekOrigin.End);
+
+                foreach (Script script in bac.Scripts)
                 {
-                    strings.Add(null);
-                    index++;
+                    int tmp = (int)outFile.BaseStream.Position;
+                    writeScript(bac, bcm, outFile, script);
+                    outFile.BaseStream.Seek(ScriptOffset + script.Index*4);
+                    outFile.Write(tmp);
+                    outFile.Seek(0, SeekOrigin.End);
                 }
-                index++;
-                strings.Add(tmp.Name);
-            }
-            Util.writeStringTable(outFile, VFXScriptNameOffset, strings);
+                foreach (Script script in bac.VFXScripts)
+                {
+                    int tmp = (int)outFile.BaseStream.Position;
+                    writeScript(bac, bcm, outFile, script);
+                    outFile.BaseStream.Seek(VFXScriptOffset + script.Index*4);
+                    outFile.Write(tmp);
+                    outFile.Seek(0, SeekOrigin.End);
+                }
+                /* Hitbox Table */
+                foreach (HitBoxDataset dataset in bac.HitboxTable)
+                {
+                    int tmp = (int)outFile.BaseStream.Position;
+                    outFile.BaseStream.Seek(HitboxTableOffset + dataset.Index*4);
+                    outFile.Write(tmp);
+                    outFile.Seek(0, SeekOrigin.End);
+                    foreach (HitBoxData data in dataset.Data)
+                    {
+                        outFile.Write(data.Damage);
+                        outFile.Write(data.Stun);
+                        outFile.Write((ushort)data.Effect);
+                        if (data.OnHit != null)
+                            outFile.Write((short)(data.OnHit.Index - HitBoxData.getIndexOffset(data.Effect)));
+                        else
+                            outFile.Write((short)-1);
+                        //0x8
+                        outFile.Write(data.AttackerHitstop);
+                        outFile.Write(data.AttackerShaking);
+                        outFile.Write(data.VictimHitstop);
+                        outFile.Write(data.VictimShaking);
+                        //010
+                        outFile.Write(data.HitGFX);
+                        outFile.Write(data.Unknown1);
+                        outFile.Write(data.Unknown2_1);
+                        outFile.Write(data.Unknown2_2);
+                        //20
+                        outFile.Write(data.HitSound);
+                        outFile.Write(data.Unknown4);
+                        outFile.Write(data.PainSound);
+                        outFile.Write(data.HitSFX);
+                        outFile.Write(data.HitSFX2);
+                        outFile.Write(data.VictimSFX);
 
-            outFile.BaseStream.Seek(0x14);
-            outFile.Write(ScriptOffset);
-            outFile.Write(VFXScriptOffset);
-            outFile.Write(ScriptNameOffset);
-            outFile.Write(VFXScriptNameOffset);
-            outFile.Write(HitboxTableOffset);
-            outFile.Close();
+                        outFile.Write(data.ArcadeScore);
+                        outFile.Write(data.AtkMeter);
+                        outFile.Write(data.VctmMeter);
+                        outFile.Write(data.JuggleStart);
+                        outFile.Write(data.AnimTime);
+                        outFile.Write(data.ForceUnknown2);
+                        outFile.Write(data.ForceX);
+                        outFile.Write(data.ForceY);
+
+                        outFile.Write(data.ForceUnknown3);
+                        outFile.Write(data.ForceXAcceleration);
+                        outFile.Write(data.ForceYAcceleration);
+                        outFile.Write(data.ForceUnknown4);
+                        outFile.Write(data.ForceUnknown5);
+                    }
+                }
+                /* Script Names+Offsets */
+
+                List<string> strings = new List<string>();
+                int index = 0;
+                foreach (Script tmp in bac.Scripts)
+                {
+                    while (index != tmp.Index)
+                    {
+                        strings.Add(null);
+                        index++;
+                    }
+                    index++;
+                    if (tmp.Name != "null")
+                        strings.Add(tmp.Name);
+                    else
+                        strings.Add(null);
+                }
+                Util.writeStringTable(outFile, ScriptNameOffset, strings);
+
+                strings.Clear();
+                index = 0;
+                foreach (Script tmp in bac.VFXScripts)
+                {
+                    while (index != tmp.Index)
+                    {
+                        strings.Add(null);
+                        index++;
+                    }
+                    index++;
+                    strings.Add(tmp.Name);
+                }
+                Util.writeStringTable(outFile, VFXScriptNameOffset, strings);
+
+                outFile.BaseStream.Seek(0x14);
+                outFile.Write(ScriptOffset);
+                outFile.Write(VFXScriptOffset);
+                outFile.Write(ScriptNameOffset);
+                outFile.Write(VFXScriptNameOffset);
+                outFile.Write(HitboxTableOffset);
+
+                using (var fs = File.Create(name))
+                {
+                    ms.WriteTo(fs);
+                }
+            }
         }
 
         private static void writeScript(BACFile bac, BCMFile bcm, BinaryWriter outFile, Script script)

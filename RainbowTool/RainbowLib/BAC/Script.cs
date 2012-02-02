@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 namespace RainbowLib.BAC
 {
     [Serializable]
-    public class Script : INotifyPropertyChanged
+    public class Script : INotifyPropertyChanged, ICloneable
     {
         public int Index { get; set; }
 
@@ -31,6 +29,20 @@ namespace RainbowLib.BAC
         {
             return Name;
         }
+
+        public object Clone()
+        {
+            var clone = Cloner.ShallowCopy(this);
+            clone._CommandLists = new ObservableCollection<dynamic>();
+            for (int i = 0; i < 13; i++)
+            {
+                clone._CommandLists.Add(Cloner.Clone(this._CommandLists[i]));
+            }
+
+            clone.Name = this.Name + "_COPY";
+            return clone;
+        }
+
         private ushort _FirstHitboxFrame;
         public ushort FirstHitboxFrame
         {
@@ -101,7 +113,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("UnknownFlags3");
             }
         }
-           
+         
+        [NonSerialized]
         private ObservableCollection<dynamic> _CommandLists = new ObservableCollection<dynamic>();
         public ObservableCollection<dynamic> CommandLists
         {

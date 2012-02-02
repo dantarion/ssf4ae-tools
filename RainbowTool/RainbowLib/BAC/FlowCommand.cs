@@ -51,7 +51,7 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown");
             }
         }
-        public override BaseCommand Clone()
+        public override object Clone()
         {
             var cmd = (FlowCommand)base.Clone();
             cmd.TargetScript = this.TargetScript;

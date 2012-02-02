@@ -50,7 +50,7 @@ namespace RainbowLib.BAC
         }
     }
     [Serializable]
-    public class CommandList<T> : ObservableCollection<T> where T:BaseCommand, INotifyPropertyChanged 
+    public class CommandList<T> : ObservableCollection<T>, ICloneable where T:BaseCommand, INotifyPropertyChanged 
     {
         internal CommandList()
         {
@@ -63,6 +63,19 @@ namespace RainbowLib.BAC
                 return Type.ToString();
 
         }
+
+        public object Clone()
+        {
+            var clone = new CommandList<T>();
+            clone.Type = this.Type;
+            foreach (var element in this)
+            {
+                clone.Add(Cloner.Clone(element));
+            }
+
+            return clone;
+        }
+
         public BaseCommand GenerateCommand()
         {
             return (BaseCommand)typeof(T).GetConstructor(System.Type.EmptyTypes).Invoke(null);

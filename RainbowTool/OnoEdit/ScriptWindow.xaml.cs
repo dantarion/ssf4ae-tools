@@ -45,8 +45,7 @@ namespace OnoEdit
 
         private void ScriptSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var c = e as SelectionChangedEventArgs;
-            if (c.AddedItems.Count > 0 && ComboBox != null)
+            if (e.AddedItems.Count > 0 && ComboBox != null)
                 ComboBox.SelectedIndex = nextIndex;
         }
     }

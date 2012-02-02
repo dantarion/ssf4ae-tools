@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -27,24 +28,39 @@ namespace RainbowLib
     }
     public static class Cloner
     {
-        public static object Clone(object lol)
+        public static T Clone<T>(T source)
         {
-            var stream = new MemoryStream();
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, lol);
-            stream.Seek(0);
-            
-            var obj = formatter.Deserialize(stream);
-            foreach (PropertyInfo pinfo in lol.GetType().GetProperties())
+            var clonable = source as ICloneable;
+            if (clonable != null)
             {
-                if (!pinfo.PropertyType.IsClass || !pinfo.CanWrite || pinfo.IsDefined(typeof(SerializableAttribute),true))
-                    continue;
-                var val = pinfo.GetValue(lol, null);
-                pinfo.SetValue(obj, val, null);
+                return (T)clonable.Clone();
             }
-            if (obj.GetType() == typeof(RainbowLib.BAC.Script))
-                (obj as RainbowLib.BAC.Script).Name = (lol as RainbowLib.BAC.Script).Name + "_COPY";
-            return obj;
+            else
+            {
+                return ShallowCopy(source);
+            }
+        }
+
+        public static T ShallowCopy<T>(T source)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, source);
+                stream.Seek(0);
+
+                T clone = (T)formatter.Deserialize(stream);
+                foreach (PropertyInfo pinfo in source.GetType().GetProperties())
+                {
+                    if (!pinfo.PropertyType.IsClass || !pinfo.CanWrite ||
+                        pinfo.IsDefined(typeof(SerializableAttribute), true))
+                        continue;
+                    var val = pinfo.GetValue(source, null);
+                    pinfo.SetValue(clone, val, null);
+                }
+
+                return clone;
+            }
         }
     }
     public static class Util

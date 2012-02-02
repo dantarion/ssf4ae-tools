@@ -42,6 +42,34 @@ namespace RainbowLib.BCM
         NONE = 0,
         AIR = 4
     }
+
+    [Flags]
+    public enum MoveAttributeFlags : uint
+    {
+        NONE = 0x0,
+        LP = 0x1,
+        MP = 0x2,
+        HP = 0x4,
+        LK = 0x8,
+        MK = 0x10,
+        HK = 0x20,
+        THROW = 0x40,
+        SAVING = 0x80,
+        APPEAL = 0x100,
+        SPECIAL = 0x200,
+        SUPER = 0x400,
+        ULTRA = 0x800,
+        EX = 0x1000,
+        TARGET_COMBO = 0x2000,
+        UNUSED1 = 0x4000,
+        UNUSED2 = 0x8000,
+        HIGH_JUMP = 0x10000,
+        UNUSED3 = 0x20000,
+        UNUSED4 = 0x40000,
+        DASH = 0x80000,
+        BACK_DASH = 0x100000,
+    }
+
     [Serializable]
     public class Move : INotifyPropertyChanged
     {
@@ -225,135 +253,201 @@ namespace RainbowLib.BCM
             }
         }
 
-        /*private byte[] _AIData;
-        public byte[] AIData
+        private MoveAttributeFlags _Attributes;
+        public MoveAttributeFlags Attributes
         {
-            get { return _AIData; }
+            get { return this._Attributes; }
             set
             {
-                _AIData = value;
-                OnPropertyChanged("AIData");
-            }
-        }*/
-
-        private uint _AIData0; // 44 - 40
-        public uint AIData0
-        {
-            get { return _AIData0; }
-            set
-            {
-                _AIData0 = value;
-                OnPropertyChanged("AIData0");
+                this._Attributes = value;
+                OnPropertyChanged("Attributes");
             }
         }
 
-        private uint _AIData1; // 40 - 36
-        public uint AIData1
+        private float _CpuMinRange;
+        public float CpuMinRange
         {
-            get { return _AIData1; }
+            get { return this._CpuMinRange; }
             set
             {
-                _AIData1 = value;
-                OnPropertyChanged("AIData1");
+                this._CpuMinRange = value;
+                OnPropertyChanged("CpuMinRange");
             }
         }
 
-        private float _AIData2; // 36 - 32
-        public float AIData2
+        private float _CpuMaxRange;
+        public float CpuMaxRange
         {
-            get { return _AIData2; }
+            get { return this._CpuMaxRange; }
             set
             {
-                _AIData2 = value;
-                OnPropertyChanged("AIData2");
+                this._CpuMaxRange = value;
+                OnPropertyChanged("CpuMaxRange");
             }
         }
 
-        private uint _AIData3; // 32 - 28
-        public uint AIData3
+        private uint _Unk2;
+        public uint Unk2
         {
-            get { return _AIData3; }
+            get { return this._Unk2; }
             set
             {
-                _AIData3 = value;
-                OnPropertyChanged("AIData3");
+                this._Unk2 = value;
+                OnPropertyChanged("Unk2");
             }
         }
 
-        private uint _AIData4; // 28 - 24
-        public uint AIData4
+        private ushort _Unk3; 
+        public ushort Unk3
         {
-            get { return _AIData4; }
+            get { return this._Unk3; }
             set
             {
-                _AIData4 = value;
-                OnPropertyChanged("AIData4");
+                this._Unk3 = value;
+                OnPropertyChanged("Unk3");
             }
         }
 
-        private uint _AIData5; // 24 - 20
-        public uint AIData5
+        private UInt16 _CpuPassiveMove; 
+        public UInt16 CpuPassiveMove
         {
-            get { return _AIData5; }
+            get { return this._CpuPassiveMove; }
             set
             {
-                _AIData5 = value;
-                OnPropertyChanged("AIData5");
+                this._CpuPassiveMove = value;
+                OnPropertyChanged("CpuPassiveMove");
             }
         }
 
-        private uint _AIData6; // 20 - 16
-        public uint AIData6
+        private UInt16 _CpuCounterMove;
+        public UInt16 CpuCounterMove
         {
-            get { return _AIData6; }
+            get { return this._CpuCounterMove; }
             set
             {
-                _AIData6 = value;
-                OnPropertyChanged("AIData6");
+                this._CpuCounterMove = value;
+                OnPropertyChanged("CpuCounterMove");
             }
         }
 
-        private uint _AIData7; // 16 - 12
-        public uint AIData7
+        private UInt16 _CpuVsStand; 
+        public UInt16 CpuVsStand
         {
-            get { return _AIData7; }
+            get { return this._CpuVsStand; }
             set
             {
-                _AIData7 = value;
-                OnPropertyChanged("AIData7");
+                this._CpuVsStand = value;
+                OnPropertyChanged("CpuVsStand");
             }
         }
 
-        private uint _AIData8; // 12 - 8
-        public uint AIData8
+        private UInt16 _CpuVsCrouch; 
+        public UInt16 CpuVsCrouch
         {
-            get { return _AIData8; }
+            get { return this._CpuVsCrouch; }
             set
             {
-                _AIData8 = value;
-                OnPropertyChanged("AIData8");
+                this._CpuVsCrouch = value;
+                OnPropertyChanged("CpuVsCrouch");
             }
         }
 
-        private uint _AIData9; // 8 - 4
-        public uint AIData9
+        private UInt16 _CpuVsAir; 
+        public UInt16 CpuVsAir
         {
-            get { return _AIData9; }
+            get { return this._CpuVsAir; }
             set
             {
-                _AIData9 = value;
-                OnPropertyChanged("AIData9");
+                this._CpuVsAir = value;
+                OnPropertyChanged("CpuVsAir");
             }
         }
 
-        private uint _AIDataA; // 4 - 0
-        public uint AIDataA
+        private UInt16 _CpuVsDown; 
+        public UInt16 CpuVsDown
         {
-            get { return _AIDataA; }
+            get { return this._CpuVsDown; }
             set
             {
-                _AIDataA = value;
-                OnPropertyChanged("AIDataA");
+                this._CpuVsDown = value;
+                OnPropertyChanged("CpuVsDown");
+            }
+        }
+
+        private UInt16 _CpuVsStunned;
+        public UInt16 CpuVsStunned
+        {
+            get { return this._CpuVsStunned; }
+            set
+            {
+                this._CpuVsStunned = value;
+                OnPropertyChanged("CpuVsStunned");
+            }
+        }
+
+        private UInt16 _CpuProbeMove; 
+        public UInt16 CpuProbeMove
+        {
+            get { return this._CpuProbeMove; }
+            set
+            {
+                this._CpuProbeMove = value;
+                OnPropertyChanged("CpuProbeMove");
+            }
+        }
+
+        private UInt16 _CpuVsVeryClose;
+        public UInt16 CpuVsVeryClose
+        {
+            get { return this._CpuVsVeryClose; }
+            set
+            {
+                this._CpuVsVeryClose = value;
+                OnPropertyChanged("CpuVsVeryClose");
+            }
+        }
+
+        private UInt16 _CpuVsClose;
+        public UInt16 CpuVsClose
+        {
+            get { return this._CpuVsClose; }
+            set
+            {
+                this._CpuVsClose = value;
+                OnPropertyChanged("CpuVsClose");
+            }
+        }
+
+        private UInt16 _CpuVsMidRange;
+        public UInt16 CpuVsMidRange
+        {
+            get { return this._CpuVsMidRange; }
+            set
+            {
+                this._CpuVsMidRange = value;
+                OnPropertyChanged("CpuVsMidRange");
+            }
+        }
+
+        private UInt16 _CpuVsFar; 
+        public UInt16 CpuVsFar
+        {
+            get { return this._CpuVsFar; }
+            set
+            {
+                this._CpuVsFar = value;
+                OnPropertyChanged("CpuVsFar");
+            }
+        }
+
+        private UInt16 _CpuVsVeryFar; 
+        public UInt16 CpuVsVeryFar
+        {
+            get { return this._CpuVsVeryFar; }
+            set
+            {
+                this._CpuVsVeryFar = value;
+                OnPropertyChanged("CpuVsVeryFar");
             }
         }
 

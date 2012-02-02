@@ -36,9 +36,10 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("CancelList");
             }
         }
-        public override BaseCommand Clone()
+
+        public override object Clone()
         {
-            var cc = (CancelCommand) base.Clone();
+            var cc = (CancelCommand)base.Clone();
             cc.CancelList = this.CancelList;
             return cc;
         }

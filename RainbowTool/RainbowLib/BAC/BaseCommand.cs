@@ -7,7 +7,7 @@ using System.IO;
 namespace RainbowLib.BAC
 {
     [Serializable]
-    public class BaseCommand : INotifyPropertyChanged
+    public class BaseCommand : INotifyPropertyChanged, ICloneable
     {
         public BaseCommand()
         {
@@ -82,10 +82,12 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("RawString");
             }
         }
-        public virtual BaseCommand Clone()
+
+        public virtual object Clone()
         {
-            return (BaseCommand)Cloner.Clone(this);
+            return Cloner.ShallowCopy(this);
         }
+
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
          

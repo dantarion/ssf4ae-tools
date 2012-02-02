@@ -6,7 +6,7 @@ using System.Text;
 namespace RainbowLib.BAC
 {
     [Serializable]
-    public class HitboxCommand : BaseCommand
+    public class HitboxCommand : BaseCommand, ICloneable
     {
         private float _X;
         public float X
@@ -229,9 +229,10 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("HitboxDataSet");
             }
         }
-        public override BaseCommand Clone()
+
+        public override object Clone()
         {
-            HitboxCommand hitbox =  (HitboxCommand) base.Clone();
+            HitboxCommand hitbox = (HitboxCommand)base.Clone();
             hitbox.HitboxDataSet = this.HitboxDataSet;
             return hitbox;
         }
