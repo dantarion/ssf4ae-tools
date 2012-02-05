@@ -12,7 +12,7 @@ namespace RainbowLib.BAC
         {
             CONTROL = 0,
             GFX = 5,
-            GFX2 = 6
+            GFX2 = 6,
         }
         [Flags]
         public enum EtcControlType : short

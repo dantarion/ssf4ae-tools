@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace RainbowLib.BCM
 {
     [Serializable]
-    public class CancelList : INotifyPropertyChanged
+    public class CancelList : INotifyPropertyChanged, ICloneable
     {
         private string _Name;
         public string Name
@@ -37,5 +37,19 @@ namespace RainbowLib.BCM
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(Name));
         }
+
+        public object Clone()
+        {
+            var clone = Cloner.ShallowCopy(this);
+            for (int i = 0; i < this.Moves.Count; i++)
+            {
+                clone.Moves[i].Target = this.Moves[i].Target;
+            }
+
+            clone.Name = this.Name + "_COPY";
+            return clone;
+        }
+
+
     }
 }

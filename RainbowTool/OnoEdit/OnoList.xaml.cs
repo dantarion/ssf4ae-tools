@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections;
 
 namespace OnoEdit
 {
@@ -43,13 +44,19 @@ namespace OnoEdit
         public static readonly DependencyProperty SelectedValueProperty =
             DependencyProperty.Register("SelectedValue", typeof(object), typeof(OnoList), new UIPropertyMetadata(null));
 
-        public override ListCollectionView ListCollectionView()
+        public override ListCollectionView ListCollectionView
         {
-            return myDataGrid.ItemsSource as ListCollectionView;
+            get { return this.myDataGrid.ItemsSource as ListCollectionView; }
         }
+
+        public override object[] SelectedItems
+        {
+            get { return this.myDataGrid.SelectedItems.Cast<object>().ToArray(); }
+        }
+
         public override void ScrollCurrent()
         {
-            myDataGrid.ScrollIntoView(ListCollectionView().CurrentItem);
+            myDataGrid.ScrollIntoView(ListCollectionView.CurrentItem);
         }
 
         private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

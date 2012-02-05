@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
@@ -111,7 +112,9 @@ namespace OnoEdit
                 var b2 = new Binding("ShortParam");
                 mb.Bindings.Add(b2);
             }
-            else if (etc.Type == EtcCommand.EtcCommandType.CONTROL || etc.Type == EtcCommand.EtcCommandType.GFX2)
+            else if (etc.Type == EtcCommand.EtcCommandType.CONTROL ||
+                     etc.Type == EtcCommand.EtcCommandType.GFX ||
+                     etc.Type == EtcCommand.EtcCommandType.GFX2)
             {
                 dt.VisualTree = new FrameworkElementFactory(typeof(ComboBox));
                 var mb = new MultiBinding();
@@ -151,16 +154,13 @@ namespace OnoEdit
                 case EtcCommand.EtcCommandType.CONTROL:
                     return (EtcCommand.EtcControlType)val;
                 case EtcCommand.EtcCommandType.GFX:
+                case EtcCommand.EtcCommandType.GFX2:
                     var dict = ResourceManager.Load("VFX");
                     if (dict.ContainsKey(val))
                         return dict[val];
                     break;
-                case EtcCommand.EtcCommandType.GFX2:
-                    var dict2 = ResourceManager.Load("VFX");
-                    if (dict2.ContainsKey(val))
-                        return dict2[val];
-                    break;
             }
+
             return val;
         }
 
@@ -174,7 +174,6 @@ namespace OnoEdit
             }
             else
             {
-
                 rt[1] = value;
             }
             return rt;
@@ -187,6 +186,7 @@ namespace OnoEdit
             {
                 case EtcCommand.EtcCommandType.CONTROL:
                     return Enum.GetValues(typeof(EtcCommand.EtcControlType));
+                case EtcCommand.EtcCommandType.GFX:
                 case EtcCommand.EtcCommandType.GFX2:
                     return ResourceManager.Load("VFX").Values;
             }

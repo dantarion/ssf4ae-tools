@@ -29,7 +29,7 @@
                     <TextBlock VerticalAlignment="Center">Paste</TextBlock>
                 </WrapPanel>
             </Button>
-            <TextBlock Text="{Binding ElementName=Base,Path=Copy}"/>
+            <TextBlock Text="{Binding ElementName=Base,Path=Copy,Converter={x:Static my:ClipboardToStringConverter.Instance}}"/>
         </StackPanel>
         <DataGrid ContextMenuOpening="ContextMenuOpening"  Name="myDataGrid" ItemsSource="{Binding Source={StaticResource ItemView}}" AutoGeneratingColumn="ColumnGeneration" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=FrozenColumns}" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="10" ColumnWidth="SizeToCells">
             <DataGrid.ContextMenu>

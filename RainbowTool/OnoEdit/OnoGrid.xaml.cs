@@ -33,6 +33,16 @@ namespace OnoEdit
             /*
              * Comboboxes 
              */
+            //Charges
+            if (e.PropertyType == typeof(RainbowLib.BCM.Charge))
+            {
+                var col = new DataGridComboBoxColumn();
+                col.ItemsSource = App.OpenedFiles.BCMFile.Charges;
+                col.SelectedItemBinding = new Binding(e.PropertyName);
+                col.DisplayMemberPath = "Name";
+                col.Header = "Charge";
+                e.Column = col;
+            }
             //CancelLists
             if (e.PropertyType == typeof(RainbowLib.BCM.CancelList))
             {
@@ -176,13 +186,22 @@ namespace OnoEdit
 
         }
 
-        public override ListCollectionView ListCollectionView()
+        public override ListCollectionView ListCollectionView
         {
-            return (ListCollectionView)myDataGrid.ItemsSource;
+            get { return (ListCollectionView)this.myDataGrid.ItemsSource; }
         }
+
+        public override object[] SelectedItems
+        {
+            get 
+            {
+                return this.myDataGrid.SelectedItems.Cast<object>().ToArray();
+            }
+        } 
+
         public override void ScrollCurrent()
         {
-            myDataGrid.ScrollIntoView(ListCollectionView().CurrentItem);
+            myDataGrid.ScrollIntoView(ListCollectionView.CurrentItem);
         }
         private void RawCheckbox_Checked(object sender, RoutedEventArgs e)
         {

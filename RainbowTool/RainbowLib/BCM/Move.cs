@@ -458,5 +458,10 @@ namespace RainbowLib.BCM
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(Name));
         }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }
