@@ -130,7 +130,7 @@ namespace RainbowLib.BAC
             NONE = 0,
             UNKNOWN0 = 0x01,
             UNKNOWN1 = 0x02,
-            UNKNOWN2 = 0x04,
+            UNBLOCKABLE = 0x04,
             BREAK_ARMOR = 0x08,
             BREAK_ARMOR2 = 0x10,
             CROSSUP = 0x20,

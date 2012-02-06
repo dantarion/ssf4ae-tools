@@ -230,6 +230,8 @@ namespace RainbowLib
                             var index = inFile.ReadInt16();
                             if (index != -1)
                                 (cmd as FlowCommand).TargetScript = bac.Scripts[index];
+                            else
+                                (cmd as FlowCommand).TargetScript = Script.NullScript;
                             (cmd as FlowCommand).TargetFrame = inFile.ReadInt16();
                             break;
                         case CommandListType.ANIMATION:
@@ -318,7 +320,17 @@ namespace RainbowLib
                                 hit.HitboxDataSet.Usage.Add(script);
                             break;
                         case CommandListType.INVINC:
-                        case CommandListType.UNK11:
+                            var invinc = cmd as InvincCommand;
+                            invinc.InvincFlags = (InvincCommand.InFlags)inFile.ReadUInt16();
+                            invinc.Unk01 = inFile.ReadUInt16();
+                            invinc.Location = inFile.ReadUInt16();
+                            invinc.Unk02 = inFile.ReadUInt16();
+                            invinc.Unk03 = inFile.ReadUInt16();
+                            invinc.Unk04 = inFile.ReadUInt16();
+                            invinc.Unk05 = inFile.ReadUInt16();
+                            invinc.Unk06 = inFile.ReadUInt16();
+                            break;
+                        case CommandListType.DAMAGEANIM:
                         case CommandListType.SFX:
                             cmd.Raw = inFile.ReadBytes(0x10);
                             break;
@@ -597,6 +609,31 @@ namespace RainbowLib
                         outFile.Write(physics.XAccel);
                         outFile.Write(physics.YAccel);
                         outFile.Write((ulong)physics.Unk02);
+                    }
+                    else if (cmd is InvincCommand)
+                    {
+                        /*
+                         * case CommandListType.INVINC:
+                            var invinc = cmd as InvincCommand;
+                            invinc.InvincFlags = (InvincCommand.InFlags)inFile.ReadUInt16();
+                            invinc.Unk01 = inFile.ReadUInt16();
+                            invinc.Location = inFile.ReadUInt16();
+                            invinc.Unk02 = inFile.ReadUInt16();
+                            invinc.Unk03 = inFile.ReadUInt16();
+                            invinc.Unk04 = inFile.ReadUInt16();
+                            invinc.Unk05 = inFile.ReadUInt16();
+                            invinc.Unk06 = inFile.ReadUInt16();
+                            break;
+                         */
+                        var invinc = cmd as InvincCommand;
+                        outFile.Write((ushort)invinc.InvincFlags);
+                        outFile.Write(invinc.Unk01);
+                        outFile.Write(invinc.Location);
+                        outFile.Write(invinc.Unk02);
+                        outFile.Write(invinc.Unk03);
+                        outFile.Write(invinc.Unk04);
+                        outFile.Write(invinc.Unk05);
+                        outFile.Write(invinc.Unk06);
                     }
                     else if (cmd is CancelCommand)
                     {

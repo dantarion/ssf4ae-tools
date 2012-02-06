@@ -21,7 +21,7 @@ namespace RainbowLib.BAC
         INVINC = 8,
         HURTBOX = 9,
         ETC = 10,
-        UNK11 = 11,
+        DAMAGEANIM = 11,
         SFX = 12,
     }
     public static class CommandListFactory
@@ -46,6 +46,8 @@ namespace RainbowLib.BAC
                 return new CommandList<EtcCommand>();
             if (type == CommandListType.HITBOX)
                 return new CommandList<HitboxCommand>();
+            if (type == CommandListType.INVINC)
+                return new CommandList<InvincCommand>();
             return new CommandList<BaseCommand>();
         }
     }

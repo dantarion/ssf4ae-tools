@@ -8,7 +8,7 @@ namespace RainbowLib.BAC
     [Serializable]
     public class FlowCommand : BaseCommand
     {
-        [Flags]
+        //[Flags]
         public enum FlowType : int
         {
             ALWAYS = 0,
