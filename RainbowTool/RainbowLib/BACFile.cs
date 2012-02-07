@@ -102,6 +102,11 @@ namespace RainbowLib
                         data.Damage = inFile.ReadInt16();
                         data.Stun = inFile.ReadInt16();
                         data.Effect = (HitBoxData.HitBoxEffect)inFile.ReadUInt16();
+                        if (!HitBoxData.HitBoxEffect.IsDefined(typeof(HitBoxData.HitBoxEffect), data.Effect))
+                        {
+                            AELogger.Log("undefinied HitBoxData.HitBoxEffect enum value: "
+                                + data.Effect + " in hitbox #" + i);
+                        }
                         var index = inFile.ReadInt16() + HitBoxData.getIndexOffset(data.Effect);
                         if (index > -1)
                             data.OnHit = bac.Scripts.Where(x => x.Index == index).First();

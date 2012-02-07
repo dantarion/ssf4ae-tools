@@ -1,0 +1,11 @@
+﻿<Window x:Class="OnoEdit.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About Ono!" Height="480" Width="600">
+    <StackPanel>
+        <Label Name="BVersion">Ono! version </Label>
+        <TextBlock Name="OtherLabel" Margin="10">a</TextBlock>
+        <Button Content="Google Code" Click="ClickGoogleCode"/>
+        <TextBlock Name="FileInfo" Margin="10">No file opened.</TextBlock>
+    </StackPanel>
+</Window>

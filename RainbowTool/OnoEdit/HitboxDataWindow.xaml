@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="HitboxDataWindow" Height="300" Width="700">
+        Title="HitboxData" Height="300" Width="700">
     <DockPanel>
         <DockPanel DockPanel.Dock="Left">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">

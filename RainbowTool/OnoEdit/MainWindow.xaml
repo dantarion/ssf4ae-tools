@@ -10,13 +10,13 @@
         <Menu Grid.Column="0" Grid.Row="0">
 
             <MenuItem Header="_File">
-                <MenuItem Header="Open..." Command="Open"/>
+                <MenuItem Header="_Open..." Command="Open"/>
                 <Separator />
-                <MenuItem Header="Save" Command="Save"/>
-                <MenuItem Header="Save As.." Command="SaveAs"/>
+                <MenuItem Header="_Save" Command="Save"/>
+                <MenuItem Header="Save _As.." Command="SaveAs"/>
+                <Separator />
+                <MenuItem Header="About" Click="GC_Click" IsEnabled="True" />
             </MenuItem>
-            <MenuItem Header="_IRC" Click="IRC_Click" IsEnabled="False" />
-            <MenuItem Header="_Google Code" Click="GC_Click" IsEnabled="True" />
         </Menu>
         <StackPanel Grid.Row="1" IsEnabled="{Binding Source={StaticResource OpenedFiles}, Path=FilesOpened}">
             <StackPanel.Resources>
@@ -31,17 +31,17 @@
             <Label Name="BuildTime" Height="30" />
             <GroupBox Header="BCM">
                 <StackPanel>
-                    <Button Content="Charges" Click="ClickCharges"/>
-                    <Button Content="Input Motions" Click="ClickInputs" />
-                    <Button Content="Moves" Click="ClickMoves"/>
-                    <Button Content="Cancels" Click="ClickCancels"/>
+                    <Button Content="C_harges" Click="ClickCharges"/>
+                    <Button Content="_Input Motions" Click="ClickInputs" />
+                    <Button Content="_Moves" Click="ClickMoves"/>
+                    <Button Content="_Cancels" Click="ClickCancels"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="BAC">
                 <StackPanel>
-                    <Button Content="Scripts" Click="ClickScripts"/>
-                    <Button Content="VFX Scripts" Click="ClickVFXScripts"/>
-                    <Button Content="Hitbox Table" Click="ClickHitboxTable"/>
+                    <Button Content="_Scripts" Click="ClickScripts"/>
+                    <Button Content="_VFX Scripts" Click="ClickVFXScripts"/>
+                    <Button Content="_Hitbox Table" Click="ClickHitboxTable"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

@@ -34,7 +34,7 @@ namespace OnoEdit
             binding.Source = App.OpenedFiles.BACFile;
             this.SetBinding(Window.DataContextProperty, binding);
             InitializeComponent();
-            this.Title = Title + " - " + MainWindow.Opened;
+            this.Title = path + " - " + MainWindow.Opened;
         }
         private int nextIndex = 0;
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

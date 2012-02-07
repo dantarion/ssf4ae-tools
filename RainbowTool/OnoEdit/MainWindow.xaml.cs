@@ -192,7 +192,8 @@ namespace OnoEdit
 
         private void GC_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://code.google.com/p/ssf4ae-tools/");
+            new AboutWindow().Show();
+            //System.Diagnostics.Process.Start("http://code.google.com/p/ssf4ae-tools/");
         }
         // end anotak
     }

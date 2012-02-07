@@ -80,6 +80,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EnumTemplateGenerator.cs" />
     <Compile Include="HitboxDataWindow.xaml.cs">
       <DependentUpon>HitboxDataWindow.xaml</DependentUpon>
@@ -95,6 +98,10 @@
       <DependentUpon>ScriptWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplateSelectors.cs" />
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CancelListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

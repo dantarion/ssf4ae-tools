@@ -81,7 +81,9 @@ namespace OnoEdit
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value == null)
+                return null;
+            return ((RainbowLib.IndexReference)value).Value;
         }
     }
     public class EtcTemplateSelector : DataTemplateSelector, IMultiValueConverter, IValueConverter
