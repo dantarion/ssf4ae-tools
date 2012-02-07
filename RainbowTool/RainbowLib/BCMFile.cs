@@ -217,6 +217,7 @@ namespace RainbowLib
             using (var tracker = new TrackingStream(fs))
             using (var inFile = new BinaryReader(tracker))
             {
+                AELogger.Log(AELogger.O_SEPARATOR, false);
                 var bcm = new BCMFile();
                 tracker.SetLabel("Header");
                 var s = new string(inFile.ReadChars(4));
@@ -245,7 +246,7 @@ namespace RainbowLib
                 var CancelListNamesOffset = inFile.ReadUInt32();
 
                 #region Read Charges
-
+                AELogger.Log("Header done, reading charges");
                 tracker.SetLabel("Charges");
                 for (int i = 0; i < ChargeCount; i++)
                 {
@@ -255,8 +256,25 @@ namespace RainbowLib
                     charge.Name = inFile.ReadCString();
                     inFile.BaseStream.Seek(ChargeOffset + i*16);
                     charge.Input = (Input)inFile.ReadUInt16();
+                    /*if (!Input.IsDefined(typeof(Input), charge.Input))
+                    {
+                        AELogger.Log("undefined Input enum value: "
+                            + charge.Input + " in charge named " + charge.Name);
+                    }*/
+                    if (Char.IsDigit(charge.Input.ToString()[0])
+                        && charge.Input.ToString()[0] != '0')
+                    {
+                        AELogger.Log("undefined Input enum value: "
+                            + charge.Input + " in charge named " + charge.Name);
+                    }
                     charge.Unknown1 = inFile.ReadUInt16();
                     charge.MoveFlags = (MoveFlags)inFile.ReadUInt16();
+                    if (Char.IsDigit(charge.MoveFlags.ToString()[0])
+                        && charge.Input.ToString()[0] != '0')
+                    {
+                        AELogger.Log("undefined Moveflags enum value: "
+                            + charge.MoveFlags + " in charge named " + charge.Name);
+                    }
                     charge.Frames = inFile.ReadUInt32();
                     charge.Unknown3 = inFile.ReadUInt16();
                     charge.StorageIndex = inFile.ReadUInt32();
@@ -267,7 +285,7 @@ namespace RainbowLib
                 #endregion
 
                 #region Read Inputs
-
+                AELogger.Log("charges done, reading motions");
                 tracker.SetLabel("Inputs");
                 bcm.InputMotions.Add(InputMotion.NONE);
                 for (int i = 0; i < InputCount; i++)
@@ -284,13 +302,35 @@ namespace RainbowLib
                     {
                         var entry = new InputMotionEntry();
                         entry.Type = (InputType)inFile.ReadUInt16();
+                        if (!InputType.IsDefined(typeof(InputType), entry.Type))
+                        {
+                            AELogger.Log("undefined InputType enum value: "
+                                + entry.Type + " in motion named " + inputMotion.Name + " index " + j);
+                        }
                         entry.Buffer = inFile.ReadUInt16();
                         System.UInt16 a = inFile.ReadUInt16();
                         if (entry.Type == InputType.CHARGE)
                             entry.Charge = bcm.Charges[a];
                         entry.Input = (Input)a;
+                        if (Char.IsDigit(entry.Input.ToString()[0])
+                            && entry.Input.ToString()[0] != '0')
+                        {
+                            AELogger.Log("undefined Input enum value: "
+                                + entry.Input + " in motion named " + inputMotion.Name + " index " + j);
+                        }
                         entry.MoveFlags = (MoveFlags)inFile.ReadUInt16();
+                        if (Char.IsDigit(entry.MoveFlags.ToString()[0])
+                            && entry.MoveFlags.ToString()[0] != '0')
+                        {
+                            AELogger.Log("undefined MoveFlags enum value: "
+                                + entry.MoveFlags + " in motion named " + inputMotion.Name + " index " + j);
+                        }
                         entry.Flags = (InputReqType)inFile.ReadUInt16();
+                        if (!InputReqType.IsDefined(typeof(InputReqType), entry.Flags))
+                        {
+                            AELogger.Log("undefined InputReqType enum value: "
+                                + entry.Flags + " in motion named " + inputMotion.Name + " index " + j);
+                        }
                         entry.Requirement = inFile.ReadUInt16();
                         inputMotion.Entries.Add(entry);
                         //Console.WriteLine(entry);
@@ -303,7 +343,7 @@ namespace RainbowLib
                 #endregion
 
                 #region Read Moves
-
+                AELogger.Log("motions done, reading moves");
                 tracker.SetLabel("Moves");
                 for (int i = 0; i < MoveCount; i++)
                 {
@@ -316,7 +356,19 @@ namespace RainbowLib
                     inFile.BaseStream.Seek(MoveOffset + i*0x54);
 
                     move.Input = (Input)inFile.ReadUInt16();
+                    if (Char.IsDigit(move.Input.ToString()[0])
+                            && move.Input.ToString()[0] != '0')
+                    {
+                        AELogger.Log("undefined Input enum value: "
+                            + move.Input + " in move named " + move.Name);
+                    }
                     move.MoveFlags = (MoveFlags)inFile.ReadUInt16();
+                    if (Char.IsDigit(move.MoveFlags.ToString()[0])
+                            && move.MoveFlags.ToString()[0] != '0')
+                    {
+                        AELogger.Log("undefined MoveFlags enum value: "
+                            + move.MoveFlags + " in move named " + move.Name);
+                    }
                     move.PositionRestriction = (PositionRestriction)inFile.ReadUInt16();
                     move.Restriction = (MoveRestriction)inFile.ReadUInt16();
                     move.StateRestriction = (Move.MoveStateRestriction)inFile.ReadUInt32();
@@ -359,7 +411,7 @@ namespace RainbowLib
                 #endregion
 
                 #region ReadCancels
-
+                AELogger.Log("moves done, reading cancels");
                 tracker.SetLabel("Cancels");
                 for (int i = 0; i < CancelListCount; i++)
                 {
@@ -382,11 +434,11 @@ namespace RainbowLib
                         else cl.Moves.Add(Move.NULL);
                     }
                 }
-
+                AELogger.Log("cancels done");
                 #endregion
 
                 ////Console.WriteLine(tracker.Report());
-                
+                AELogger.Log(AELogger.O_SEPARATOR, false);
                 return bcm;
             }
         }

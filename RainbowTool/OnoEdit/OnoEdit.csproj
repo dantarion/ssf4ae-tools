@@ -87,6 +87,9 @@
     <Compile Include="HitboxDataWindow.xaml.cs">
       <DependentUpon>HitboxDataWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OnoEditControl.cs" />
     <Compile Include="OnoGrid.xaml.cs">
       <DependentUpon>OnoGrid.xaml</DependentUpon>
@@ -115,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

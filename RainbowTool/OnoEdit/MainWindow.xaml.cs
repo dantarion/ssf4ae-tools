@@ -44,6 +44,7 @@ namespace OnoEdit
             BuildTime.Content = "Build Date: "+buildDateTime.ToShortDateString();
 
             AELogger.Log("Build Date: " + buildDateTime.ToShortDateString(), false);
+            App.OpenedFiles.Log = AELogger.Logger;
         }
 
         private void FilesOpened(object sender, CanExecuteRoutedEventArgs e)
@@ -71,6 +72,7 @@ namespace OnoEdit
             // start anotak edit
             if (result == MessageBoxResult.Yes)
             {
+                AELogger.Log("quitting");
                 AELogger.WriteLog();
                 App.Current.Shutdown();
             }
@@ -109,13 +111,15 @@ namespace OnoEdit
             var result = sb.ShowDialog(this);
             if ((bool)result.Value)
             {
+                AELogger.Log("Opening BCM " + System.IO.Path.GetFileName(_opened));
                 App.OpenedFiles.BCMFile = BCMFile.FromFilename(sb.FileName);
                 string bacfile = sb.FileName.Replace(".bcm", ".bac");
+                AELogger.Log("Opened BCM, Opening BAC " + System.IO.Path.GetFileName(_opened));
                 App.OpenedFiles.BACFile = BACFile.FromFilename(bacfile, App.OpenedFiles.BCMFile);
                 _opened = sb.FileName;
                 RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(_opened));
                 App.OpenedFiles.FilesOpened = true;
-
+                AELogger.Log("Opened BAC " + System.IO.Path.GetFileName(_opened));
                 this.Title = "Ono! " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version + " - " +  System.IO.Path.GetFileName(_opened);
             }
             
@@ -131,8 +135,11 @@ namespace OnoEdit
             var result = MessageBox.Show("Are you sure you want to overwrite \""+_opened+"\" ?", "Overwrite File", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
+                AELogger.Log("Saving BCM " + System.IO.Path.GetFileName(_opened));
                 BCMFile.ToFilename(_opened, App.OpenedFiles.BCMFile);
+                AELogger.Log("Saved BCM, Saving BAC " + System.IO.Path.GetFileName(_opened));
                 BACFile.ToFilename(_opened.Replace(".bcm",".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
+                AELogger.Log("Saved BAC " + System.IO.Path.GetFileName(_opened));
             }
         }
         private void ClickSaveAs(object sender, RoutedEventArgs e)
@@ -147,8 +154,11 @@ namespace OnoEdit
             if (result)
             {
                 _opened = sb.FileName;
+                AELogger.Log("Saving BCM " + System.IO.Path.GetFileName(_opened));
                 BCMFile.ToFilename(sb.FileName,App.OpenedFiles.BCMFile);
+                AELogger.Log("Saved BCM, Saving BAC " + System.IO.Path.GetFileName(_opened));
                 BACFile.ToFilename(sb.FileName.Replace(".bcm", ".bac"), App.OpenedFiles.BACFile, App.OpenedFiles.BCMFile);
+                AELogger.Log("Saved BAC " + System.IO.Path.GetFileName(_opened));
             }
         }
 
@@ -194,6 +204,11 @@ namespace OnoEdit
         {
             new AboutWindow().Show();
             //System.Diagnostics.Process.Start("http://code.google.com/p/ssf4ae-tools/");
+        }
+
+        private void Log_Click(object sender, RoutedEventArgs e)
+        {
+            new LogWindow().Show();
         }
         // end anotak
     }

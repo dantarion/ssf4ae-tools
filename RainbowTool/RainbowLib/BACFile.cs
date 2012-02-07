@@ -40,6 +40,7 @@ namespace RainbowLib
             using (var tracker = new TrackingStream(fs))
             using (var inFile = new BinaryReader(tracker))
             {
+                AELogger.Log(AELogger.O_SEPARATOR, false);
                 tracker.SetLabel("Header");
 
                 if (new String(inFile.ReadChars(4)) != "#BAC")
@@ -55,6 +56,8 @@ namespace RainbowLib
                 int ScriptNameOffset = inFile.ReadInt32();
                 int VFXScriptNameOffset = inFile.ReadInt32();
                 int HitboxTableOffset = inFile.ReadInt32();
+                
+                AELogger.Log("Header done, reading floats");
 
                 var bac = new BACFile();
                 for (int i = 0; i < 0x1c; i++)
@@ -66,6 +69,7 @@ namespace RainbowLib
                     }
                     bac.UnknownFloatData.Add(list);
                 }
+                AELogger.Log("floats done, reading scripts");
 
                 for (int i = 0; i < ScriptCount; i++)
                     bac.Scripts.Add(new Script(i));
@@ -84,6 +88,7 @@ namespace RainbowLib
                 //Read Scripts
                 readScripts(inFile, bac.Scripts, bcm, ScriptCount, ScriptOffset, ScriptNameOffset, bac);
                 readScripts(inFile, bac.VFXScripts, bcm, VFXScriptCount, VFXScriptOffset, VFXScriptNameOffset, bac);
+                AELogger.Log("scripts done, reading hitboxtable");
                 //Read Hitbox Table
                 for (int i = 0; i < HitboxTableSize; i++)
                 {
@@ -142,11 +147,13 @@ namespace RainbowLib
                         data.ForceUnknown5 = inFile.ReadSingle();
                     }
                 }
+                AELogger.Log("hitbox done");
                 List<HitBoxDataset> nullHitboxData = bac.HitboxTable.Where(x => x.Data.Count() == 0).ToList();
                 foreach (HitBoxDataset tmp in nullHitboxData)
                     bac.HitboxTable.Remove(tmp);
                 FilterScripts(bac.Scripts);
                 FilterScripts(bac.VFXScripts);
+                AELogger.Log(AELogger.O_SEPARATOR, false);
                 
                 return bac;
             }

@@ -16,6 +16,7 @@
                 <MenuItem Header="Save _As.." Command="SaveAs"/>
                 <Separator />
                 <MenuItem Header="About" Click="GC_Click" IsEnabled="True" />
+                <MenuItem Header="Log" Click="Log_Click" IsEnabled="True" />
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1" IsEnabled="{Binding Source={StaticResource OpenedFiles}, Path=FilesOpened}">

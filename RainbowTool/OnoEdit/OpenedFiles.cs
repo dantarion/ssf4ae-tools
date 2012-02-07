@@ -34,6 +34,14 @@ namespace OnoEdit
 
         // Using a DependencyProperty as the backing store for BCMFile.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BCMFileProperty =
-            DependencyProperty.Register("BCMFile", typeof(BCMFile), typeof(OpenedFiles), new UIPropertyMetadata(null));     
+            DependencyProperty.Register("BCMFile", typeof(BCMFile), typeof(OpenedFiles), new UIPropertyMetadata(null));
+
+        public AELogger Log
+        {
+            get { return (AELogger)GetValue(LogProperty); }
+            set { SetValue(LogProperty, value); }
+        }
+        public static readonly DependencyProperty LogProperty =
+            DependencyProperty.Register("Log", typeof(AELogger), typeof(OpenedFiles), new UIPropertyMetadata(null));
     }
 }
