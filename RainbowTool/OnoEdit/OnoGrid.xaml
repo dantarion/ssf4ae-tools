@@ -12,6 +12,7 @@
             <Label Name="Label" Content="{Binding}"/>
         </DataTemplate>
         <CollectionViewSource x:Key="ItemView" Source="{Binding}"/>
+        <RoutedCommand x:Key="CopyCommand"/>
     </my:OnoEditControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">

@@ -61,10 +61,57 @@ namespace OnoEdit
         public object ConvertBack(object value, Type targetType,
             object parameter, CultureInfo culture)
         {
-            var val = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+            Int32 val = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+
             return val;
         }
     }
+    public class EnumHexConverter<T> : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return string.Format("{0:X}", value);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            Int32 val = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+            if (typeof(T).IsEnum)
+            {
+                return Enum.Parse(typeof(T), val.ToString());
+            }
+            else
+            {
+                return val;
+            }
+        }
+    }
+    public class HexConverterUInt32<T> : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return string.Format("{0:X}", value);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            uint val = UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+            RainbowLib.AELogger.Log(val + " " + value.ToString());
+            if (typeof(T).IsEnum)
+            {
+                return Enum.Parse(typeof(T), val.ToString());
+            }
+            else
+            {
+                return val;
+            }
+        }
+    }
+
     public class RealFrameConverter : DependencyObject, IValueConverter
     {
 

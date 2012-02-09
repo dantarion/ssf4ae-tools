@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Collections;
+using System.Windows.Input;
 
 namespace OnoEdit
 {
@@ -14,7 +15,6 @@ namespace OnoEdit
         public OnoEditControl()
         {
         }
-
 
         public object[] Copy
         {
@@ -188,6 +188,56 @@ namespace OnoEdit
         {
             if (!EditEnabled)
                 e.Handled = true;
+        }
+
+        public class CopyICommand : ICommand
+        {
+            public OnoEditControl myControl;
+            public CopyICommand(OnoEditControl o)
+                : base()
+            {
+                myControl = o;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                myControl.CopyCommand(this, new RoutedEventArgs());
+            }
+            public event EventHandler CanExecuteChanged
+            {
+                add { }
+                remove { }
+            }
+        }
+
+        public class PasteICommand : ICommand
+        {
+            public OnoEditControl myControl;
+            public PasteICommand(OnoEditControl o)
+                : base()
+            {
+                myControl = o;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                myControl.PasteCommand(this, new RoutedEventArgs());
+            }
+            public event EventHandler CanExecuteChanged
+            {
+                add { }
+                remove { }
+            }
         }
     }
 

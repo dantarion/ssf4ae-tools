@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections;
+using System.Globalization;
 
 namespace OnoEdit
 {
@@ -23,6 +24,19 @@ namespace OnoEdit
         public OnoGrid()
         {
             InitializeComponent();
+            CopyICommand vCopyCommand = new CopyICommand(this);
+            KeyBinding CopyCmdKeyBinding = new KeyBinding(
+                vCopyCommand,
+                Key.C,
+                ModifierKeys.Control);
+            myDataGrid.InputBindings.Add(CopyCmdKeyBinding);
+
+            PasteICommand vPasteCommand = new PasteICommand(this);
+            KeyBinding PasteCmdKeyBinding = new KeyBinding(
+                vPasteCommand,
+                Key.V,
+                ModifierKeys.Control);
+            myDataGrid.InputBindings.Add(PasteCmdKeyBinding);
         }       
 
         private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -75,12 +89,28 @@ namespace OnoEdit
             //Scripts
             if (e.PropertyType == typeof(RainbowLib.BAC.Script))
             {
-                var col = new DataGridComboBoxColumn();
-                col.ItemsSource = App.OpenedFiles.BACFile.Scripts;
-                col.SelectedItemBinding = new Binding(e.PropertyName);
-                col.DisplayMemberPath = "Name";
-                col.Header = "Script";
-                e.Column = col;
+                if (RawCheckbox.IsChecked.Value)
+                {
+                    var col = new DataGridTextColumn();
+                    //col.ItemsSource = Enum.GetValues(e.PropertyType);
+                    var b = new Binding(e.PropertyName); // + ".Index"
+                    col.Binding = b;
+                    //b.StringFormat = "X";
+                    b.Converter = new ScriptConverter();
+                    //col.DisplayMemberPath = "Name";
+                    col.Header = e.PropertyName;
+                    col.Header = "Script";
+                    e.Column = col;
+                }
+                else
+                {
+                    var col = new DataGridComboBoxColumn();
+                    col.ItemsSource = App.OpenedFiles.BACFile.Scripts;
+                    col.SelectedItemBinding = new Binding(e.PropertyName);
+                    col.DisplayMemberPath = "Name";
+                    col.Header = "Script";
+                    e.Column = col;
+                }
             }
             //Hex display and entry of Unknown params
             if (e.PropertyName.Contains("Unknown") && e.PropertyType != typeof(float))
@@ -101,8 +131,10 @@ namespace OnoEdit
                 //col.ItemsSource = Enum.GetValues(e.PropertyType);
                 var b = new Binding(e.PropertyName);
                 col.Binding = b;
-                b.StringFormat = "X";
-                //b.Converter = new HexConverter();
+
+                Type type = typeof(EnumHexConverter<>).MakeGenericType(e.PropertyType);
+                b.Converter = Activator.CreateInstance(type) as IValueConverter;
+                
                 //col.DisplayMemberPath = "Name";
                 col.Header = e.PropertyName;
                 e.Column = col;
@@ -226,5 +258,31 @@ namespace OnoEdit
         public static readonly DependencyProperty SelectedValueProperty =
             DependencyProperty.Register("SelectedValue", typeof(object), typeof(OnoGrid), new UIPropertyMetadata(null));
 
+        private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+        
+    }
+
+    public class ScriptConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            return string.Format("{0:X}", (value as RainbowLib.BAC.Script).Index);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            Int32 index = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+            RainbowLib.AELogger.Log(index.ToString() + " and " + App.OpenedFiles.BACFile.Scripts.Count);
+            RainbowLib.BAC.Script scr = App.OpenedFiles.BACFile.Scripts.Where(x => x.Index == index).First();
+            return scr;
+        }
     }
 }

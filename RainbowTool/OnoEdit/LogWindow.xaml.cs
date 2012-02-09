@@ -24,6 +24,7 @@ namespace OnoEdit
         public LogWindow()
         {
             InitializeComponent();
+            Scroller.ScrollToBottom();
         }
     }
     public class LogConverter : IValueConverter
