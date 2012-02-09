@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" 
              xmlns:my="clr-namespace:OnoEdit"
-             x:Name="Base">
+             x:Name="Base" DataContextChanged="myDataGrid_DataContextChanged">
     <my:OnoEditControl.Resources>
         <DataTemplate x:Key="EnumDisplayTemplate">
             <Label Name="Label" Content="{Binding}"/>
@@ -32,7 +32,7 @@
             </Button>
             <TextBlock Text="{Binding ElementName=Base,Path=Copy,Converter={x:Static my:ClipboardToStringConverter.Instance}}"/>
         </StackPanel>
-        <DataGrid ContextMenuOpening="ContextMenuOpening"  Name="myDataGrid" ItemsSource="{Binding Source={StaticResource ItemView}}" AutoGeneratingColumn="ColumnGeneration" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=FrozenColumns}" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="10" ColumnWidth="SizeToCells">
+        <DataGrid ContextMenuOpening="ContextMenuOpening"  Name="myDataGrid" ItemsSource="{Binding Source={StaticResource ItemView}}" AutoGeneratingColumn="ColumnGeneration" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=FrozenColumns}" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="10" ColumnWidth="SizeToCells" DataContextChanged="myDataGrid_DataContextChanged">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Copy" Click="CopyCommand"/>

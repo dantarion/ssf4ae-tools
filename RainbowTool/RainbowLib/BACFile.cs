@@ -136,7 +136,7 @@ namespace RainbowLib
                         data.VctmMeter = inFile.ReadUInt16();
                         data.JuggleStart = inFile.ReadInt16();
                         data.AnimTime = inFile.ReadInt16();
-                        data.ForceUnknown2 = inFile.ReadSingle();
+                        data.ForceUnknown2 = inFile.ReadInt32();
                         data.ForceX = inFile.ReadSingle();
                         data.ForceY = inFile.ReadSingle();
 
@@ -321,10 +321,10 @@ namespace RainbowLib
                             hit.HitFlags = (HitboxCommand.Flags)inFile.ReadByte();
                             hit.Unknown1 = inFile.ReadInt16();
                             hit.UnknownByte1 = inFile.ReadSByte();
-                            hit.UnknownByte2 = inFile.ReadSByte();
+                            hit.Hits = inFile.ReadSByte();
                             hit.JugglePotential = inFile.ReadSByte();
                             hit.JuggleIncrement = inFile.ReadSByte();
-                            hit.UnknownByte5 = inFile.ReadSByte();
+                            hit.JuggleIncrementLimit = inFile.ReadSByte();
                             hit.HitboxEffect = inFile.ReadInt32();
                             var index2 = inFile.ReadInt32();
                             hit.HitboxDataSet = bac.HitboxTable[index2];
@@ -695,10 +695,10 @@ namespace RainbowLib
                         outFile.Write((byte)hit.HitFlags);
                         outFile.Write(hit.Unknown1);
                         outFile.Write(hit.UnknownByte1);
-                        outFile.Write(hit.UnknownByte2);
+                        outFile.Write(hit.Hits);
                         outFile.Write(hit.JugglePotential);
                         outFile.Write(hit.JuggleIncrement);
-                        outFile.Write(hit.UnknownByte5);
+                        outFile.Write(hit.JuggleIncrementLimit);
                         outFile.Write(hit.HitboxEffect);
                         outFile.Write((int)hit.HitboxDataSet.Index);
                     }

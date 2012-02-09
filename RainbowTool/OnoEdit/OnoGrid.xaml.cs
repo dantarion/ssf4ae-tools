@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -24,19 +25,6 @@ namespace OnoEdit
         public OnoGrid()
         {
             InitializeComponent();
-            CopyICommand vCopyCommand = new CopyICommand(this);
-            KeyBinding CopyCmdKeyBinding = new KeyBinding(
-                vCopyCommand,
-                Key.C,
-                ModifierKeys.Control);
-            myDataGrid.InputBindings.Add(CopyCmdKeyBinding);
-
-            PasteICommand vPasteCommand = new PasteICommand(this);
-            KeyBinding PasteCmdKeyBinding = new KeyBinding(
-                vPasteCommand,
-                Key.V,
-                ModifierKeys.Control);
-            myDataGrid.InputBindings.Add(PasteCmdKeyBinding);
         }       
 
         private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -258,13 +246,13 @@ namespace OnoEdit
         public static readonly DependencyProperty SelectedValueProperty =
             DependencyProperty.Register("SelectedValue", typeof(object), typeof(OnoGrid), new UIPropertyMetadata(null));
 
-        private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void myDataGrid_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-
+            if(this.ListCollectionView != null)
+            {
+                this.ListCollectionView.CommitEdit();
+            }
         }
-
-
-        
     }
 
     public class ScriptConverter : IValueConverter

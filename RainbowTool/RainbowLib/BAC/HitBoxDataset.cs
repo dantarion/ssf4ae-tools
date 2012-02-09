@@ -272,8 +272,9 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("AnimTime");
             }
         }
-        private float _ForceUnknown2;
-        public float ForceUnknown2
+
+        private int _ForceUnknown2;
+        public int ForceUnknown2
         {
             get { return _ForceUnknown2; }
             set

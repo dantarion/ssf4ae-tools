@@ -24,19 +24,6 @@ namespace OnoEdit
         {
             InitializeComponent();
            // ListCollectionView().Filter = myFilter;
-            CopyICommand vCopyCommand = new CopyICommand(this);
-            KeyBinding CopyCmdKeyBinding = new KeyBinding(
-                vCopyCommand,
-                Key.C,
-                ModifierKeys.Control);
-            myDataGrid.InputBindings.Add(CopyCmdKeyBinding);
-
-            PasteICommand vPasteCommand = new PasteICommand(this);
-            KeyBinding PasteCmdKeyBinding = new KeyBinding(
-                vPasteCommand,
-                Key.V,
-                ModifierKeys.Control);
-            myDataGrid.InputBindings.Add(PasteCmdKeyBinding);
         }
 
         public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(

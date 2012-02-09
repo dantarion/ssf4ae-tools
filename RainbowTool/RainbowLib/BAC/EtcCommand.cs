@@ -18,7 +18,7 @@ namespace RainbowLib.BAC
         public enum EtcControlType : short
         {
             UNKNOWN = 0,
-            PROJECTILE = 2,
+            VFX_SCRIPT = 2,
             SUPERFLASH = 5
         }
         private EtcCommandType _Type;

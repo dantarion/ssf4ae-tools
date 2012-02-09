@@ -429,9 +429,14 @@ namespace RainbowLib
                     {
                         var x = inFile.ReadInt16();
                         //Console.WriteLine(x);
-                        if (x != -1)
+                        if (x == -1)
+                        {
+                            cl.Moves.Add(Move.NULL);
+                        }
+                        else if (x < bcm.Moves.Count)
+                        {
                             cl.Moves.Add(bcm.Moves[x]);
-                        else cl.Moves.Add(Move.NULL);
+                        }
                     }
                 }
                 AELogger.Log("cancels done");

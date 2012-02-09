@@ -168,14 +168,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("UnknownByte1");
             }
         }
-        private sbyte _UnknownByte2;
-        public sbyte UnknownByte2
+        private sbyte _Hits;
+        public sbyte Hits
         {
-            get { return _UnknownByte2; }
+            get { return this._Hits; }
             set
             {
-                _UnknownByte2 = value;
-                OnPropertyChanged("UnknownByte2");
+                this._Hits = value;
+                OnPropertyChanged("Hits");
             }
         }
         private sbyte _JugglePotential;
@@ -198,14 +198,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("JuggleIncrement");
             }
         }
-        private sbyte _UnknownByte5;
-        public sbyte UnknownByte5
+        private sbyte _JuggleIncrementLimit;
+        public sbyte JuggleIncrementLimit
         {
-            get { return _UnknownByte5; }
+            get { return this._JuggleIncrementLimit; }
             set
             {
-                _UnknownByte5 = value;
-                OnPropertyChanged("UnknownByte5");
+                this._JuggleIncrementLimit = value;
+                OnPropertyChanged("JuggleIncrementLimit");
             }
         }
         private int _HitboxEffect;

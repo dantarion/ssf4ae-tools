@@ -14,6 +14,18 @@ namespace OnoEdit
     {
         public OnoEditControl()
         {
+            this.PreviewKeyDown += this.Base_PreviewKeyDown;
+        }
+
+        private void Base_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                if (e.Key == Key.C) 
+                    this.CopyCommand(sender, e);
+                else if (e.Key == Key.V) 
+                    this.PasteCommand(sender, e);
+            }
         }
 
         public object[] Copy
@@ -188,56 +200,6 @@ namespace OnoEdit
         {
             if (!EditEnabled)
                 e.Handled = true;
-        }
-
-        public class CopyICommand : ICommand
-        {
-            public OnoEditControl myControl;
-            public CopyICommand(OnoEditControl o)
-                : base()
-            {
-                myControl = o;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public void Execute(object parameter)
-            {
-                myControl.CopyCommand(this, new RoutedEventArgs());
-            }
-            public event EventHandler CanExecuteChanged
-            {
-                add { }
-                remove { }
-            }
-        }
-
-        public class PasteICommand : ICommand
-        {
-            public OnoEditControl myControl;
-            public PasteICommand(OnoEditControl o)
-                : base()
-            {
-                myControl = o;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public void Execute(object parameter)
-            {
-                myControl.PasteCommand(this, new RoutedEventArgs());
-            }
-            public event EventHandler CanExecuteChanged
-            {
-                add { }
-                remove { }
-            }
         }
     }
 
