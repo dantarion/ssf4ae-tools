@@ -97,6 +97,31 @@ namespace RainbowLib
         {
             str.Seek(off, SeekOrigin.Begin);
         }
+
+        public static void LogUnkEnumFlags(Enum en, string parent, string Name, int Index = -1)
+        {
+            if (Char.IsDigit(en.ToString()[0])
+                        && en.ToString()[0] != '0')
+            {
+                AELogger.Log("undefined " + en.GetType().Name + " enum flag value: "
+                    + en + " in " + parent + " named " + Name +
+                    (Index == -1 ? "" : (" at index " + Index)),
+                    false
+                    );
+            }
+        }
+
+        public static void LogUnkEnum(Enum en, string parent, string Name, int Index = -1)
+        {
+            if (!Enum.IsDefined(en.GetType(), en))
+            {
+                AELogger.Log("undefined " + en.GetType().Name + " enum value: "
+                    + en + " in  "+ parent +" named " + Name +
+                    (Index == -1 ? "" : (" at index " + Index)),
+                    false
+                    );
+            }
+        }
     }
 
 }

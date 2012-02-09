@@ -125,31 +125,39 @@ namespace RainbowLib.BAC
             }
         }
         [Flags]
-        public enum Flags : byte
+        public enum Flags : ushort
         {
-            NONE = 0,
-            UNKNOWN0 = 0x01,
-            UNKNOWN1 = 0x02,
-            UNBLOCKABLE = 0x04,
-            BREAK_ARMOR = 0x08,
-            BREAK_ARMOR2 = 0x10,
-            CROSSUP = 0x20,
-            UNKNOWN5 = 0x40,
-            DONT_HIT_CROUCHING = 0x80
+            NONE                = 0,
+            LOWER               = 0x01,
+            UPPER               = 0x02,
+            UNBLOCKABLE         = 0x04,
+            BREAK_ARMOR         = 0x08,
+            BREAK_COUNTER       = 0x10,
+            CROSSUP             = 0x20,
+            DONT_HIT_STANDING   = 0x40,
+            DONT_HIT_CROUCHING  = 0x80,
+            DONT_HIT_AIR        = 0x100,
+            DONT_HIT_FRONT      = 0x200,
+            DONT_HIT_JUMP_START = 0x400,
+            UNKNOWN800          = 0x800,
+            UNKNOWN1000         = 0x1000,
+            GET_TARGET_SIDE     = 0x2000,
+            IGNORE_FINISH       = 0x4000,
+            IGNORE_AIMAGE       = 0x8000
         }
-        private Flags _Unknown0;
+        private Flags _HitFlags;
         public Flags HitFlags
         {
-            get { return _Unknown0; }
+            get { return _HitFlags; }
             set
             {
-                _Unknown0 = value;
+                _HitFlags = value;
                 OnPropertyChanged("HitFlags");
             }
         }
         
-        private short _Unknown1;
-        public short Unknown1
+        private byte _Unknown1;
+        public byte Unknown1
         {
             get { return _Unknown1; }
             set

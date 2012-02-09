@@ -100,7 +100,7 @@ namespace OnoEdit
             object parameter, CultureInfo culture)
         {
             uint val = UInt32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
-            RainbowLib.AELogger.Log(val + " " + value.ToString());
+            //RainbowLib.AELogger.Log(val + " " + value.ToString());
             if (typeof(T).IsEnum)
             {
                 return Enum.Parse(typeof(T), val.ToString());

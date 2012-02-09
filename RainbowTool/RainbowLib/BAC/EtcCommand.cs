@@ -19,7 +19,13 @@ namespace RainbowLib.BAC
         {
             UNKNOWN = 0,
             VFX_SCRIPT = 2,
-            SUPERFLASH = 5
+            SUPERFLASH = 5,
+            THROW_TECH = 6,
+            STICK_MOVEMENT = 11, // think lariat or honda 8hp
+            AIR_TRACKING = 12, // bison ex headstomp
+            TELEPORT = 15,
+            DROP_KNIFE = 19,
+            ANGRY_SCAR = 28
         }
         private EtcCommandType _Type;
         public EtcCommandType Type

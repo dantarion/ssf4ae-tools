@@ -33,7 +33,7 @@ namespace OnoEdit
             OtherLabel.Text =
             "Credits (alphabetical)\n"
             + "Main Programming: Dantarion\nProgramming: Anotak, Waterine\n"
-            + "File format info:\nAnotak, Dantarion, Gojira, Error1, Illitirit, Piecemontee, Polarity,\nProvidenceangle, Sindor, Waterine, yeb, Zeipher\n"
+            + "File format info:\nACCELERATOR, Anotak, Dantarion, Gojira, Error1, Illitirit, Piecemontee, Polarity,\nProvidenceangle, Sindor, Waterine, yeb, Zeipher\n"
             + "\nBug Reports:\nBebopfan, Comeback Mechanic, Error1, Mnszyk, Polarity, Razor5070, yeb, Zeipher\n"
             + "Special thanks:\nahfb, Banana Ken, combovid.com, Dandy J, hunterk (aemods.pbworks.com),\nsonichurricane.com, SSJ George Bush, xentax.com, Zandwich\n"
             + "Google code: http://code.google.com/p/ssf4ae-tools/ \n"

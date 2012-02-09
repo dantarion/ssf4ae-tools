@@ -256,25 +256,10 @@ namespace RainbowLib
                     charge.Name = inFile.ReadCString();
                     inFile.BaseStream.Seek(ChargeOffset + i*16);
                     charge.Input = (Input)inFile.ReadUInt16();
-                    /*if (!Input.IsDefined(typeof(Input), charge.Input))
-                    {
-                        AELogger.Log("undefined Input enum value: "
-                            + charge.Input + " in charge named " + charge.Name);
-                    }*/
-                    if (Char.IsDigit(charge.Input.ToString()[0])
-                        && charge.Input.ToString()[0] != '0')
-                    {
-                        AELogger.Log("undefined Input enum value: "
-                            + charge.Input + " in charge named " + charge.Name);
-                    }
+                    Util.LogUnkEnumFlags(charge.Input, "charge", charge.Name);
                     charge.Unknown1 = inFile.ReadUInt16();
                     charge.MoveFlags = (MoveFlags)inFile.ReadUInt16();
-                    if (Char.IsDigit(charge.MoveFlags.ToString()[0])
-                        && charge.Input.ToString()[0] != '0')
-                    {
-                        AELogger.Log("undefined Moveflags enum value: "
-                            + charge.MoveFlags + " in charge named " + charge.Name);
-                    }
+                    Util.LogUnkEnumFlags(charge.MoveFlags, "charge", charge.Name);
                     charge.Frames = inFile.ReadUInt32();
                     charge.Unknown3 = inFile.ReadUInt16();
                     charge.StorageIndex = inFile.ReadUInt32();
@@ -302,35 +287,20 @@ namespace RainbowLib
                     {
                         var entry = new InputMotionEntry();
                         entry.Type = (InputType)inFile.ReadUInt16();
-                        if (!InputType.IsDefined(typeof(InputType), entry.Type))
-                        {
-                            AELogger.Log("undefined InputType enum value: "
-                                + entry.Type + " in motion named " + inputMotion.Name + " index " + j);
-                        }
+                        Util.LogUnkEnum(entry.Type, "motion", inputMotion.Name, j);
+
                         entry.Buffer = inFile.ReadUInt16();
                         System.UInt16 a = inFile.ReadUInt16();
                         if (entry.Type == InputType.CHARGE)
                             entry.Charge = bcm.Charges[a];
                         entry.Input = (Input)a;
-                        if (Char.IsDigit(entry.Input.ToString()[0])
-                            && entry.Input.ToString()[0] != '0')
-                        {
-                            AELogger.Log("undefined Input enum value: "
-                                + entry.Input + " in motion named " + inputMotion.Name + " index " + j);
-                        }
+                        Util.LogUnkEnum(entry.Input, "motion", inputMotion.Name, j);
+
                         entry.MoveFlags = (MoveFlags)inFile.ReadUInt16();
-                        if (Char.IsDigit(entry.MoveFlags.ToString()[0])
-                            && entry.MoveFlags.ToString()[0] != '0')
-                        {
-                            AELogger.Log("undefined MoveFlags enum value: "
-                                + entry.MoveFlags + " in motion named " + inputMotion.Name + " index " + j);
-                        }
+                        Util.LogUnkEnumFlags(entry.MoveFlags, "motion", inputMotion.Name, j);
+
                         entry.Flags = (InputReqType)inFile.ReadUInt16();
-                        if (!InputReqType.IsDefined(typeof(InputReqType), entry.Flags))
-                        {
-                            AELogger.Log("undefined InputReqType enum value: "
-                                + entry.Flags + " in motion named " + inputMotion.Name + " index " + j);
-                        }
+                        Util.LogUnkEnum(entry.Flags, "motion", inputMotion.Name, j);
                         entry.Requirement = inFile.ReadUInt16();
                         inputMotion.Entries.Add(entry);
                         //Console.WriteLine(entry);
@@ -356,23 +326,23 @@ namespace RainbowLib
                     inFile.BaseStream.Seek(MoveOffset + i*0x54);
 
                     move.Input = (Input)inFile.ReadUInt16();
-                    if (Char.IsDigit(move.Input.ToString()[0])
-                            && move.Input.ToString()[0] != '0')
-                    {
-                        AELogger.Log("undefined Input enum value: "
-                            + move.Input + " in move named " + move.Name);
-                    }
+                    Util.LogUnkEnumFlags(move.Input, "move", move.Name);
+
                     move.MoveFlags = (MoveFlags)inFile.ReadUInt16();
-                    if (Char.IsDigit(move.MoveFlags.ToString()[0])
-                            && move.MoveFlags.ToString()[0] != '0')
-                    {
-                        AELogger.Log("undefined MoveFlags enum value: "
-                            + move.MoveFlags + " in move named " + move.Name);
-                    }
+                    Util.LogUnkEnumFlags(move.MoveFlags, "move", move.Name);
+
                     move.PositionRestriction = (PositionRestriction)inFile.ReadUInt16();
+                    Util.LogUnkEnum(move.PositionRestriction, "move", move.Name);
+
                     move.Restriction = (MoveRestriction)inFile.ReadUInt16();
+                    Util.LogUnkEnumFlags(move.MoveFlags, "move", move.Name);
+
                     move.StateRestriction = (Move.MoveStateRestriction)inFile.ReadUInt32();
+                    Util.LogUnkEnum(move.StateRestriction, "move", move.Name);
+
                     move.UltraRestriction = (Move.MoveUltraRestriction)inFile.ReadUInt64();
+                    Util.LogUnkEnum(move.UltraRestriction, "move", move.Name);
+
                     move.PositionRestrictionDistance = inFile.ReadSingle();
                     move.EXRequirement = inFile.ReadInt16();
                     move.EXCost = inFile.ReadInt16();
@@ -387,6 +357,8 @@ namespace RainbowLib
 
                     /* AI data */
                     move.Attributes = (MoveAttributeFlags)inFile.ReadUInt32();
+                    Util.LogUnkEnumFlags(move.Attributes, "move", move.Name);
+
                     move.CpuMinRange = inFile.ReadSingle();
                     move.CpuMaxRange = inFile.ReadSingle();
                     move.Unk2 = inFile.ReadUInt32();
@@ -436,6 +408,10 @@ namespace RainbowLib
                         else if (x < bcm.Moves.Count)
                         {
                             cl.Moves.Add(bcm.Moves[x]);
+                        }
+                        else
+                        {
+                            AELogger.Log("WARNING: Out of range move detected!!!!");
                         }
                     }
                 }

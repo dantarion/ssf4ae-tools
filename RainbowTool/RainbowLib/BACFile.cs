@@ -107,11 +107,8 @@ namespace RainbowLib
                         data.Damage = inFile.ReadInt16();
                         data.Stun = inFile.ReadInt16();
                         data.Effect = (HitBoxData.HitBoxEffect)inFile.ReadUInt16();
-                        if (!HitBoxData.HitBoxEffect.IsDefined(typeof(HitBoxData.HitBoxEffect), data.Effect))
-                        {
-                            AELogger.Log("undefinied HitBoxData.HitBoxEffect enum value: "
-                                + data.Effect + " in hitbox #" + i);
-                        }
+                        Util.LogUnkEnum(data.Effect, "Hitbox #" + dataset.Index, "hitboxdataset", j);
+
                         var index = inFile.ReadInt16() + HitBoxData.getIndexOffset(data.Effect);
                         if (index > -1)
                             data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
@@ -239,6 +236,7 @@ namespace RainbowLib
                     {
                         case CommandListType.FLOW:
                             (cmd as FlowCommand).Type = (FlowCommand.FlowType)inFile.ReadInt32();
+                            Util.LogUnkEnum((cmd as FlowCommand).Type, "script", script.Name);
                             var index = inFile.ReadInt16();
                             if (index != -1)
                                 (cmd as FlowCommand).TargetScript = bac.Scripts[index];
@@ -250,7 +248,9 @@ namespace RainbowLib
                             var ani = cmd as AnimationCommand;
                             ani.Animation = inFile.ReadInt16();
                             ani.Type = (AnimationCommand.AnimationType)inFile.ReadByte();
+                            Util.LogUnkEnum(ani.Type, "script", script.Name);
                             ani.Flags = (AnimationCommand.AnimationFlags)inFile.ReadByte();
+                            Util.LogUnkEnum(ani.Flags, "script", script.Name);
                             ani.FromFrame = inFile.ReadInt16();
                             ani.ToFrame = inFile.ReadInt16();
                             break;
@@ -260,6 +260,7 @@ namespace RainbowLib
                         case CommandListType.STATE:
                             var unk3 = cmd as StateCommand;
                             unk3.Flags = (StateCommand.StateFlags)inFile.ReadUInt32();
+                            Util.LogUnkEnumFlags(unk3.Flags, "script", script.Name);
                             unk3.UnknownFlags2 = inFile.ReadUInt32();
                             break;
                         case CommandListType.SPEED:
@@ -267,8 +268,9 @@ namespace RainbowLib
                             break;
                         case CommandListType.CANCELS:
                             (cmd as CancelCommand).Type = (CancelCommand.CancelType)inFile.ReadUInt32();
+                            Util.LogUnkEnumFlags((cmd as CancelCommand).Type, "script", script.Name);
                             var d = inFile.ReadInt32();
-                            if (d != -1)
+                            if (d != -1 && d < bcm.CancelLists.Count)
                                 (cmd as CancelCommand).CancelList = bcm.CancelLists[d];
                             break;
                         case CommandListType.HURTBOX:
@@ -291,6 +293,7 @@ namespace RainbowLib
                             physics.YVel = inFile.ReadSingle();
                             physics.Unk01 = inFile.ReadUInt32();
                             physics.PhysicsFlags = (PhysicsCommand.PFlags)inFile.ReadUInt32();
+                            Util.LogUnkEnumFlags(physics.PhysicsFlags, "script", script.Name);
                             physics.XAccel = inFile.ReadSingle();
                             physics.YAccel = inFile.ReadSingle();
                             physics.Unk02 = inFile.ReadUInt64();
@@ -299,6 +302,7 @@ namespace RainbowLib
                         case CommandListType.ETC:
                             var etc = cmd as EtcCommand;
                             etc.Type = (EtcCommand.EtcCommandType)inFile.ReadUInt16();
+                            Util.LogUnkEnum(etc.Type, "script", script.Name);
                             etc.ShortParam = inFile.ReadUInt16();
                             var arr = new int[7];
                             for(int tmp = 0; tmp < 7; tmp++)
@@ -317,9 +321,12 @@ namespace RainbowLib
                             hit.ID = inFile.ReadSByte();
                             hit.Juggle = inFile.ReadSByte();
                             hit.Type = (HitboxCommand.HitboxType)inFile.ReadByte();
+                            Util.LogUnkEnum(hit.Type, "script", script.Name);
                             hit.HitLevel = (HitboxCommand.HitLevelType)inFile.ReadByte();
-                            hit.HitFlags = (HitboxCommand.Flags)inFile.ReadByte();
-                            hit.Unknown1 = inFile.ReadInt16();
+                            Util.LogUnkEnum(hit.HitLevel, "script", script.Name);
+                            hit.HitFlags = (HitboxCommand.Flags)inFile.ReadInt16();
+                            Util.LogUnkEnumFlags(hit.HitFlags, "script", script.Name);
+                            hit.Unknown1 = inFile.ReadByte();
                             hit.UnknownByte1 = inFile.ReadSByte();
                             hit.Hits = inFile.ReadSByte();
                             hit.JugglePotential = inFile.ReadSByte();
@@ -334,6 +341,7 @@ namespace RainbowLib
                         case CommandListType.INVINC:
                             var invinc = cmd as InvincCommand;
                             invinc.InvincFlags = (InvincCommand.InFlags)inFile.ReadUInt16();
+                            Util.LogUnkEnumFlags(invinc.InvincFlags, "script", script.Name);
                             invinc.Unk01 = inFile.ReadUInt16();
                             invinc.Location = inFile.ReadUInt16();
                             invinc.Unk02 = inFile.ReadUInt16();
@@ -692,7 +700,7 @@ namespace RainbowLib
                         outFile.Write(hit.Juggle);
                         outFile.Write((byte)hit.Type);
                         outFile.Write((byte)hit.HitLevel);
-                        outFile.Write((byte)hit.HitFlags);
+                        outFile.Write((ushort)hit.HitFlags);
                         outFile.Write(hit.Unknown1);
                         outFile.Write(hit.UnknownByte1);
                         outFile.Write(hit.Hits);
