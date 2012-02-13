@@ -20,63 +20,74 @@
         <GroupBox DockPanel.Dock="Left" Header="Script">
             <local:OnoList SelectionChanged="ScriptSelectionChanged"  Width="180" x:Name="ListBox" DataContext="{Binding}"/>
         </GroupBox>
-        <GroupBox DockPanel.Dock="Left" Header="CommandList">
-            <ListBox Width="90" Name="ComboBox" ItemsSource="{Binding ElementName=ListBox,Path=SelectedValue.CommandLists}" DisplayMemberPath="Type" SelectedIndex="0" 
+        <TabControl Name="tabControl1" Margin="0" Padding="0" TabStripPlacement="Top">
+            <TabItem Header="Data" Name="dataTab">
+                <DockPanel>
+                    <GroupBox DockPanel.Dock="Left" Header="CommandList">
+                        <ListBox Width="90" Name="ComboBox" ItemsSource="{Binding ElementName=ListBox,Path=SelectedValue.CommandLists}" DisplayMemberPath="Type" SelectedIndex="0" 
                       SelectionChanged="ComboBox_SelectionChanged" FontWeight="Bold">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=Count}" Value="0">
-                                <Setter Property="ListBoxItem.FontStyle"  Value="Italic" />
-                                <Setter Property="ListBoxItem.FontWeight"  Value="Normal" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
-        </GroupBox>
-        <DockPanel>
-            <Expander IsExpanded="False" DockPanel.Dock="Top" Header="Script Header Data" DataContext="{Binding ElementName=ListBox,Path=SelectedValue}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Count}" Value="0">
+                                            <Setter Property="ListBoxItem.FontStyle"  Value="Italic" />
+                                            <Setter Property="ListBoxItem.FontWeight"  Value="Normal" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </GroupBox>
+                    <DockPanel>
+                        <Expander IsExpanded="False" DockPanel.Dock="Top" Header="Script Header Data" DataContext="{Binding ElementName=ListBox,Path=SelectedValue}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0">Name</Label>
+                                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=Name}"/>
+                                <Label Grid.Column="0" Grid.Row="1">Index</Label>
+                                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=Index}" IsEnabled="False" />
+                                <Label Grid.Column="0" Grid.Row="2">First Hitbox Frame?</Label>
+                                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=FirstHitboxFrame}"/>
+                                <Label Grid.Column="0" Grid.Row="3">Last Hitbox Frame?</Label>
+                                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=LastHitboxFrame}"/>
+                                <Label Grid.Column="0" Grid.Row="4">Interrupt at Frame:</Label>
+                                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=IASAFrame}"/>
+                                <Label Grid.Column="0" Grid.Row="5">Total Duration</Label>
+                                <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Path=TotalFrames}"/>
+                                <Label Grid.Column="0" Grid.Row="6">UnknownFlags1</Label>
+                                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Path=UnknownFlags1}"/>
+                                <Label Grid.Column="0" Grid.Row="7">UnknownFlags2</Label>
+                                <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Path=UnknownFlags2}"/>
+                                <Label Grid.Column="0" Grid.Row="8">UnknownFlags3</Label>
+                                <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding Path=UnknownFlags3}"/>
+                            </Grid>
+                        </Expander>
+
+                        <GroupBox Header="Commands">
+                            <local:OnoGrid x:Name="DataGrid" FrozenColumns="2" DataContext="{Binding ElementName=ComboBox,Path=SelectedItem}"/>
+                        </GroupBox>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Timeline" Name="timelineTab">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0">Name</Label>
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=Name}"/>
-                    <Label Grid.Column="0" Grid.Row="1">Index</Label>
-                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=Index}" IsEnabled="False" />
-                    <Label Grid.Column="0" Grid.Row="2">First Hitbox Frame?</Label>
-                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=FirstHitboxFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="3">Last Hitbox Frame?</Label>
-                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=LastHitboxFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="4">Interrupt at Frame:</Label>
-                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=IASAFrame}"/>
-                    <Label Grid.Column="0" Grid.Row="5">Total Duration</Label>
-                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Path=TotalFrames}"/>
-                    <Label Grid.Column="0" Grid.Row="6">UnknownFlags1</Label>
-                    <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Path=UnknownFlags1}"/>
-                    <Label Grid.Column="0" Grid.Row="7">UnknownFlags2</Label>
-                    <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Path=UnknownFlags2}"/>
-                    <Label Grid.Column="0" Grid.Row="8">UnknownFlags3</Label>
-                    <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding Path=UnknownFlags3}"/>
+                    <DataGrid Name="timelineDataGrid" ItemsSource="{Binding ElementName=ListBox,Path=SelectedValue.CommandLists,Converter={x:Static local:TimelineGenerator.Instance}}" FrozenColumnCount="1" Margin="0" AutoGenerateColumns="True" IsReadOnly="True" IsManipulationEnabled="False" AutoGeneratingColumn="timelineDataGrid_AutoGeneratingColumn" />
                 </Grid>
-            </Expander>
-            
-            <GroupBox Header="Commands">
-                <local:OnoGrid x:Name="DataGrid" FrozenColumns="2" DataContext="{Binding ElementName=ComboBox,Path=SelectedItem}"/>
-            </GroupBox>
-        </DockPanel>
+            </TabItem>
+        </TabControl>
     </DockPanel>
 </Window>

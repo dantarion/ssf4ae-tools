@@ -6,13 +6,11 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 namespace RainbowLib.BAC
 {
-    
-   
     public enum CommandListType : ushort
     {
         FLOW = 0,
         ANIMATION = 1,
-        UNK02 = 2,
+        TRANSITION = 2,
         STATE = 3,
         SPEED = 4,
         PHYSICS = 5,
@@ -28,27 +26,37 @@ namespace RainbowLib.BAC
     {
         public static dynamic ByType(CommandListType type)
         {
-            if (type == CommandListType.FLOW)
-                return new CommandList<FlowCommand>();
-            if (type == CommandListType.ANIMATION)
-                return new CommandList<AnimationCommand>();
-            if (type == CommandListType.STATE)
-                return new CommandList<StateCommand>();
-            if (type == CommandListType.SPEED)
-                return new CommandList<SpeedCommand>();
-            if (type == CommandListType.PHYSICS)
-                return new CommandList<PhysicsCommand>();
-            if (type == CommandListType.CANCELS)
-                return new CommandList<CancelCommand>();
-            if (type == CommandListType.HURTBOX)
-                return new CommandList<HurtboxCommand>();
-            if (type == CommandListType.ETC)
-                return new CommandList<EtcCommand>();
-            if (type == CommandListType.HITBOX)
-                return new CommandList<HitboxCommand>();
-            if (type == CommandListType.INVINC)
-                return new CommandList<InvincCommand>();
-            return new CommandList<BaseCommand>();
+            switch (type)
+            {
+                case CommandListType.FLOW:
+                    return new CommandList<FlowCommand>();
+                case CommandListType.ANIMATION:
+                    return new CommandList<AnimationCommand>();
+                case CommandListType.TRANSITION:
+                    return new CommandList<TransitionCommand>();
+                case CommandListType.STATE:
+                    return new CommandList<StateCommand>();
+                case CommandListType.SPEED:
+                    return new CommandList<SpeedCommand>();
+                case CommandListType.PHYSICS:
+                    return new CommandList<PhysicsCommand>();
+                case CommandListType.CANCELS:
+                    return new CommandList<CancelCommand>();
+                case CommandListType.HURTBOX:
+                    return new CommandList<HurtboxCommand>();
+                case CommandListType.ETC:
+                    return new CommandList<EtcCommand>();
+                case CommandListType.HITBOX:
+                    return new CommandList<HitboxCommand>();
+                case CommandListType.INVINC:
+                    return new CommandList<InvincCommand>();
+                case CommandListType.DAMAGEANIM:
+                    return new CommandList<DamageAnimCommand>();
+                case CommandListType.SFX:
+                    return new CommandList<SfxCommand>();
+                default:
+                    return new CommandList<BaseCommand>();
+            }
         }
     }
     [Serializable]
@@ -57,13 +65,13 @@ namespace RainbowLib.BAC
         internal CommandList()
         {
         }
+
         public override string ToString()
         {
             if (Count == 0)
                 return Type.ToString() + "*";
             else
                 return Type.ToString();
-
         }
 
         public object Clone()

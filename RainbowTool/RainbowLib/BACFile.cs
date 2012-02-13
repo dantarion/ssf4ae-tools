@@ -254,8 +254,16 @@ namespace RainbowLib
                             ani.FromFrame = inFile.ReadInt16();
                             ani.ToFrame = inFile.ReadInt16();
                             break;
-                        case CommandListType.UNK02:
-                            cmd.Raw = inFile.ReadBytes(0x1C);
+                        case CommandListType.TRANSITION:
+                            var transition = (TransitionCommand)cmd;
+                            transition.Flag1 = inFile.ReadUInt16();
+                            transition.Flag2 = inFile.ReadUInt16();
+                            transition.Float1 = inFile.ReadSingle();
+                            transition.Float2 = inFile.ReadSingle();
+                            transition.Float3 = inFile.ReadSingle();
+                            transition.Float4 = inFile.ReadSingle();
+                            transition.Float5 = inFile.ReadSingle();
+                            transition.Float6 = inFile.ReadSingle();
                             break;
                         case CommandListType.STATE:
                             var unk3 = cmd as StateCommand;
@@ -351,8 +359,19 @@ namespace RainbowLib
                             invinc.Unk06 = inFile.ReadUInt16();
                             break;
                         case CommandListType.DAMAGEANIM:
+                            var damageAnim = (DamageAnimCommand)cmd;
+                            damageAnim.Type = inFile.ReadInt32();
+                            damageAnim.Anim = inFile.ReadInt32();
+                            damageAnim.Unknown2 = inFile.ReadInt32();
+                            damageAnim.Unknown3 = inFile.ReadInt32();
+                            break;
                         case CommandListType.SFX:
-                            cmd.Raw = inFile.ReadBytes(0x10);
+                            var sfx = (SfxCommand)cmd;
+                            sfx.Type = (SfxType)inFile.ReadUInt16();
+                            sfx.Sound = inFile.ReadInt16();
+                            sfx.Unknown1 = inFile.ReadUInt32();
+                            sfx.Unknown2 = inFile.ReadUInt32();
+                            sfx.Unknown3 = inFile.ReadUInt32();
                             break;
                         default:
                             cmd.Raw = inFile.ReadBytes(8);
@@ -609,6 +628,18 @@ namespace RainbowLib
                         outFile.Write(animation.FromFrame);
                         outFile.Write(animation.ToFrame);
                     }
+                    else if (cmd is TransitionCommand)
+                    {
+                        var transition = (TransitionCommand)cmd;
+                        outFile.Write(transition.Flag1);
+                        outFile.Write(transition.Flag2);
+                        outFile.Write(transition.Float1);
+                        outFile.Write(transition.Float2);
+                        outFile.Write(transition.Float3);
+                        outFile.Write(transition.Float4);
+                        outFile.Write(transition.Float5);
+                        outFile.Write(transition.Float6);
+                    }
                     else if (cmd is StateCommand)
                     {
                         var state = cmd as StateCommand;
@@ -709,6 +740,23 @@ namespace RainbowLib
                         outFile.Write(hit.JuggleIncrementLimit);
                         outFile.Write(hit.HitboxEffect);
                         outFile.Write((int)hit.HitboxDataSet.Index);
+                    }
+                    else if (cmd is DamageAnimCommand)
+                    {
+                        var damageAnim = (DamageAnimCommand)cmd;
+                        outFile.Write(damageAnim.Type);
+                        outFile.Write(damageAnim.Anim);
+                        outFile.Write(damageAnim.Unknown2);
+                        outFile.Write(damageAnim.Unknown3);
+                    }
+                    else if (cmd is SfxCommand)
+                    {
+                        var sfx = (SfxCommand)cmd;
+                        outFile.Write((UInt16)sfx.Type);
+                        outFile.Write(sfx.Sound);
+                        outFile.Write(sfx.Unknown1);
+                        outFile.Write(sfx.Unknown2);
+                        outFile.Write(sfx.Unknown3);
                     }
                     else
                     {
