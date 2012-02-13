@@ -9,11 +9,16 @@ namespace RainbowLib.BAC
     public class FlowCommand : BaseCommand
     {
         //[Flags]
-        public enum FlowType : int
+        public enum FlowType : short
         {
             ALWAYS = 0,
             ON_HIT = 1,
             ON_BLOCK = 2,
+            SWING = 3,
+            GROUP_HIT = 4,
+            GROUP_GUARD = 5,
+            GROUP_SWING = 6,
+            GROUND = 7, 
             ON_LAND = 8,
             ON_WALL = 9,
             ON_COUNTER = 0xA,
@@ -28,6 +33,16 @@ namespace RainbowLib.BAC
             {
                 _Type = value;
                 OnPropertyChanged("Type");
+            }
+        }
+        private Input _Input;
+        public Input Input
+        {
+            get { return _Input; }
+            set
+            {
+                _Input = value;
+                OnPropertyChanged("Input");
             }
         }
         [NonSerialized]

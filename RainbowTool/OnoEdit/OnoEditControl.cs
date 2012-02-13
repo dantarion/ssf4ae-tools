@@ -177,22 +177,32 @@ namespace OnoEdit
             var view = this.ListCollectionView;
             var source = (IList)view.SourceCollection;
 
-            var index = this.SelectedItems.Max(item => source.IndexOf(item));
+            int index = source.Count > 0 ? this.SelectedItems.Max(item => source.IndexOf(item)) : 0;
+
             try
             {
                 foreach (var item in items)
                 {
                     var clone = RainbowLib.Cloner.Clone(item);
                     checkScriptIndex(clone);
-                    source.Insert(++index, clone);
+                    if (source.Count == 0)
+                    {
+                        source.Add(clone);
+                    }
+                    else
+                    {
+                        source.Insert(++index, clone);
+                    }
                 }
 
                 view.MoveCurrentTo(source[index]);
                 ScrollCurrent();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 MessageBox.Show("Cannot paste that here!");
+                RainbowLib.AELogger.Log("Paste exception: " + e.Message);
+                RainbowLib.AELogger.Log("Paste index: " + index);
             }
         }
 

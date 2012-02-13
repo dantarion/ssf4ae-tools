@@ -7,6 +7,8 @@ namespace RainbowLib.BAC
         NORMAL = 0,
         EFFECT = 1,
         VOICE = 2,
+        TARGET_EFFECT = 3,
+        TARGET_VOICE = 4,
         STOMP = 5
     }
 

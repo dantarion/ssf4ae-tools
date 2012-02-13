@@ -235,8 +235,10 @@ namespace RainbowLib
                     switch ((CommandListType)cl.Type)
                     {
                         case CommandListType.FLOW:
-                            (cmd as FlowCommand).Type = (FlowCommand.FlowType)inFile.ReadInt32();
+                            (cmd as FlowCommand).Type = (FlowCommand.FlowType)inFile.ReadInt16();
                             Util.LogUnkEnum((cmd as FlowCommand).Type, "script", script.Name);
+                            (cmd as FlowCommand).Input = (Input)inFile.ReadUInt16();
+                            Util.LogUnkEnum((cmd as FlowCommand).Input, "script", script.Name);
                             var index = inFile.ReadInt16();
                             if (index != -1)
                                 (cmd as FlowCommand).TargetScript = bac.Scripts[index];
@@ -612,7 +614,8 @@ namespace RainbowLib
                     if (cmd is FlowCommand)
                     {
                         var flow = cmd as FlowCommand;
-                        outFile.Write((int)flow.Type);
+                        outFile.Write((short)flow.Type);
+                        outFile.Write((ushort)flow.Input);
                         if (flow.TargetScript != null && flow.TargetScript != Script.NullScript)
                             outFile.Write((short)flow.TargetScript.Index);
                         else

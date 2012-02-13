@@ -42,6 +42,7 @@ namespace RainbowLib.BAC
         [Flags]
         public enum PFlags : uint
         {
+            //todo: nibble SET NEG Z = 7, SET NEG Y = 6 , SET NEG X= 5 SET SIGN = 4, ADD = 3, SCALE = 2, SET = 1
             XVEL = 0x01,
             YVEL = 0x10,
             XACCEL = 0x10000,
