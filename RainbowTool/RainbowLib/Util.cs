@@ -14,6 +14,7 @@ namespace RainbowLib
     [Flags]
     public enum Input : ushort
     {
+        NONE = 0, // DASH, BACK_DASH
         NEUTRAL = 0x1,
         UP = 0x2,
         DOWN = 0x4,

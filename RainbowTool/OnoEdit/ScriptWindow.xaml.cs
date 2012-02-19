@@ -239,7 +239,7 @@ namespace OnoEdit
 
                 case CommandListType.CANCELS:
                     var cancel = (CancelCommand)cmd;
-                    this.Cancels = AppendString(this.Cancels, cancel.Type + ":" + cancel.CancelList.Name, et);
+                    this.Cancels = AppendString(this.Cancels, cancel.Type + ":" + cancel.CancelList, et);
                     return;
 
                 case CommandListType.HITBOX:

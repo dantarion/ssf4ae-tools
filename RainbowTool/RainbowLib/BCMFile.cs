@@ -114,8 +114,10 @@ namespace RainbowLib
                     inFile.Write((ushort)m.MoveFlags);
                     inFile.Write((ushort)m.PositionRestriction);
                     inFile.Write((ushort)m.Restriction);
-                    inFile.Write((uint)m.StateRestriction);
-                    inFile.Write((ulong)m.UltraRestriction);
+                    inFile.Write(m.Unk1);
+                    inFile.Write((ushort)m.StateRestriction);
+                    inFile.Write((uint)m.MiscRestriction);
+                    inFile.Write((uint)m.UltraRestriction);
                     inFile.Write(m.PositionRestrictionDistance);
                     inFile.Write((short)m.EXRequirement);
                     inFile.Write((short)m.EXCost);
@@ -125,7 +127,7 @@ namespace RainbowLib
                     inFile.Write(m.Script.Index);
 
                     /* AI data */
-                    inFile.Write((uint)m.Attributes);
+                    inFile.Write((uint)m.Features);
                     inFile.Write(m.CpuMinRange);
                     inFile.Write(m.CpuMaxRange);
                     inFile.Write(m.Unk2);
@@ -337,10 +339,15 @@ namespace RainbowLib
                     move.Restriction = (MoveRestriction)inFile.ReadUInt16();
                     Util.LogUnkEnumFlags(move.MoveFlags, "move", move.Name);
 
-                    move.StateRestriction = (Move.MoveStateRestriction)inFile.ReadUInt32();
+                    move.Unk1 = inFile.ReadUInt16();
+
+                    move.StateRestriction = (Move.MoveStateRestriction)inFile.ReadUInt16();
                     Util.LogUnkEnum(move.StateRestriction, "move", move.Name);
 
-                    move.UltraRestriction = (Move.MoveUltraRestriction)inFile.ReadUInt64();
+                    move.MiscRestriction = (Move.MoveMiscRestriction)inFile.ReadUInt32();
+                    Util.LogUnkEnum(move.MiscRestriction, "move", move.Name);
+
+                    move.UltraRestriction = (Move.MoveUltraRestriction)inFile.ReadUInt32();
                     Util.LogUnkEnum(move.UltraRestriction, "move", move.Name);
 
                     move.PositionRestrictionDistance = inFile.ReadSingle();
@@ -356,8 +363,8 @@ namespace RainbowLib
                     move.ScriptIndex = inFile.ReadInt32();
 
                     /* AI data */
-                    move.Attributes = (MoveAttributeFlags)inFile.ReadUInt32();
-                    Util.LogUnkEnumFlags(move.Attributes, "move", move.Name);
+                    move.Features = (MoveFeatureFlags)inFile.ReadUInt32();
+                    Util.LogUnkEnumFlags(move.Features, "move", move.Name);
 
                     move.CpuMinRange = inFile.ReadSingle();
                     move.CpuMaxRange = inFile.ReadSingle();

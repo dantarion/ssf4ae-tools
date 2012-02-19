@@ -19,22 +19,29 @@ namespace RainbowLib.BCM
     {
         NONE = 0,
         PROJECTILE = 0x1,
-        KNIFE = 0x04,
-        NO_KNIFE = 0x08,
-        SPECIAL = 0x40,//This is for Juri's U1, Guile Shades, Gen Stance
+        WEAPON = 0x04,
+        NO_WEAPON = 0x08,
+        CLAW_MASK = 0x10,
+        CLAW_NO_MASK = 0x20,
+        STANCE = 0x40,//This is for Juri's U1, Guile Shades, Gen Stance
         ULTRA = 0x80,
     }
     [Flags]
     public enum MoveFlags : ushort
     {
-        LAZY_STICK = 0x1,
-        STRICT_STICK = 0x2,
-        BUTTONS = 0x10,
-        ALL_BUTTONS = 0x20,
-        ANY_TWO = 0x40,
-        STICK = 0x400,
-        ON_PRESS = 0x1000,
-        ON_RELEASE = 0x2000
+        NONE = 0,
+        LAZY_STICK = 0x1, // 1
+        STRICT_STICK = 0x2, // 2
+        BUTTONS = 0x10, // 5
+        ALL_BUTTONS = 0x20, // 6
+        ANY_TWO = 0x40, // 7
+        SUPER_JUMP_MOTION = 0x100, // 9. Rufus 6MK/3MK/3HP also have this but not require SJ motion?
+        ANY_DIRECTION = 0x200, // 10. Only used by BLK 22/HKN 2PPP
+        STICK = 0x400, // 11
+        ON_PRESS = 0x1000, // 12
+        ON_RELEASE = 0x2000, // 13
+        UNK1 = 0x4000, // 14. MKT UC2-LK/MK
+        UNK2 = 0x8000 // 15. ADN UC-K, GUY TC-2HK, MKT UC2-LK/MK
     }
     [Flags]
     public enum StateRestriction : uint
@@ -44,7 +51,7 @@ namespace RainbowLib.BCM
     }
 
     [Flags]
-    public enum MoveAttributeFlags : uint
+    public enum MoveFeatureFlags : uint
     {
         NONE = 0x0,
         LP = 0x1,
@@ -198,12 +205,26 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("InputMotion");
             }
         }
-        public enum MoveStateRestriction : uint
+
+        // YUN/YAN/MKT/ROS SC, ROS UC2, CDY BAD_SPRAY use this value.
+        private ushort _Unk1;
+        public ushort Unk1
         {
-            THROW = 0x10000,
-            GROUND_NORMAL = 0x30000,
-            AIR_NORMAL = 0x40000,
-            SPECIAL = 0x70000,
+            get { return _Unk1; }
+            set
+            {
+                _Unk1 = value;
+                OnPropertyChanged("Unk1");
+            }
+        }
+        public enum MoveStateRestriction : ushort
+        {
+            THROW = 0x1, 
+            UNKNOWN2 = 0x2, // DAN appeal, GEN stance switch, YUN TC2_2 (2HK)
+            GROUND_NORMAL = 0x3,
+            AIR_NORMAL = 0x4,
+            SPECIAL = 0x7,
+            UNKNOWN15 = 0xF // CDY bad spray (8P on knockdown recovery)
         }
         private MoveStateRestriction _StateRestriction;
         public MoveStateRestriction StateRestriction
@@ -215,11 +236,29 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("StateRestriction");
             }
         }
-        public enum MoveUltraRestriction : ulong
+        public enum MoveMiscRestriction : uint
         {
             NONE = 0,
-            ULTRA2 =        0x0000000100000000,
-            ANGRY_SCAR =    0x0000000001000000
+            UNK_B_DANCE = 0x7,
+            UNK_SOUL_THR = 0x10,
+            UNK_RANBU = 0x10000,
+            STANCE = 0x1000000
+        }
+        private MoveMiscRestriction _MiscRestriction;
+        public MoveMiscRestriction MiscRestriction
+        {
+            get { return _MiscRestriction; }
+            set
+            {
+                _MiscRestriction = value;
+                OnPropertyChanged("MiscRestriction");
+            }
+        }
+
+        public enum MoveUltraRestriction : uint
+        {
+            NONE = 0,
+            ULTRA2 = 1
         }
         private MoveUltraRestriction _UltraRestriction;
         public MoveUltraRestriction UltraRestriction
@@ -231,6 +270,7 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("UltraRestriction");
             }
         }
+
         [NonSerialized]
         private int _ScriptIndex;
         public int ScriptIndex
@@ -253,14 +293,14 @@ namespace RainbowLib.BCM
             }
         }
 
-        private MoveAttributeFlags _Attributes;
-        public MoveAttributeFlags Attributes
+        private MoveFeatureFlags _Features;
+        public MoveFeatureFlags Features
         {
-            get { return this._Attributes; }
+            get { return this._Features; }
             set
             {
-                this._Attributes = value;
-                OnPropertyChanged("Attributes");
+                this._Features = value;
+                OnPropertyChanged("Features");
             }
         }
 

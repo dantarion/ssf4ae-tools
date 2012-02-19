@@ -248,9 +248,18 @@ namespace OnoEdit
 
         private void myDataGrid_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(this.ListCollectionView != null)
+            var lc = this.ListCollectionView;
+            if(lc != null)
             {
-                this.ListCollectionView.CommitEdit();
+                if (lc.IsAddingNew)
+                {
+                    lc.CommitNew();
+                }
+
+                if (lc.IsEditingItem)
+                {
+                    lc.CommitEdit();
+                }
             }
         }
     }
