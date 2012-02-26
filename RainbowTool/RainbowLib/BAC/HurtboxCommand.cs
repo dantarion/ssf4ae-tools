@@ -78,26 +78,17 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown1");
             }
         }
-        private byte _Unknown2;
-        public byte Unknown2
+        private Unused16 _Unused;
+        public Unused16 Unused
         {
-            get { return _Unknown2; }
+            get { return _Unused; }
             set
             {
-                _Unknown2 = value;
-                OnPropertyChanged("Unknown2");
+                _Unused = value;
+                OnPropertyChanged("Unused");
             }
         }
-        private byte _Unknown3;
-        public byte Unknown3
-        {
-            get { return _Unknown3; }
-            set
-            {
-                _Unknown3 = value;
-                OnPropertyChanged("Unknown3");
-            }
-        }
+
         private byte _Unknown4;
         public byte Unknown4
         {
@@ -118,14 +109,5 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown5");
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 }

@@ -186,7 +186,7 @@ namespace OnoEdit
         public string Invinc { get; set; }
         public string Hurtbox { get; set; }
         public string Etc { get; set; }
-        public string DmgAnim { get; set; }
+        public string TgtLock { get; set; }
         public string Sfx { get; set; }
 
         private static string AppendString(string original, string addition, EventType et)
@@ -239,7 +239,7 @@ namespace OnoEdit
 
                 case CommandListType.CANCELS:
                     var cancel = (CancelCommand)cmd;
-                    this.Cancels = AppendString(this.Cancels, cancel.Type + ":" + cancel.CancelList, et);
+                    this.Cancels = AppendString(this.Cancels, cancel.Condition + ":" + cancel.CancelList, et);
                     return;
 
                 case CommandListType.HITBOX:
@@ -250,7 +250,7 @@ namespace OnoEdit
 
                 case CommandListType.INVINC:
                     var invinc = (InvincCommand)cmd;
-                    this.Invinc = AppendString(this.Invinc, invinc.InvincFlags.ToString(), et);
+                    this.Invinc = AppendString(this.Invinc, invinc.Flags.ToString(), et);
                     return;
 
                 case CommandListType.HURTBOX:
@@ -263,9 +263,9 @@ namespace OnoEdit
                     this.Etc = AppendString(this.Etc, string.Join("/", etc.Type, etc.ShortParam, etc.Unknown00, etc.Unknown01), et);
                     return;
 
-                case CommandListType.DAMAGEANIM:
-                    var dmgAnim = (DamageAnimCommand)cmd;
-                    this.DmgAnim= AppendString(this.DmgAnim, dmgAnim.Type + ":" + dmgAnim.Anim, et);
+                case CommandListType.TARGETLOCK:
+                    var dmgAnim = (TargetLockCommand)cmd;
+                    this.TgtLock= AppendString(this.TgtLock, dmgAnim.Type + ":" + dmgAnim.AnimId, et);
                     return;
 
                 case CommandListType.SFX:

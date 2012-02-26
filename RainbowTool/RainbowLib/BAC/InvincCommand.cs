@@ -9,27 +9,33 @@ namespace RainbowLib.BAC
     public class InvincCommand : BaseCommand
     {
         [Flags]
-        public enum InFlags : ushort
+        public enum InvincFlags : uint
         {
+            NONE = 0,
             PUSH = 0x01,
             HIT = 0x02,
             THROW = 0x04,
             PROJECTILE = 0x08,
-            ARMOR1 = 0x10,
-            ARMOR2 = 0x40
+            ABSORB_HIT = 0x10,
+            ABSORB_THROW = 0x20,
+            ABSORB_PROJECTILE = 0x40,
+            COUNTER_HIT = 0x80,
+            COUNTER_SP_MOVE = 0x200
         }
-        private InFlags _InvincFlags;
-        public InFlags InvincFlags
+
+        private InvincFlags _Flags;
+        public InvincFlags Flags
         {
-            get { return _InvincFlags; }
+            get { return this._Flags; }
             set
             {
-                _InvincFlags = value;
-                OnPropertyChanged("InvincFlags");
+                this._Flags = value;
+                OnPropertyChanged("Flags");
             }
         }
-        private ushort _Unk01;
-        public ushort Unk01
+
+        private UInt16 _Unk01;
+        public UInt16 Unk01
         {
             get { return _Unk01; }
             set
@@ -38,18 +44,9 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unk01");
             }
         }
-        private ushort _Location;
-        public ushort Location
-        {
-            get { return _Location; }
-            set
-            {
-                _Location = value;
-                OnPropertyChanged("Location");
-            }
-        }
-        private ushort _Unk02;
-        public ushort Unk02
+        
+        private UInt32 _Unk02;
+        public UInt32 Unk02
         {
             get { return _Unk02; }
             set
@@ -58,6 +55,7 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unk02");
             }
         }
+
         private ushort _Unk03;
         public ushort Unk03
         {
@@ -86,16 +84,6 @@ namespace RainbowLib.BAC
             {
                 _Unk05 = value;
                 OnPropertyChanged("Unk05");
-            }
-        }
-        private ushort _Unk06;
-        public ushort Unk06
-        {
-            get { return _Unk06; }
-            set
-            {
-                _Unk06 = value;
-                OnPropertyChanged("Unk06");
             }
         }
     }

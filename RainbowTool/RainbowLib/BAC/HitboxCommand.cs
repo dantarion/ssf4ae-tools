@@ -58,14 +58,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Height");
             }
         }
-        private float _FloatUnknown;
-        public float FloatUnknown
+        private Unused32 _Unused;
+        public Unused32 Unused
         {
-            get { return _FloatUnknown; }
+            get { return this._Unused; }
             set
             {
-                _FloatUnknown = value;
-                OnPropertyChanged("FloatUnknown");
+                this._Unused = value;
+                OnPropertyChanged("Unused");
             }
         }
         private sbyte _ID;
@@ -128,22 +128,20 @@ namespace RainbowLib.BAC
         public enum Flags : ushort
         {
             NONE                = 0,
-            LOWER               = 0x01,
-            UPPER               = 0x02,
             UNBLOCKABLE         = 0x04,
             BREAK_ARMOR         = 0x08,
             BREAK_COUNTER       = 0x10,
-            CROSSUP             = 0x20,
+            CAN_CROSSUP         = 0x20,
             DONT_HIT_STANDING   = 0x40,
             DONT_HIT_CROUCHING  = 0x80,
             DONT_HIT_AIR        = 0x100,
             DONT_HIT_FRONT      = 0x200,
             DONT_HIT_JUMP_START = 0x400,
-            UNKNOWN800          = 0x800,
-            UNKNOWN1000         = 0x1000,
+            DONT_HIT_IF_HAVE_WEAPON = 0x800,
+            DONT_HIT_IF_NO_WEAPON = 0x1000,
             GET_TARGET_SIDE     = 0x2000,
-            IGNORE_FINISH       = 0x4000,
-            IGNORE_AIMAGE       = 0x8000
+            IGNORE_KO           = 0x4000,
+            IGNORE_ANIM         = 0x8000
         }
         private Flags _HitFlags;
         public Flags HitFlags
@@ -156,24 +154,24 @@ namespace RainbowLib.BAC
             }
         }
         
-        private byte _Unknown1;
-        public byte Unknown1
-        {
-            get { return _Unknown1; }
-            set
-            {
-                _Unknown1 = value;
-                OnPropertyChanged("Unknown1");
-            }
-        }
         private sbyte _UnknownByte1;
         public sbyte UnknownByte1
         {
-            get { return _UnknownByte1; }
+            get { return this._UnknownByte1; }
             set
             {
-                _UnknownByte1 = value;
+                this._UnknownByte1 = value;
                 OnPropertyChanged("UnknownByte1");
+            }
+        }
+        private sbyte _UnknownByte2;
+        public sbyte UnknownByte2
+        {
+            get { return this._UnknownByte2; }
+            set
+            {
+                this._UnknownByte2 = value;
+                OnPropertyChanged("UnknownByte2");
             }
         }
         private sbyte _Hits;
@@ -216,14 +214,36 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("JuggleIncrementLimit");
             }
         }
-        private int _HitboxEffect;
-        public int HitboxEffect
+        private sbyte _HitboxEffect;
+        public sbyte HitboxEffect
         {
             get { return _HitboxEffect; }
             set
             {
                 _HitboxEffect = value;
                 OnPropertyChanged("HitboxEffect");
+            }
+        }
+
+        private sbyte _UnknownByte3;
+        public sbyte UnknownByte3
+        {
+            get { return _UnknownByte3; }
+            set
+            {
+                _UnknownByte3 = value;
+                OnPropertyChanged("UnknownByte3");
+            }
+        }
+
+        private Unused16 _Unused2;
+        public Unused16 Unused2
+        {
+            get { return this._Unused2; }
+            set
+            {
+                this._Unused2 = value;
+                OnPropertyChanged("Unused2");
             }
         }
         [NonSerialized]

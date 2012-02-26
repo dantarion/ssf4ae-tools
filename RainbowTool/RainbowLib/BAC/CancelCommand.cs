@@ -9,19 +9,22 @@ namespace RainbowLib.BAC
     public class CancelCommand : BaseCommand
     {
         [Flags]
-        public enum CancelType
+        public enum CancelConditions
         {
-            STOP = 1,
             START = 0,
-            ON_HIT = 6
+            STOP = 1,
+            ON_HIT = 2,
+            ON_BLOCK = 4,
+            ON_WHIFF = 8
         }
-        private CancelType _Type;
-        public CancelType Type
+
+        private CancelConditions _Condition;
+        public CancelConditions Condition
         {
-            get { return _Type; }
+            get { return this._Condition; }
             set
             {
-                _Type = value;
+                this._Condition = value;
                 OnPropertyChanged("Type");
             }
         }

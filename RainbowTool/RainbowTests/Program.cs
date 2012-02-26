@@ -50,8 +50,8 @@ namespace RainbowTests
                     }
                     foreach (CancelCommand cancel in script.CommandLists[(int)CommandListType.CANCELS])
                     {
-                        if(cancel.Type == CancelCommand.CancelType.ON_HIT)
-                            cancel.Type = CancelCommand.CancelType.START;
+                        if(cancel.Condition == CancelCommand.CancelConditions.ON_HIT)
+                            cancel.Condition = CancelCommand.CancelConditions.START;
                     }
                 }
                 if(!Directory.Exists(Path.GetDirectoryName(targetbcm)))

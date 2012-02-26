@@ -78,7 +78,7 @@
     <Compile Include="BAC\AnimationCommand.cs" />
     <Compile Include="BAC\BaseCommand.cs" />
     <Compile Include="BAC\CancelCommand.cs" />
-    <Compile Include="BAC\DamageAnimCommand.cs" />
+    <Compile Include="BAC\TargetLockCommand.cs" />
     <Compile Include="BAC\SfxCommand.cs" />
     <Compile Include="BAC\TransitionCommand.cs" />
     <Compile Include="BAC\EtcCommand.cs" />

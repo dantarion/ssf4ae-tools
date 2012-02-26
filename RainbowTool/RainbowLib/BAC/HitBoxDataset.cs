@@ -381,10 +381,21 @@ namespace RainbowLib.BAC
         {
             get
             {
-                var sb = new StringBuilder();
-                foreach (Script script in Usage)
-                    sb.Append(script.Name + ", ");
-                return sb.ToString();
+                var dict = new Dictionary<Script, int>();
+                foreach (var script in Usage)
+                {
+                    if (!dict.ContainsKey(script))
+                    {
+                        dict.Add(script, 0);
+                    }
+
+                    dict[script] = dict[script] + 1;
+                }
+
+                var strings = from kvp in dict
+                              select kvp.Value > 1 ? kvp.Key.Name + "*" + kvp.Value : kvp.Key.Name;
+
+                return string.Join(", ", strings);
             }
         }
         [NonSerialized]

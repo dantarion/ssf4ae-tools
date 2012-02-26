@@ -277,8 +277,8 @@ namespace RainbowLib
                             (cmd as SpeedCommand).Multiplier = inFile.ReadSingle();
                             break;
                         case CommandListType.CANCELS:
-                            (cmd as CancelCommand).Type = (CancelCommand.CancelType)inFile.ReadUInt32();
-                            Util.LogUnkEnumFlags((cmd as CancelCommand).Type, "script", script.Name);
+                            (cmd as CancelCommand).Condition = (CancelCommand.CancelConditions)inFile.ReadUInt32();
+                            Util.LogUnkEnumFlags((cmd as CancelCommand).Condition, "script", script.Name);
                             var d = inFile.ReadInt32();
                             if (d != -1 && d < bcm.CancelLists.Count)
                                 (cmd as CancelCommand).CancelList = bcm.CancelLists[d];
@@ -292,8 +292,7 @@ namespace RainbowLib
                             hurt.Height = inFile.ReadSingle();
                             hurt.FloatUnknown = inFile.ReadSingle();
                             hurt.Unknown1 = inFile.ReadUInt32();
-                            hurt.Unknown2 = inFile.ReadByte();
-                            hurt.Unknown3 = inFile.ReadByte();
+                            hurt.Unused = (Unused16)inFile.ReadUInt16();
                             hurt.Unknown4 = inFile.ReadByte();
                             hurt.Unknown5 = inFile.ReadSByte();
                             break;
@@ -327,7 +326,7 @@ namespace RainbowLib
                             hit.Rotation = inFile.ReadSingle();
                             hit.Width = inFile.ReadSingle();
                             hit.Height = inFile.ReadSingle();
-                            hit.FloatUnknown = inFile.ReadSingle();
+                            hit.Unused = (Unused32)inFile.ReadInt32();
                             hit.ID = inFile.ReadSByte();
                             hit.Juggle = inFile.ReadSByte();
                             hit.Type = (HitboxCommand.HitboxType)inFile.ReadByte();
@@ -336,13 +335,15 @@ namespace RainbowLib
                             Util.LogUnkEnum(hit.HitLevel, "script", script.Name);
                             hit.HitFlags = (HitboxCommand.Flags)inFile.ReadInt16();
                             Util.LogUnkEnumFlags(hit.HitFlags, "script", script.Name);
-                            hit.Unknown1 = inFile.ReadByte();
                             hit.UnknownByte1 = inFile.ReadSByte();
+                            hit.UnknownByte2 = inFile.ReadSByte();
                             hit.Hits = inFile.ReadSByte();
                             hit.JugglePotential = inFile.ReadSByte();
                             hit.JuggleIncrement = inFile.ReadSByte();
                             hit.JuggleIncrementLimit = inFile.ReadSByte();
-                            hit.HitboxEffect = inFile.ReadInt32();
+                            hit.HitboxEffect = inFile.ReadSByte();
+                            hit.UnknownByte3 = inFile.ReadSByte();
+                            hit.Unused2 = (Unused16)inFile.ReadInt16();
                             var index2 = inFile.ReadInt32();
                             hit.HitboxDataSet = bac.HitboxTable[index2];
                             if (!hit.HitboxDataSet.Usage.Contains(script) && hit.Type != HitboxCommand.HitboxType.PROXIMITY)
@@ -350,20 +351,18 @@ namespace RainbowLib
                             break;
                         case CommandListType.INVINC:
                             var invinc = cmd as InvincCommand;
-                            invinc.InvincFlags = (InvincCommand.InFlags)inFile.ReadUInt16();
-                            Util.LogUnkEnumFlags(invinc.InvincFlags, "script", script.Name);
+                            invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt32();
+                            Util.LogUnkEnumFlags(invinc.Flags, "script", script.Name);
                             invinc.Unk01 = inFile.ReadUInt16();
-                            invinc.Location = inFile.ReadUInt16();
-                            invinc.Unk02 = inFile.ReadUInt16();
+                            invinc.Unk02 = inFile.ReadUInt32();
                             invinc.Unk03 = inFile.ReadUInt16();
                             invinc.Unk04 = inFile.ReadUInt16();
                             invinc.Unk05 = inFile.ReadUInt16();
-                            invinc.Unk06 = inFile.ReadUInt16();
                             break;
-                        case CommandListType.DAMAGEANIM:
-                            var damageAnim = (DamageAnimCommand)cmd;
-                            damageAnim.Type = inFile.ReadInt32();
-                            damageAnim.Anim = inFile.ReadInt32();
+                        case CommandListType.TARGETLOCK:
+                            var damageAnim = (TargetLockCommand)cmd;
+                            damageAnim.Type = (TargetLockCommand.TargetLockType)inFile.ReadInt32();
+                            damageAnim.AnimId = inFile.ReadInt32();
                             damageAnim.Unknown2 = inFile.ReadInt32();
                             damageAnim.Unknown3 = inFile.ReadInt32();
                             break;
@@ -669,7 +668,7 @@ namespace RainbowLib
                         /*
                          * case CommandListType.INVINC:
                             var invinc = cmd as InvincCommand;
-                            invinc.InvincFlags = (InvincCommand.InFlags)inFile.ReadUInt16();
+                            invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt16();
                             invinc.Unk01 = inFile.ReadUInt16();
                             invinc.Location = inFile.ReadUInt16();
                             invinc.Unk02 = inFile.ReadUInt16();
@@ -680,19 +679,17 @@ namespace RainbowLib
                             break;
                          */
                         var invinc = cmd as InvincCommand;
-                        outFile.Write((ushort)invinc.InvincFlags);
+                        outFile.Write((uint)invinc.Flags);
                         outFile.Write(invinc.Unk01);
-                        outFile.Write(invinc.Location);
                         outFile.Write(invinc.Unk02);
                         outFile.Write(invinc.Unk03);
                         outFile.Write(invinc.Unk04);
                         outFile.Write(invinc.Unk05);
-                        outFile.Write(invinc.Unk06);
                     }
                     else if (cmd is CancelCommand)
                     {
                         var cancel = cmd as CancelCommand;
-                        outFile.Write((int)cancel.Type);
+                        outFile.Write((int)cancel.Condition);
                         if (cancel.CancelList != null)
                             outFile.Write((int)bcm.CancelLists.IndexOf(cancel.CancelList));
                         else
@@ -708,8 +705,7 @@ namespace RainbowLib
                         outFile.Write(hurt.Height);
                         outFile.Write(hurt.FloatUnknown);
                         outFile.Write(hurt.Unknown1);
-                        outFile.Write(hurt.Unknown2);
-                        outFile.Write(hurt.Unknown3);
+                        outFile.Write((ushort)hurt.Unused);
                         outFile.Write(hurt.Unknown4);
                         outFile.Write(hurt.Unknown5);
                     }
@@ -729,26 +725,28 @@ namespace RainbowLib
                         outFile.Write(hit.Rotation);
                         outFile.Write(hit.Width);
                         outFile.Write(hit.Height);
-                        outFile.Write(hit.FloatUnknown);
+                        outFile.Write((Int32)hit.Unused);
                         outFile.Write(hit.ID);
                         outFile.Write(hit.Juggle);
                         outFile.Write((byte)hit.Type);
                         outFile.Write((byte)hit.HitLevel);
                         outFile.Write((ushort)hit.HitFlags);
-                        outFile.Write(hit.Unknown1);
                         outFile.Write(hit.UnknownByte1);
+                        outFile.Write(hit.UnknownByte2);
                         outFile.Write(hit.Hits);
                         outFile.Write(hit.JugglePotential);
                         outFile.Write(hit.JuggleIncrement);
                         outFile.Write(hit.JuggleIncrementLimit);
                         outFile.Write(hit.HitboxEffect);
+                        outFile.Write(hit.UnknownByte3);
+                        outFile.Write((short)hit.Unused2);
                         outFile.Write((int)hit.HitboxDataSet.Index);
                     }
-                    else if (cmd is DamageAnimCommand)
+                    else if (cmd is TargetLockCommand)
                     {
-                        var damageAnim = (DamageAnimCommand)cmd;
-                        outFile.Write(damageAnim.Type);
-                        outFile.Write(damageAnim.Anim);
+                        var damageAnim = (TargetLockCommand)cmd;
+                        outFile.Write((Int32)damageAnim.Type);
+                        outFile.Write(damageAnim.AnimId);
                         outFile.Write(damageAnim.Unknown2);
                         outFile.Write(damageAnim.Unknown3);
                     }

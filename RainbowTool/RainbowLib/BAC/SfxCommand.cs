@@ -9,7 +9,7 @@ namespace RainbowLib.BAC
         VOICE = 2,
         TARGET_EFFECT = 3,
         TARGET_VOICE = 4,
-        STOMP = 5
+        STAGE = 5
     }
 
     [Serializable]

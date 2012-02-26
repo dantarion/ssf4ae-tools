@@ -14,16 +14,20 @@ namespace RainbowLib.BAC
             ALWAYS = 0,
             ON_HIT = 1,
             ON_BLOCK = 2,
-            SWING = 3,
-            GROUP_HIT = 4,
-            GROUP_GUARD = 5,
-            GROUP_SWING = 6,
-            GROUND = 7, 
+            ON_WHIFF = 3,
+            ON_GROUP_HIT = 4,
+            ON_GROUP_GUARD = 5,
+            ON_GROUP_WHIFF = 6,
+            ON_LEAVE_GROUND = 7,
             ON_LAND = 8,
             ON_WALL = 9,
-            ON_COUNTER = 0xA,
+            ON_INTO_RANGE = 0xA,
             ON_RELEASE = 0xB,
-            ON_INPUT = 0xC
+            ON_INPUT = 0xC,
+            ON_ABSORB = 0xF,
+            ON_COUNTER_ATK = 0x10, 
+            ON_KO = 0x11,
+            ON_WEAPON_CHG = 0x12
         }
         private FlowType _Type;
         public FlowType Type

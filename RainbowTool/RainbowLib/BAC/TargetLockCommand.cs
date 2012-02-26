@@ -3,10 +3,19 @@
 namespace RainbowLib.BAC
 {
     [Serializable]
-    public class DamageAnimCommand : BaseCommand
+    public class TargetLockCommand : BaseCommand
     {
-        private Int32 _Type;
-        public Int32 Type
+        public enum TargetLockType : int
+        {
+            MESH_UNLOCK = 0,
+            MESH_LOCK = 1,
+            PART_UNLOCK = 2,
+            PART_LOCK = 3,
+            SPECIAL_EFFECT = 4,
+        }
+
+        private TargetLockType _Type;
+        public TargetLockType Type
         {
             get { return this._Type; }
             set
@@ -16,14 +25,14 @@ namespace RainbowLib.BAC
             }
         }
 
-        private Int32 _Anim;
-        public Int32 Anim
+        private Int32 _AnimId;
+        public Int32 AnimId
         {
-            get { return this._Anim; }
+            get { return this._AnimId; }
             set
             {
-                this._Anim = value;
-                OnPropertyChanged("Anim");
+                this._AnimId = value;
+                OnPropertyChanged("AnimId");
             }
         }
 

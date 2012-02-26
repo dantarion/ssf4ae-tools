@@ -11,6 +11,17 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 namespace RainbowLib
 {
+    public enum Unused32 : int
+    {
+        NULL = 0
+    }
+
+    public enum Unused16 : short
+    {
+        NULL = 0
+    }
+
+
     [Flags]
     public enum Input : ushort
     {
