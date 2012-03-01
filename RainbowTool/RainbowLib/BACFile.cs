@@ -119,28 +119,27 @@ namespace RainbowLib
                         data.VictimShaking = inFile.ReadUInt16();
                         data.HitGFX = inFile.ReadInt16();
                         data.Unknown1 = inFile.ReadInt32();
-                        data.Unknown2_1 = inFile.ReadInt16();
-                        data.Unknown2_2 = inFile.ReadInt16();
-                        data.HitSound = inFile.ReadUInt16();
-                        data.Unknown4 = inFile.ReadInt16();
-                        data.PainSound = inFile.ReadInt16();
+                        data.Unused = (Unused16)inFile.ReadInt16();
+                        data.HitGFX2 = inFile.ReadInt16();
+                        data.Unused2 = (Unused32)inFile.ReadInt32();
+                        data.Unused3 = (Unused16)inFile.ReadInt16();
                         data.HitSFX = inFile.ReadInt16();
                         data.HitSFX2 = inFile.ReadInt16();
                         data.VictimSFX = inFile.ReadInt16();
 
                         data.ArcadeScore = inFile.ReadUInt16();
-                        data.AtkMeter = inFile.ReadUInt16();
-                        data.VctmMeter = inFile.ReadUInt16();
+                        data.AtkMeter = inFile.ReadInt16();
+                        data.VctmMeter = inFile.ReadInt16();
                         data.JuggleStart = inFile.ReadInt16();
                         data.AnimTime = inFile.ReadInt16();
-                        data.ForceUnknown2 = inFile.ReadInt32();
+                        data.MiscFlag = (HitBoxData.MiscFlags)inFile.ReadInt32();
                         data.ForceX = inFile.ReadSingle();
                         data.ForceY = inFile.ReadSingle();
 
                         data.ForceUnknown3 = inFile.ReadSingle();
+                        data.ForceUnknown4 = inFile.ReadSingle();
                         data.ForceXAcceleration = inFile.ReadSingle();
                         data.ForceYAcceleration = inFile.ReadSingle();
-                        data.ForceUnknown4 = inFile.ReadSingle();
                         data.ForceUnknown5 = inFile.ReadSingle();
                     }
                 }
@@ -353,8 +352,8 @@ namespace RainbowLib
                             var invinc = cmd as InvincCommand;
                             invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt32();
                             Util.LogUnkEnumFlags(invinc.Flags, "script", script.Name);
-                            invinc.Unk01 = inFile.ReadUInt16();
-                            invinc.Unk02 = inFile.ReadUInt32();
+                            invinc.Location = (InvincCommand.BodyParts)inFile.ReadUInt32();
+                            invinc.Unk02 = inFile.ReadUInt16();
                             invinc.Unk03 = inFile.ReadUInt16();
                             invinc.Unk04 = inFile.ReadUInt16();
                             invinc.Unk05 = inFile.ReadUInt16();
@@ -494,15 +493,15 @@ namespace RainbowLib
                         outFile.Write(data.AttackerShaking);
                         outFile.Write(data.VictimHitstop);
                         outFile.Write(data.VictimShaking);
-                        //010
+                        //0x10
                         outFile.Write(data.HitGFX);
                         outFile.Write(data.Unknown1);
-                        outFile.Write(data.Unknown2_1);
-                        outFile.Write(data.Unknown2_2);
-                        //20
-                        outFile.Write(data.HitSound);
-                        outFile.Write(data.Unknown4);
-                        outFile.Write(data.PainSound);
+                        outFile.Write((short)data.Unused);
+                        //0x18
+                        outFile.Write(data.HitGFX2);
+                        outFile.Write((int)data.Unused2);
+                        outFile.Write((short)data.Unused3);
+                        //0x20
                         outFile.Write(data.HitSFX);
                         outFile.Write(data.HitSFX2);
                         outFile.Write(data.VictimSFX);
@@ -512,14 +511,14 @@ namespace RainbowLib
                         outFile.Write(data.VctmMeter);
                         outFile.Write(data.JuggleStart);
                         outFile.Write(data.AnimTime);
-                        outFile.Write(data.ForceUnknown2);
+                        outFile.Write((int)data.MiscFlag);
                         outFile.Write(data.ForceX);
                         outFile.Write(data.ForceY);
 
                         outFile.Write(data.ForceUnknown3);
+                        outFile.Write(data.ForceUnknown4);
                         outFile.Write(data.ForceXAcceleration);
                         outFile.Write(data.ForceYAcceleration);
-                        outFile.Write(data.ForceUnknown4);
                         outFile.Write(data.ForceUnknown5);
                     }
                 }
@@ -669,7 +668,7 @@ namespace RainbowLib
                          * case CommandListType.INVINC:
                             var invinc = cmd as InvincCommand;
                             invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt16();
-                            invinc.Unk01 = inFile.ReadUInt16();
+                            invinc.Location = inFile.ReadUInt16();
                             invinc.Location = inFile.ReadUInt16();
                             invinc.Unk02 = inFile.ReadUInt16();
                             invinc.Unk03 = inFile.ReadUInt16();
@@ -680,7 +679,7 @@ namespace RainbowLib
                          */
                         var invinc = cmd as InvincCommand;
                         outFile.Write((uint)invinc.Flags);
-                        outFile.Write(invinc.Unk01);
+                        outFile.Write((uint)invinc.Location);
                         outFile.Write(invinc.Unk02);
                         outFile.Write(invinc.Unk03);
                         outFile.Write(invinc.Unk04);

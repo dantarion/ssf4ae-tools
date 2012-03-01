@@ -217,14 +217,14 @@ namespace RainbowLib.BCM
                 OnPropertyChanged("Unk1");
             }
         }
+
+        [Flags]
         public enum MoveStateRestriction : ushort
         {
-            THROW = 0x1, 
-            UNKNOWN2 = 0x2, // DAN appeal, GEN stance switch, YUN TC2_2 (2HK)
-            GROUND_NORMAL = 0x3,
-            AIR_NORMAL = 0x4,
-            SPECIAL = 0x7,
-            UNKNOWN15 = 0xF // CDY bad spray (8P on knockdown recovery)
+            STAND = 0x1, 
+            CROUCH = 0x2, // DAN appeal, GEN stance switch, YUN TC2_2 (2HK)
+            AIR = 0x4,
+            DOWN = 0x8 // CDY bad spray (8P on knockdown recovery)
         }
         private MoveStateRestriction _StateRestriction;
         public MoveStateRestriction StateRestriction

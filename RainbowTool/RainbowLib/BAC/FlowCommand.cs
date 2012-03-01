@@ -8,7 +8,6 @@ namespace RainbowLib.BAC
     [Serializable]
     public class FlowCommand : BaseCommand
     {
-        //[Flags]
         public enum FlowType : short
         {
             ALWAYS = 0,

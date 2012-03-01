@@ -34,19 +34,53 @@ namespace RainbowLib.BAC
             }
         }
 
-        private UInt16 _Unk01;
-        public UInt16 Unk01
+        [Flags]
+        public enum BodyParts : uint
         {
-            get { return _Unk01; }
+            NONE = 0,
+            WAIST = 0x1,
+            STOMACH = 0x2,
+            CHEST = 0x4,
+            HEAD = 0x8,
+            L_SHOULDER = 0x10,
+            L_ELBOW = 0x20,
+            L_WRIST = 0x40,
+            L_HAND = 0x80,
+            L_HIP = 0x100,
+            L_KNEE = 0x200,
+            L_ANKLE = 0x400,
+            L_FOOT = 0x800,
+            R_SHOULDER = 0x1000,
+            R_ELBOW = 0x2000,
+            R_WRIST = 0x4000,
+            R_HAND = 0x8000,
+            R_HIP = 0x10000,
+            R_KNEE = 0x20000,
+            R_ANKLE = 0x40000,
+            R_FOOT = 0x80000,
+            L_ARM = 0x100000,
+            L_LEG = 0x200000,
+            R_ARM = 0x400000,
+            R_LEG = 0x800000,
+            L_ARM_ALL = 0x1000F0,
+            L_LEG_ALL = 0x200F00,
+            R_ARM_ALL = 0x40F000,
+            R_LEG_ALL = 0x8F0000,
+        }
+
+        private BodyParts _Location;
+        public BodyParts Location
+        {
+            get { return this._Location; }
             set
             {
-                _Unk01 = value;
-                OnPropertyChanged("Unk01");
+                this._Location = value;
+                OnPropertyChanged("Location");
             }
         }
         
-        private UInt32 _Unk02;
-        public UInt32 Unk02
+        private UInt16 _Unk02;
+        public UInt16 Unk02
         {
             get { return _Unk02; }
             set

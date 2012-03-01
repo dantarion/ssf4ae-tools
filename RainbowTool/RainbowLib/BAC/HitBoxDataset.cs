@@ -43,10 +43,11 @@ namespace RainbowLib.BAC
             HIT = 0,
             SCRIPT = 1,
             BLOCK = 2,
-            HIT2 = 3,
-            KNOCKDOWN = 4,
-            KNOCKDOWN2 = 5,
-            KNOCKDOWN3 = 6
+            BLOCK2 = 3,
+            BLOW = 4,
+            BLOW2 = 5,
+            BOUND = 6,
+            BOUND2 = 7
         }
         public static int getIndexOffset(HitBoxEffect effect)
         {
@@ -54,9 +55,9 @@ namespace RainbowLib.BAC
                 return 0x83;
             if (effect == HitBoxEffect.BLOCK)
                 return 0x44;
-            if (effect == HitBoxEffect.KNOCKDOWN)
+            if (effect == HitBoxEffect.BLOW)
                 return 0xC0;
-            if (effect == HitBoxEffect.KNOCKDOWN3)
+            if (effect == HitBoxEffect.BOUND)
                 return 0x1A;
             return 0;
         }
@@ -84,40 +85,40 @@ namespace RainbowLib.BAC
         private ushort _AttackerHitstop;
         public ushort AttackerHitstop
         {
-            get { return _AttackerHitstop; }
+            get { return this._AttackerHitstop; }
             set
             {
-                _AttackerHitstop = value;
+                this._AttackerHitstop = value;
                 OnPropertyChanged("AttackerHitstop");
             }
         }
         private ushort _AttackerShaking;
         public ushort AttackerShaking
         {
-            get { return _AttackerShaking; }
+            get { return this._AttackerShaking; }
             set
             {
-                _AttackerShaking = value;
+                this._AttackerShaking = value;
                 OnPropertyChanged("AttackerShaking");
             }
         }
         private ushort _VictimHitstop;
         public ushort VictimHitstop
         {
-            get { return _VictimHitstop; }
+            get { return this._VictimHitstop; }
             set
             {
-                _VictimHitstop = value;
+                this._VictimHitstop = value;
                 OnPropertyChanged("VictimHitstop");
             }
         }
         private ushort _VictimShaking;
         public ushort VictimShaking
         {
-            get { return _VictimShaking; }
+            get { return this._VictimShaking; }
             set
             {
-                _VictimShaking = value;
+                this._VictimShaking = value;
                 OnPropertyChanged("VictimShaking");
             }
         }
@@ -141,54 +142,44 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Unknown1");
             }
         }
-        private short _Unknown2_1;
-        public short Unknown2_1
+        private Unused16 _Unused;
+        public Unused16 Unused
         {
-            get { return _Unknown2_1; }
+            get { return _Unused; }
             set
             {
-                _Unknown2_1 = value;
-                OnPropertyChanged("Unknown2_1");
+                _Unused = value;
+                OnPropertyChanged("Unused");
             }
         }
-        private short _Unknown2_2;
-        public short Unknown2_2
+        private short _HitGFX2;
+        public short HitGFX2
         {
-            get { return _Unknown2_2; }
+            get { return this._HitGFX2; }
             set
             {
-                _Unknown2_2 = value;
-                OnPropertyChanged("Unknown2_2");
+                this._HitGFX2 = value;
+                OnPropertyChanged("HitGFX2");
             }
         }
-        private ushort _HitSound;
-        public ushort HitSound
+        private Unused32 _Unused2;
+        public Unused32 Unused2
         {
-            get { return _HitSound; }
+            get { return _Unused2; }
             set
             {
-                _HitSound = value;
-                OnPropertyChanged("HitSound");
+                _Unused2 = value;
+                OnPropertyChanged("Unused2");
             }
         }
-        private short _Unknown4;
-        public short Unknown4
+        private Unused16 _Unused3;
+        public Unused16 Unused3
         {
-            get { return _Unknown4; }
+            get { return _Unused3; }
             set
             {
-                _Unknown4 = value;
-                OnPropertyChanged("Unknown4");
-            }
-        }
-        private short _PainSound;
-        public short PainSound
-        {
-            get { return _PainSound; }
-            set
-            {
-                _PainSound = value;
-                OnPropertyChanged("PainSound");
+                _Unused3 = value;
+                OnPropertyChanged("Unused2");
             }
         }
         private short _HitSFX;
@@ -232,8 +223,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("ArcadeScore");
             }
         }
-        private ushort _AtkMeter;
-        public ushort AtkMeter
+        private short _AtkMeter;
+        public short AtkMeter
         {
             get { return _AtkMeter; }
             set
@@ -242,8 +233,8 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("AtkMeter");
             }
         }
-        private ushort _VctmMeter;
-        public ushort VctmMeter
+        private short _VctmMeter;
+        public short VctmMeter
         {
             get { return _VctmMeter; }
             set
@@ -273,14 +264,24 @@ namespace RainbowLib.BAC
             }
         }
 
-        private int _ForceUnknown2;
-        public int ForceUnknown2
+        [Flags]
+        public enum MiscFlags : int
         {
-            get { return _ForceUnknown2; }
+            NONE = 0,
+            DONT_KO = 1,
+            ARMOR_DMG = 2,
+            TECHABLE = 4,
+            UNTECHABLE = 8
+        }
+
+        private MiscFlags _MiscFlag;
+        public MiscFlags MiscFlag
+        {
+            get { return _MiscFlag; }
             set
             {
-                _ForceUnknown2 = value;
-                OnPropertyChanged("ForceUnknown2");
+                _MiscFlag = value;
+                OnPropertyChanged("MiscFlag");
             }
         }
         private float _ForceX;
@@ -314,6 +315,16 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("ForceUnknown3");
             }
         }
+        private float _ForceUnknown4;
+        public float ForceUnknown4
+        {
+            get { return _ForceUnknown4; }
+            set
+            {
+                _ForceUnknown4 = value;
+                OnPropertyChanged("ForceUnknown4");
+            }
+        }
         private float _ForceXAcceleration;
         public float ForceXAcceleration
         {
@@ -332,16 +343,6 @@ namespace RainbowLib.BAC
             {
                 _ForceYAcceleration = value;
                 OnPropertyChanged("ForceYAcceleration");
-            }
-        }
-        private float _ForceUnknown4;
-        public float ForceUnknown4
-        {
-            get { return _ForceUnknown4; }
-            set
-            {
-                _ForceUnknown4 = value;
-                OnPropertyChanged("ForceUnknown4");
             }
         }
         private float _ForceUnknown5;
