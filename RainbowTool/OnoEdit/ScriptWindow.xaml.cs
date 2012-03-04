@@ -249,7 +249,7 @@ namespace OnoEdit
                     return;
 
                 case CommandListType.INVINC:
-                    var invinc = (InvincCommand)cmd;
+                    var invinc = (HurtNodeCommand)cmd;
                     this.Invinc = AppendString(this.Invinc, invinc.Flags.ToString(), et);
                     return;
 
@@ -265,7 +265,7 @@ namespace OnoEdit
 
                 case CommandListType.TARGETLOCK:
                     var dmgAnim = (TargetLockCommand)cmd;
-                    this.TgtLock= AppendString(this.TgtLock, dmgAnim.Type + ":" + dmgAnim.AnimId, et);
+                    this.TgtLock= AppendString(this.TgtLock, dmgAnim.Type + ":" + dmgAnim.DmgScript, et);
                     return;
 
                 case CommandListType.SFX:

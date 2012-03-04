@@ -78,6 +78,7 @@
     <Compile Include="BAC\AnimationCommand.cs" />
     <Compile Include="BAC\BaseCommand.cs" />
     <Compile Include="BAC\CancelCommand.cs" />
+    <Compile Include="BAC\HurtNodeCommand.cs" />
     <Compile Include="BAC\TargetLockCommand.cs" />
     <Compile Include="BAC\SfxCommand.cs" />
     <Compile Include="BAC\TransitionCommand.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="BAC\FlowCommand.cs" />
     <Compile Include="BAC\HitboxCommand.cs" />
     <Compile Include="BAC\HurtboxCommand.cs" />
-    <Compile Include="BAC\InvincCommand.cs" />
     <Compile Include="BAC\PhysicsCommand.cs" />
     <Compile Include="BAC\SpeedCommand.cs" />
     <Compile Include="BAC\StateCommand.cs" />

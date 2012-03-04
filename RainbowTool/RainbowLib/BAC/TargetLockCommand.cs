@@ -25,14 +25,15 @@ namespace RainbowLib.BAC
             }
         }
 
-        private Int32 _AnimId;
-        public Int32 AnimId
+        [NonSerialized]
+        private Reference<Script> dmgScript;
+        public Script DmgScript
         {
-            get { return this._AnimId; }
+            get { return this.dmgScript; }
             set
             {
-                this._AnimId = value;
-                OnPropertyChanged("AnimId");
+                this.dmgScript = value;
+                OnPropertyChanged("DmgScript");
             }
         }
 

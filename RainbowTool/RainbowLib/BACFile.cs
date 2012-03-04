@@ -113,10 +113,10 @@ namespace RainbowLib
                         if (index > -1)
                             data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
                         else data.OnHit = new Script(index);
-                        data.AttackerHitstop = inFile.ReadUInt16();
-                        data.AttackerShaking = inFile.ReadUInt16();
-                        data.VictimHitstop = inFile.ReadUInt16();
-                        data.VictimShaking = inFile.ReadUInt16();
+                        data.SelfHitstop = inFile.ReadUInt16();
+                        data.SelfShaking = inFile.ReadUInt16();
+                        data.TgtHitstop = inFile.ReadUInt16();
+                        data.TgtShaking = inFile.ReadUInt16();
                         data.HitGFX = inFile.ReadInt16();
                         data.Unknown1 = inFile.ReadInt32();
                         data.Unused = (Unused16)inFile.ReadInt16();
@@ -125,22 +125,22 @@ namespace RainbowLib
                         data.Unused3 = (Unused16)inFile.ReadInt16();
                         data.HitSFX = inFile.ReadInt16();
                         data.HitSFX2 = inFile.ReadInt16();
-                        data.VictimSFX = inFile.ReadInt16();
+                        data.TgtSFX = inFile.ReadInt16();
 
                         data.ArcadeScore = inFile.ReadUInt16();
-                        data.AtkMeter = inFile.ReadInt16();
-                        data.VctmMeter = inFile.ReadInt16();
+                        data.SelfMeter = inFile.ReadInt16();
+                        data.TgtMeter = inFile.ReadInt16();
                         data.JuggleStart = inFile.ReadInt16();
-                        data.AnimTime = inFile.ReadInt16();
+                        data.TgtAnimTime = inFile.ReadInt16();
                         data.MiscFlag = (HitBoxData.MiscFlags)inFile.ReadInt32();
-                        data.ForceX = inFile.ReadSingle();
-                        data.ForceY = inFile.ReadSingle();
+                        data.VelX = inFile.ReadSingle();
+                        data.VelY = inFile.ReadSingle();
 
-                        data.ForceUnknown3 = inFile.ReadSingle();
-                        data.ForceUnknown4 = inFile.ReadSingle();
-                        data.ForceXAcceleration = inFile.ReadSingle();
-                        data.ForceYAcceleration = inFile.ReadSingle();
-                        data.ForceUnknown5 = inFile.ReadSingle();
+                        data.VelZ = inFile.ReadSingle();
+                        data.PushbackDist = inFile.ReadSingle();
+                        data.AccX = inFile.ReadSingle();
+                        data.AccY = inFile.ReadSingle();
+                        data.AccZ = inFile.ReadSingle();
                     }
                 }
                 AELogger.Log("hitbox done");
@@ -297,13 +297,13 @@ namespace RainbowLib
                             break;
                         case CommandListType.PHYSICS:
                             var physics = cmd as PhysicsCommand;
-                            physics.XVel = inFile.ReadSingle();
-                            physics.YVel = inFile.ReadSingle();
+                            physics.VelX = inFile.ReadSingle();
+                            physics.VelY = inFile.ReadSingle();
                             physics.Unk01 = inFile.ReadUInt32();
                             physics.PhysicsFlags = (PhysicsCommand.PFlags)inFile.ReadUInt32();
                             Util.LogUnkEnumFlags(physics.PhysicsFlags, "script", script.Name);
-                            physics.XAccel = inFile.ReadSingle();
-                            physics.YAccel = inFile.ReadSingle();
+                            physics.AccX = inFile.ReadSingle();
+                            physics.AccY = inFile.ReadSingle();
                             physics.Unk02 = inFile.ReadUInt64();
                             //cmd.Raw = inFile.ReadBytes(0x20);
                             break;
@@ -349,21 +349,22 @@ namespace RainbowLib
                                 hit.HitboxDataSet.Usage.Add(script);
                             break;
                         case CommandListType.INVINC:
-                            var invinc = cmd as InvincCommand;
-                            invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt32();
+                            var invinc = cmd as HurtNodeCommand;
+                            invinc.Flags = (HurtNodeCommand.VulnerabilityFlags)inFile.ReadUInt32();
                             Util.LogUnkEnumFlags(invinc.Flags, "script", script.Name);
-                            invinc.Location = (InvincCommand.BodyParts)inFile.ReadUInt32();
+                            invinc.Location = (HurtNodeCommand.BodyParts)inFile.ReadUInt32();
                             invinc.Unk02 = inFile.ReadUInt16();
                             invinc.Unk03 = inFile.ReadUInt16();
                             invinc.Unk04 = inFile.ReadUInt16();
                             invinc.Unk05 = inFile.ReadUInt16();
                             break;
                         case CommandListType.TARGETLOCK:
-                            var damageAnim = (TargetLockCommand)cmd;
-                            damageAnim.Type = (TargetLockCommand.TargetLockType)inFile.ReadInt32();
-                            damageAnim.AnimId = inFile.ReadInt32();
-                            damageAnim.Unknown2 = inFile.ReadInt32();
-                            damageAnim.Unknown3 = inFile.ReadInt32();
+                            var targetLock = (TargetLockCommand)cmd;
+                            targetLock.Type = (TargetLockCommand.TargetLockType)inFile.ReadInt32();
+                            var dmgScriptIndex = inFile.ReadInt32();
+                            targetLock.DmgScript = dmgScriptIndex > -1 ? bac.Scripts.First(x => x.Index == dmgScriptIndex) : Script.NullScript;
+                            targetLock.Unknown2 = inFile.ReadInt32();
+                            targetLock.Unknown3 = inFile.ReadInt32();
                             break;
                         case CommandListType.SFX:
                             var sfx = (SfxCommand)cmd;
@@ -489,10 +490,10 @@ namespace RainbowLib
                         else
                             outFile.Write((short)-1);
                         //0x8
-                        outFile.Write(data.AttackerHitstop);
-                        outFile.Write(data.AttackerShaking);
-                        outFile.Write(data.VictimHitstop);
-                        outFile.Write(data.VictimShaking);
+                        outFile.Write(data.SelfHitstop);
+                        outFile.Write(data.SelfShaking);
+                        outFile.Write(data.TgtHitstop);
+                        outFile.Write(data.TgtShaking);
                         //0x10
                         outFile.Write(data.HitGFX);
                         outFile.Write(data.Unknown1);
@@ -504,22 +505,22 @@ namespace RainbowLib
                         //0x20
                         outFile.Write(data.HitSFX);
                         outFile.Write(data.HitSFX2);
-                        outFile.Write(data.VictimSFX);
+                        outFile.Write(data.TgtSFX);
 
                         outFile.Write(data.ArcadeScore);
-                        outFile.Write(data.AtkMeter);
-                        outFile.Write(data.VctmMeter);
+                        outFile.Write(data.SelfMeter);
+                        outFile.Write(data.TgtMeter);
                         outFile.Write(data.JuggleStart);
-                        outFile.Write(data.AnimTime);
+                        outFile.Write(data.TgtAnimTime);
                         outFile.Write((int)data.MiscFlag);
-                        outFile.Write(data.ForceX);
-                        outFile.Write(data.ForceY);
+                        outFile.Write(data.VelX);
+                        outFile.Write(data.VelY);
 
-                        outFile.Write(data.ForceUnknown3);
-                        outFile.Write(data.ForceUnknown4);
-                        outFile.Write(data.ForceXAcceleration);
-                        outFile.Write(data.ForceYAcceleration);
-                        outFile.Write(data.ForceUnknown5);
+                        outFile.Write(data.VelZ);
+                        outFile.Write(data.PushbackDist);
+                        outFile.Write(data.AccX);
+                        outFile.Write(data.AccY);
+                        outFile.Write(data.AccZ);
                     }
                 }
                 /* Script Names+Offsets */
@@ -654,20 +655,20 @@ namespace RainbowLib
                     else if (cmd is PhysicsCommand)
                     {
                         var physics = cmd as PhysicsCommand;
-                        outFile.Write(physics.XVel);
-                        outFile.Write(physics.YVel);
+                        outFile.Write(physics.VelX);
+                        outFile.Write(physics.VelY);
                         outFile.Write((uint)physics.Unk01);
                         outFile.Write((uint)physics.PhysicsFlags);
-                        outFile.Write(physics.XAccel);
-                        outFile.Write(physics.YAccel);
+                        outFile.Write(physics.AccX);
+                        outFile.Write(physics.AccY);
                         outFile.Write((ulong)physics.Unk02);
                     }
-                    else if (cmd is InvincCommand)
+                    else if (cmd is HurtNodeCommand)
                     {
                         /*
                          * case CommandListType.INVINC:
-                            var invinc = cmd as InvincCommand;
-                            invinc.Flags = (InvincCommand.InvincFlags)inFile.ReadUInt16();
+                            var invinc = cmd as HurtNodeCommand;
+                            invinc.Flags = (HurtNodeCommand.VulnerabilityFlags)inFile.ReadUInt16();
                             invinc.Location = inFile.ReadUInt16();
                             invinc.Location = inFile.ReadUInt16();
                             invinc.Unk02 = inFile.ReadUInt16();
@@ -677,7 +678,7 @@ namespace RainbowLib
                             invinc.Unk06 = inFile.ReadUInt16();
                             break;
                          */
-                        var invinc = cmd as InvincCommand;
+                        var invinc = cmd as HurtNodeCommand;
                         outFile.Write((uint)invinc.Flags);
                         outFile.Write((uint)invinc.Location);
                         outFile.Write(invinc.Unk02);
@@ -745,7 +746,7 @@ namespace RainbowLib
                     {
                         var damageAnim = (TargetLockCommand)cmd;
                         outFile.Write((Int32)damageAnim.Type);
-                        outFile.Write(damageAnim.AnimId);
+                        outFile.Write((Int32)damageAnim.DmgScript.Index);
                         outFile.Write(damageAnim.Unknown2);
                         outFile.Write(damageAnim.Unknown3);
                     }

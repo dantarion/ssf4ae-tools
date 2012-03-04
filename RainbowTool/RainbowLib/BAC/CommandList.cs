@@ -49,7 +49,7 @@ namespace RainbowLib.BAC
                 case CommandListType.HITBOX:
                     return new CommandList<HitboxCommand>();
                 case CommandListType.INVINC:
-                    return new CommandList<InvincCommand>();
+                    return new CommandList<HurtNodeCommand>();
                 case CommandListType.TARGETLOCK:
                     return new CommandList<TargetLockCommand>();
                 case CommandListType.SFX:

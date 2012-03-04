@@ -8,24 +8,24 @@ namespace RainbowLib.BAC
     [Serializable]
     public class PhysicsCommand : BaseCommand
     {
-        private float _XVel;
-        public float XVel
+        private float velX;
+        public float VelX
         {
-            get { return _XVel; }
+            get { return this.velX; }
             set
             {
-                _XVel = value;
-                OnPropertyChanged("XVel");
+                this.velX = value;
+                OnPropertyChanged("VelX");
             }
         }
-        private float _YVel;
-        public float YVel
+        private float velY;
+        public float VelY
         {
-            get { return _YVel; }
+            get { return this.velY; }
             set
             {
-                _YVel = value;
-                OnPropertyChanged("YVel");
+                this.velY = value;
+                OnPropertyChanged("VelY");
             }
         }
 
@@ -58,25 +58,25 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("PhysicsFlags");
             }
         }
-        private float _XAccel;
-        public float XAccel
+        private float accX;
+        public float AccX
         {
-            get { return _XAccel; }
+            get { return this.accX; }
             set
             {
-                _XAccel = value;
-                OnPropertyChanged("XAccel");
+                this.accX = value;
+                OnPropertyChanged("AccX");
             }
         }
 
-        private float _YAccel;
-        public float YAccel
+        private float accY;
+        public float AccY
         {
-            get { return _YAccel; }
+            get { return this.accY; }
             set
             {
-                _YAccel = value;
-                OnPropertyChanged("YAccel");
+                this.accY = value;
+                OnPropertyChanged("AccY");
             }
         }
 

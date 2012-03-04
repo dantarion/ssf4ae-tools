@@ -6,10 +6,10 @@ using System.Text;
 namespace RainbowLib.BAC
 {
     [Serializable]
-    public class InvincCommand : BaseCommand
+    public class HurtNodeCommand : BaseCommand
     {
         [Flags]
-        public enum InvincFlags : uint
+        public enum VulnerabilityFlags : uint
         {
             NONE = 0,
             PUSH = 0x01,
@@ -23,8 +23,8 @@ namespace RainbowLib.BAC
             COUNTER_SP_MOVE = 0x200
         }
 
-        private InvincFlags _Flags;
-        public InvincFlags Flags
+        private VulnerabilityFlags _Flags;
+        public VulnerabilityFlags Flags
         {
             get { return this._Flags; }
             set
@@ -65,7 +65,7 @@ namespace RainbowLib.BAC
             L_ARM_ALL = 0x1000F0,
             L_LEG_ALL = 0x200F00,
             R_ARM_ALL = 0x40F000,
-            R_LEG_ALL = 0x8F0000,
+            R_LEG_ALL = 0x8F0000
         }
 
         private BodyParts _Location;

@@ -38,6 +38,7 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("Stun");
             }
         }
+
         public enum HitBoxEffect : ushort
         {
             HIT = 0,
@@ -51,16 +52,25 @@ namespace RainbowLib.BAC
         }
         public static int getIndexOffset(HitBoxEffect effect)
         {
-            if (effect == HitBoxEffect.HIT)
-                return 0x83;
-            if (effect == HitBoxEffect.BLOCK)
-                return 0x44;
-            if (effect == HitBoxEffect.BLOW)
-                return 0xC0;
-            if (effect == HitBoxEffect.BOUND)
-                return 0x1A;
-            return 0;
+            switch (effect)
+            {
+                case HitBoxEffect.HIT:
+                    return 0x83;
+
+                case HitBoxEffect.BLOCK:
+                    return 0x44;
+
+                case HitBoxEffect.BLOW:
+                    return 0xC0;
+
+                case HitBoxEffect.BOUND:
+                    return 0x1A;
+
+                default:
+                    return 0;
+            }
         }
+
         private HitBoxEffect _Effect;
         public HitBoxEffect Effect
         {
@@ -82,44 +92,44 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("OnHit");
             }
         }
-        private ushort _AttackerHitstop;
-        public ushort AttackerHitstop
+        private ushort selfHitstop;
+        public ushort SelfHitstop
         {
-            get { return this._AttackerHitstop; }
+            get { return this.selfHitstop; }
             set
             {
-                this._AttackerHitstop = value;
-                OnPropertyChanged("AttackerHitstop");
+                this.selfHitstop = value;
+                OnPropertyChanged("SelfHitstop");
             }
         }
-        private ushort _AttackerShaking;
-        public ushort AttackerShaking
+        private ushort selfShaking;
+        public ushort SelfShaking
         {
-            get { return this._AttackerShaking; }
+            get { return this.selfShaking; }
             set
             {
-                this._AttackerShaking = value;
-                OnPropertyChanged("AttackerShaking");
+                this.selfShaking = value;
+                OnPropertyChanged("SelfShaking");
             }
         }
-        private ushort _VictimHitstop;
-        public ushort VictimHitstop
+        private ushort tgtHitstop;
+        public ushort TgtHitstop
         {
-            get { return this._VictimHitstop; }
+            get { return this.tgtHitstop; }
             set
             {
-                this._VictimHitstop = value;
-                OnPropertyChanged("VictimHitstop");
+                this.tgtHitstop = value;
+                OnPropertyChanged("TgtHitstop");
             }
         }
-        private ushort _VictimShaking;
-        public ushort VictimShaking
+        private ushort tgtShaking;
+        public ushort TgtShaking
         {
-            get { return this._VictimShaking; }
+            get { return this.tgtShaking; }
             set
             {
-                this._VictimShaking = value;
-                OnPropertyChanged("VictimShaking");
+                this.tgtShaking = value;
+                OnPropertyChanged("TgtShaking");
             }
         }
         private short _HitGFX;
@@ -202,14 +212,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("HitSFX2");
             }
         }
-        private short _VictimSFX;
-        public short VictimSFX
+        private short tgtSfx;
+        public short TgtSFX
         {
-            get { return _VictimSFX; }
+            get { return this.tgtSfx; }
             set
             {
-                _VictimSFX = value;
-                OnPropertyChanged("VictimSFX");
+                this.tgtSfx = value;
+                OnPropertyChanged("TgtSFX");
             }
         }
 
@@ -223,24 +233,24 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("ArcadeScore");
             }
         }
-        private short _AtkMeter;
-        public short AtkMeter
+        private short selfMeter;
+        public short SelfMeter
         {
-            get { return _AtkMeter; }
+            get { return this.selfMeter; }
             set
             {
-                _AtkMeter = value;
-                OnPropertyChanged("AtkMeter");
+                this.selfMeter = value;
+                OnPropertyChanged("SelfMeter");
             }
         }
-        private short _VctmMeter;
-        public short VctmMeter
+        private short tgtMeter;
+        public short TgtMeter
         {
-            get { return _VctmMeter; }
+            get { return this.tgtMeter; }
             set
             {
-                _VctmMeter = value;
-                OnPropertyChanged("VctmMeter");
+                this.tgtMeter = value;
+                OnPropertyChanged("TgtMeter");
             }
         }
         private short _JuggleStart;
@@ -253,14 +263,14 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("JuggleStart");
             }
         }
-        private short _AnimTime;
-        public short AnimTime
+        private short tgtAnimTime;
+        public short TgtAnimTime
         {
-            get { return _AnimTime; }
+            get { return this.tgtAnimTime; }
             set
             {
-                _AnimTime = value;
-                OnPropertyChanged("AnimTime");
+                this.tgtAnimTime = value;
+                OnPropertyChanged("TgtAnimTime");
             }
         }
 
@@ -284,75 +294,75 @@ namespace RainbowLib.BAC
                 OnPropertyChanged("MiscFlag");
             }
         }
-        private float _ForceX;
-        public float ForceX
+        private float velX;
+        public float VelX
         {
-            get { return _ForceX; }
+            get { return this.velX; }
             set
             {
-                _ForceX = value;
-                OnPropertyChanged("ForceX");
+                this.velX = value;
+                OnPropertyChanged("VelX");
             }
         }
-        private float _ForceY;
-        public float ForceY
+        private float velY;
+        public float VelY
         {
-            get { return _ForceY; }
+            get { return this.velY; }
             set
             {
-                _ForceY = value;
-                OnPropertyChanged("ForceY");
+                this.velY = value;
+                OnPropertyChanged("VelY");
             }
         }
 
-        private float _ForceUnknown3;
-        public float ForceUnknown3
+        private float velZ;
+        public float VelZ
         {
-            get { return _ForceUnknown3; }
+            get { return this.velZ; }
             set
             {
-                _ForceUnknown3 = value;
-                OnPropertyChanged("ForceUnknown3");
+                this.velZ = value;
+                OnPropertyChanged("VelZ");
             }
         }
-        private float _ForceUnknown4;
-        public float ForceUnknown4
+        private float pushbackDist;
+        public float PushbackDist
         {
-            get { return _ForceUnknown4; }
+            get { return this.pushbackDist; }
             set
             {
-                _ForceUnknown4 = value;
-                OnPropertyChanged("ForceUnknown4");
+                this.pushbackDist = value;
+                OnPropertyChanged("PushbackDist");
             }
         }
-        private float _ForceXAcceleration;
-        public float ForceXAcceleration
+        private float accX;
+        public float AccX
         {
-            get { return _ForceXAcceleration; }
+            get { return this.accX; }
             set
             {
-                _ForceXAcceleration = value;
-                OnPropertyChanged("ForceXAcceleration");
+                this.accX = value;
+                OnPropertyChanged("AccX");
             }
         }
-        private float _ForceYAcceleration;
-        public float ForceYAcceleration
+        private float accY;
+        public float AccY
         {
-            get { return _ForceYAcceleration; }
+            get { return this.accY; }
             set
             {
-                _ForceYAcceleration = value;
-                OnPropertyChanged("ForceYAcceleration");
+                this.accY = value;
+                OnPropertyChanged("AccY");
             }
         }
-        private float _ForceUnknown5;
-        public float ForceUnknown5
+        private float accZ;
+        public float AccZ
         {
-            get { return _ForceUnknown5; }
+            get { return this.accZ; }
             set
             {
-                _ForceUnknown5 = value;
-                OnPropertyChanged("ForceUnknown5");
+                this.accZ = value;
+                OnPropertyChanged("AccZ");
             }
         }
          [field: NonSerialized]
