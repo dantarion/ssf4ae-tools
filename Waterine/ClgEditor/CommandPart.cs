@@ -13,8 +13,6 @@ namespace ClgEditor
 
         public string Description { get; set; }
 
-        public string FullText { get; set; }
-
         public string Acronym { get; set; }
 
         public static List<CommandPart> KnownParts { get; set; }
@@ -34,7 +32,7 @@ namespace ClgEditor
                 if (string.IsNullOrWhiteSpace(line)) continue;
 
                 var data = line.Split(',');
-                Debug.Assert(data.Length == 3 || data.Length == 5);
+                Debug.Assert(data.Length == 3 || data.Length == 4);
                 
                 var part = new CommandPart
                 {
@@ -43,15 +41,9 @@ namespace ClgEditor
                     Description = data[2].Trim(),
                 };
 
-                if (data.Length == 5)
+                if (data.Length == 4)
                 {
-                    part.FullText = data[3].Trim();
-                    part.Acronym = data[4].Trim();
-                }
-
-                if (string.IsNullOrWhiteSpace(part.FullText))
-                {
-                    part.FullText = part.Description;
+                    part.Acronym = data[3].Trim();
                 }
 
                 if (string.IsNullOrWhiteSpace(part.Acronym))
