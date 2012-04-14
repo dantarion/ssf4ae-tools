@@ -19,7 +19,7 @@ namespace OnoEdit
 
         private void Base_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)) // && IsKeyboardFocused
             {
                 if (e.Key == Key.C) 
                     this.CopyCommand(sender, e);
