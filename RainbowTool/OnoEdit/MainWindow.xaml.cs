@@ -6,6 +6,9 @@ using System.Windows.Input;
 using System.Reflection;
 using System;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.Linq;
+
 namespace OnoEdit
 {
 
@@ -45,6 +48,103 @@ namespace OnoEdit
 
             AELogger.Log("Build Date: " + buildDateTime.ToShortDateString(), false);
             App.OpenedFiles.Log = AELogger.Logger;
+            this.PreviewKeyDown += this.Base_PreviewKeyDown;
+        }
+
+        private void Base_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift | ModifierKeys.Alt)) // && IsKeyboardFocused
+            {
+                if (e.Key == Key.P && App.OpenedFiles.FilesOpened)
+                {
+                    MessageBoxResult result = MessageBox.Show("do you want to possibly break the char! check the log after",
+                        "do you want to possibly break the char!", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        AELogger.Log("ok lets do this!");
+                        int hitbox_count = App.OpenedFiles.BACFile.HitboxTable.Count;
+
+                        for (int i = 0; i < hitbox_count; i++)
+                        {
+                            string cur = App.OpenedFiles.BACFile.HitboxTable[i].UsageString;
+                            Regex reg = new Regex("^R?\\d+[LMH][PK]"); // normals
+                            //if(reg.IsMatch(cur))
+                            if (cur.Length != 0)
+                            {
+                                if(App.OpenedFiles.BACFile.HitboxTable[i].Data[8].Effect
+                                    == RainbowLib.BAC.HitBoxData.HitBoxEffect.HIT &&
+                                    App.OpenedFiles.BACFile.HitboxTable[i].Data[8].Damage > 0)
+                                {
+                                    int index = App.OpenedFiles.BACFile.HitboxTable[i].Data[8].OnHit.Index + 61;
+                                    index = index < 192 ? 192 : index;
+                                    AELogger.Log("match! " + cur + ". lets change HIT " + App.OpenedFiles.BACFile.HitboxTable[i].Data[8].OnHit.Name + " (index " + App.OpenedFiles.BACFile.HitboxTable[i].Data[8].OnHit.Index + " to " + index);
+                                    RainbowLib.BAC.Script newHit = App.OpenedFiles.BACFile.Scripts.Where(x => x.Index == index).First();
+                                    AELogger.Log("\tto BLOW " + newHit.Name);
+                                    App.OpenedFiles.BACFile.HitboxTable[i].Data[8].Effect = RainbowLib.BAC.HitBoxData.HitBoxEffect.BLOW;
+                                    App.OpenedFiles.BACFile.HitboxTable[i].Data[8].OnHit = newHit;
+                                }
+
+                                Regex jreg = new Regex("^[789][LM]");
+                                if (jreg.IsMatch(cur))
+                                {
+                                    short curstun = App.OpenedFiles.BACFile.HitboxTable[i].Data[3].TgtAnimTime;
+                                    short newstun = 14;
+                                    if (curstun < newstun)
+                                    {
+                                        AELogger.Log("jumpmatch! " + cur + ". lets change blockstun " + curstun + " to " + newstun);
+                                        App.OpenedFiles.BACFile.HitboxTable[i].Data[3].TgtAnimTime = newstun;
+                                        App.OpenedFiles.BACFile.HitboxTable[i].Data[4].TgtAnimTime = newstun;
+                                    }
+                                }
+                            }
+                        }
+                        int moves_count = App.OpenedFiles.BCMFile.Moves.Count;
+                        for (int i = 0; i < moves_count; i++)
+                        {
+                            if(App.OpenedFiles.BCMFile.Moves[i].EXRequirement == 0)
+                            {
+                                Regex reg = new Regex("^R?\\d+[MH][PK]");
+                                string cur = App.OpenedFiles.BCMFile.Moves[i].Name;
+                                if (reg.IsMatch(cur))
+                                {
+                                    short oldmeter = App.OpenedFiles.BCMFile.Moves[i].EXCost;
+                                    short newmeter = oldmeter;
+                                    if (cur.Contains('M'))
+                                    {
+                                        newmeter = -4;
+                                    }
+                                    if (cur.Contains('H'))
+                                    {
+                                        newmeter = -7;
+                                    }
+                                    if (cur.Contains('9') && !cur.Contains('2'))
+                                    {
+                                        newmeter = -9;
+                                    }
+                                    if (cur.Contains('8'))
+                                    {
+                                        newmeter = -8;
+                                    }
+                                    if (cur.Contains("FEINT"))
+                                    {
+                                        newmeter = 0;
+                                    }
+
+                                    AELogger.Log("changing meter gain of " + cur + " from " + oldmeter + " to " + newmeter);
+
+                                    App.OpenedFiles.BCMFile.Moves[i].EXCost = newmeter;
+                                }
+
+                                if (cur.StartsWith("APPEAL"))
+                                {
+                                    AELogger.Log("changing meter gain of " + cur + " from " + App.OpenedFiles.BCMFile.Moves[i].EXCost + " to " + 20);
+                                    App.OpenedFiles.BCMFile.Moves[i].EXCost = 20;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void FilesOpened(object sender, CanExecuteRoutedEventArgs e)

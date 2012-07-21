@@ -381,8 +381,8 @@ namespace RainbowLib.BAC
         {
             if (Usage.Count > 0)
                 //return "#" + Index.ToString() + " - (" + Usage.Count + ")";
-                return "#" + Index.ToString() + " - "+UsageString;
-            return "#" + Index.ToString();
+                return Index.ToString() + " - "+UsageString;
+            return Index.ToString();
         }
         public HitBoxDataset(int index)
         {

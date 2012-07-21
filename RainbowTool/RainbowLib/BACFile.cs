@@ -112,7 +112,15 @@ namespace RainbowLib
                         var index = inFile.ReadInt16() + HitBoxData.getIndexOffset(data.Effect);
                         if (index > -1)
                             data.OnHit = bac.Scripts.Where(x => x.Index == index).First();
-                        else data.OnHit = new Script(index);
+                        else
+                        {
+                            data.OnHit = new Script(index);
+                            if (index <= -1)
+                            {
+                                AELogger.Log("negative index " + index + " in hitboxdata #" + i);
+                            }
+                        }
+                        
                         data.SelfHitstop = inFile.ReadUInt16();
                         data.SelfShaking = inFile.ReadUInt16();
                         data.TgtHitstop = inFile.ReadUInt16();

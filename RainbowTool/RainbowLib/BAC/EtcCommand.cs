@@ -21,8 +21,10 @@ namespace RainbowLib.BAC
             VFX_SCRIPT = 2,
             SUPERFLASH = 5,
             THROW_TECH = 6,
+            //JUGGLE = 7,
             STICK_MOVEMENT = 11, // think lariat or honda 8hp
             AIR_TRACKING = 12, // bison ex headstomp
+            MOVE_TO_WALL = 13,
             TELEPORT = 15,
             DROP_KNIFE = 19,
             ANGRY_SCAR = 28

@@ -270,6 +270,10 @@ namespace OnoEdit
         public object Convert(object value, Type targetType,
             object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return -1;
+            }
             return string.Format("{0:X}", (value as RainbowLib.BAC.Script).Index);
         }
 
