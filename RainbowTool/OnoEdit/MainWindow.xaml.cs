@@ -42,6 +42,8 @@ namespace OnoEdit
             InitializeComponent();
             //CommandBindings
 
+            //Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332
+
             Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(CurrentPropertyChanged);
             if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
                 Style = (Style)FindResource("AeroStyle");
@@ -87,16 +89,6 @@ namespace OnoEdit
             this.PreviewKeyDown += this.Base_PreviewKeyDown;            
         }
 
-        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
-
-            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
-                Style = (Style)FindResource("AeroStyle");
-            else
-                Style = null;
-        }
-
         public MainWindow(String openPath)
         {
             // start anotak
@@ -104,6 +96,10 @@ namespace OnoEdit
             // end anotak
             InitializeComponent();
             //CommandBindings
+
+            //Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332
+
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(CurrentPropertyChanged);
             if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
                 Style = (Style)FindResource("AeroStyle");
 
@@ -149,6 +145,16 @@ namespace OnoEdit
 
             //Re-Use Already build function
             RecentOpen(openPath);
+        }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                Style = (Style)FindResource("AeroStyle");
+            else
+                Style = null;
         }
 
         #region ButtonClicks

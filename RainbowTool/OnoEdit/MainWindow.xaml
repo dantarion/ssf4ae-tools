@@ -4,6 +4,8 @@
         Title="Ono! - Dantarion" Width="210" Closing="WindowClosing" xmlns:my="clr-namespace:OnoEdit" Icon="/OnoEdit;component/Images/Ono.ico" ResizeMode="NoResize" WindowStartupLocation="Manual" xmlns:my1="clr-namespace:Common"
         xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
         LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" Name="Main" xmlns:my2="clr-namespace:OnoEdit.Controls" FontSize="12" SizeToContent="Height">
+    <!-- Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332 -->
+    
     <Window.Resources>
 
         <Style x:Key="AeroStyle" TargetType="{x:Type my:MainWindow}">
