@@ -30,6 +30,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -57,9 +59,17 @@
     <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\Ono.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\WPF Shell Integration Library v2-src\Microsoft.Windows.Shell\bin\Debug\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Presentation" />
@@ -83,14 +93,21 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnumTemplateGenerator.cs" />
+    <Compile Include="Class\CharNames.cs" />
+    <Compile Include="Class\Cloning.cs" />
+    <Compile Include="Class\EnumTemplateGenerator.cs" />
+    <Compile Include="Class\RecentFileList.cs" />
+    <Compile Include="Class\UserSettings.cs" />
+    <Compile Include="Controls\ExButton.xaml.cs">
+      <DependentUpon>ExButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HitboxDataWindow.xaml.cs">
       <DependentUpon>HitboxDataWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OnoEditControl.cs" />
+    <Compile Include="Class\OnoEditControl.cs" />
     <Compile Include="OnoGrid.xaml.cs">
       <DependentUpon>OnoGrid.xaml</DependentUpon>
     </Compile>
@@ -100,7 +117,7 @@
     <Compile Include="ScriptWindow.xaml.cs">
       <DependentUpon>ScriptWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TemplateSelectors.cs" />
+    <Compile Include="Class\TemplateSelectors.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ChargeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ExButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,7 +192,7 @@
     <Compile Include="MoveWindow.xaml.cs">
       <DependentUpon>MoveWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OpenedFiles.cs" />
+    <Compile Include="Class\OpenedFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -191,6 +212,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -221,6 +243,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="gci.png" />
     <Resource Include="Images\application_double.png" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\paste_plain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ono.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

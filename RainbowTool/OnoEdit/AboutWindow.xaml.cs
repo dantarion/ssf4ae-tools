@@ -22,8 +22,12 @@ namespace OnoEdit
         {
             InitializeComponent();
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            this.Title = "About Ono! " + version;
             //Build Timestamp
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+            Style = (Style)FindResource("AeroStyle");
+
+            BVersion.Content = "Version : " + version;
 
             var buildDateTime = new DateTime(2000, 1, 1).Add(new TimeSpan(
             TimeSpan.TicksPerDay * version.Build + // days since 1 January 2000
@@ -32,9 +36,9 @@ namespace OnoEdit
             BVersion.Content += "\nBuild Date: " + buildDateTime.ToShortDateString() + " " + buildDateTime.ToShortTimeString();
             OtherLabel.Text =
             "Credits (alphabetical)\n"
-            + "Main Programming: Dantarion\nProgramming: Anotak, Waterine\n"
+            + "Main Programming: Dantarion\nProgramming: Anotak, razor5070, Waterine\n"
             + "File format info:\nACCELERATOR, Anotak, Dantarion, Gojira, Error1, Illitirit, Piecemontee, Polarity,\nProvidenceangle, Sindor, Waterine, yeb, Zeipher\n"
-            + "\nBug Reports:\nBebopfan, Comeback Mechanic, Error1, Mnszyk, Polarity, Razor5070, yeb, Zeipher\n"
+            + "\nBug Reports:\nBebopfan, Comeback Mechanic, Error1, Mnszyk, Polarity, razor5070, yeb, Zeipher\n"
             + "Special thanks:\nahfb, Banana Ken, combovid.com, Dandy J, hunterk (aemods.pbworks.com),\nsonichurricane.com, SSJ George Bush, xentax.com, Zandwich\n"
             + "Google code: http://code.google.com/p/ssf4ae-tools/ \n"
             + "IRC: #sf4-modding on irc.synirc.net\n"
@@ -42,7 +46,7 @@ namespace OnoEdit
             if (App.OpenedFiles.FilesOpened)
             {
                 // charges, input, moves, cancels, scripts, vfx scripts, hitbox table
-                FileInfo.Text = "Filename: " + MainWindow.Opened +
+                FileInfo.Text = "Filename: " + MainWindow.Aopened +
                     "\nCharge: " + App.OpenedFiles.BCMFile.Charges.Count +
                     " Motion: " + (App.OpenedFiles.BCMFile.InputMotions.Count - 1) +
                     " Move: " + App.OpenedFiles.BCMFile.Moves.Count +

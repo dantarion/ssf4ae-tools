@@ -33,6 +33,9 @@ namespace RainbowLib
         {
             get { return _HitboxTable; }
         }
+
+        public static int LoadedHitBoxCount { get; set; }
+
         #region Reading Functions
         public static BACFile FromFilename(string name, BCMFile bcm)
         {
@@ -100,6 +103,7 @@ namespace RainbowLib
                         continue;
                     }
                     var dataset = bac.HitboxTable[i];
+                    LoadedHitBoxCount = i;
                     for (int j = 0; j < 12; j++)
                     {
                         HitBoxData data = new HitBoxData(j);

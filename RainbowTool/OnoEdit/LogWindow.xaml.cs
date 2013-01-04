@@ -24,8 +24,29 @@ namespace OnoEdit
         public LogWindow()
         {
             InitializeComponent();
+            if (!UserSettings.CurrentSettings.WindowCollection.ContainsKey(Name))
+                UserSettings.CurrentSettings.WindowCollection.Add(Name, new TypeSettings());
+            else
+            {
+                Left = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.X;
+                Top = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.Y;
+
+                Width = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Width;
+                Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
+            }
             Scroller.ScrollToBottom();
         }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation = new Point(Left, Top);
+        }
+
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = e.NewSize;
+        }
+
     }
     public class LogConverter : IValueConverter
     {

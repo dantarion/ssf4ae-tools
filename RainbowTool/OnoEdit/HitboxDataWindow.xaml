@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="HitboxData" Height="300" Width="700">
+        Title="HitboxData" Height="300" Width="700" Icon="/OnoEdit;component/Images/Ono.ico" Name="HitBox" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged">
     <DockPanel>
         <DockPanel DockPanel.Dock="Left">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Click="AddHB">Add New</Button>
-                <Button Click="RemoveHB">Remove</Button>
+                <Button IsEnabled="False" Click="RemoveHB">Remove</Button>
                 <Button IsEnabled="False">Import...</Button>
                 <Button IsEnabled="False">Export...</Button>
             </StackPanel>

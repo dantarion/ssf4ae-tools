@@ -34,6 +34,16 @@ namespace OnoEdit
             binding.Source = App.OpenedFiles.BACFile;
             this.SetBinding(Window.DataContextProperty, binding);
             InitializeComponent();
+            if (!UserSettings.CurrentSettings.WindowCollection.ContainsKey(Name))
+                UserSettings.CurrentSettings.WindowCollection.Add(Name, new TypeSettings());
+            else
+            {
+                Left = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.X;
+                Top = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.Y;
+
+                Width = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Width;
+                Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
+            }
             this.Title = path + " - " + MainWindow.Opened;
         }
         private int nextIndex = 0;
@@ -56,6 +66,26 @@ namespace OnoEdit
                 e.Column.Header = "#";
             }
         }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {            
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation = new Point(Left, Top);
+        }
+
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = e.NewSize;
+        }
+
+        private void WindowStateChanged(object sender, EventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].IsMaximized = WindowState.HasFlag(System.Windows.WindowState.Maximized);
+
+            if (!UserSettings.CurrentSettings.WindowCollection[Name].IsMaximized) return;
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation = RestoreBounds.Location;
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = RestoreBounds.Size;
+        }
+
     }
 
     public class HexConverter : IValueConverter

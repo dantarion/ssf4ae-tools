@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 using Microsoft.Win32;
 using System.Security.Principal;
 using RainbowLib;
@@ -20,10 +21,17 @@ namespace OnoEdit
         private static string _opened = null;
         public static string Opened
         {
-            get
-            {
-                return System.IO.Path.GetFileName(_opened);
-            }
+            get { return Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0, 3)); }
+        }
+
+        public static String Aopened
+        {
+            get { return System.IO.Path.GetFileName(_opened); }
+        }
+
+        ~MainWindow()
+        {
+            UserSettings.Save();
         }
 
         public MainWindow()
@@ -33,6 +41,34 @@ namespace OnoEdit
             // end anotak
             InitializeComponent();
             //CommandBindings
+
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(CurrentPropertyChanged);
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                Style = (Style)FindResource("AeroStyle");
+
+            Class.CharNames.LoadDictionary();
+
+            if (!UserSettings.CurrentSettings.WindowCollection.ContainsKey(Name))
+                UserSettings.CurrentSettings.WindowCollection.Add(Name, new TypeSettings());
+            else
+            {
+                Left = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.X;
+                Top = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.Y;
+
+                Width = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Width;
+                Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
+            }
+
+            recentFileList.MenuClick += (s, e) => RecentOpen(e.Filepath);
+
+            exButtonCharge.OnClick += exButtonCharge_OnClick;
+            exButtonInput.OnClick += exButtonInput_OnClick;
+            exButtonMoves.OnClick += exButtonMoves_OnClick;
+            exButtonCancels.OnClick += exButtonCancels_OnClick;
+            exButtonScripts.OnClick += exButtonScripts_OnClick;
+            exButtonVFX.OnClick += exButtonVFX_OnClick;
+            exButtonHitBox.OnClick += exButtonHitBox_OnClick;
+
             this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, ClickOpen));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, ClickSave, FilesOpened));
             CommandBindings.Add(new CommandBinding(ApplicationCommands.SaveAs, ClickSaveAs, FilesOpened));
@@ -48,8 +84,111 @@ namespace OnoEdit
 
             AELogger.Log("Build Date: " + buildDateTime.ToShortDateString(), false);
             App.OpenedFiles.Log = AELogger.Logger;
-            this.PreviewKeyDown += this.Base_PreviewKeyDown;
+            this.PreviewKeyDown += this.Base_PreviewKeyDown;            
         }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                Style = (Style)FindResource("AeroStyle");
+            else
+                Style = null;
+        }
+
+        public MainWindow(String openPath)
+        {
+            // start anotak
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
+            // end anotak
+            InitializeComponent();
+            //CommandBindings
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                Style = (Style)FindResource("AeroStyle");
+
+            Class.CharNames.LoadDictionary();
+
+            if (!UserSettings.CurrentSettings.WindowCollection.ContainsKey(Name))
+                UserSettings.CurrentSettings.WindowCollection.Add(Name, new TypeSettings());
+            else
+            {
+                Left = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.X;
+                Top = UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation.Y;
+
+                Width = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Width;
+                Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
+            }
+
+            recentFileList.MenuClick += (s, e) => RecentOpen(e.Filepath);
+
+            exButtonCharge.OnClick += exButtonCharge_OnClick;
+            exButtonInput.OnClick += exButtonInput_OnClick;
+            exButtonMoves.OnClick += exButtonMoves_OnClick;
+            exButtonCancels.OnClick += exButtonCancels_OnClick;
+            exButtonScripts.OnClick += exButtonScripts_OnClick;
+            exButtonVFX.OnClick += exButtonVFX_OnClick;
+            exButtonHitBox.OnClick += exButtonHitBox_OnClick;
+
+            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, ClickOpen));
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Save, ClickSave, FilesOpened));
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.SaveAs, ClickSaveAs, FilesOpened));
+
+            this.Title = "Ono! " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            //Build Timestamp
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+            var buildDateTime = new DateTime(2000, 1, 1).Add(new TimeSpan(
+            TimeSpan.TicksPerDay * version.Build + // days since 1 January 2000
+            TimeSpan.TicksPerSecond * 2 * version.Revision)); // seconds since midnight, (multiply by 2 to get original)
+            //CommandManager.AddExecutedHandler(ApplicationCommands.Open, ClickOpen);
+            BuildTime.Content = "Build Date: " + buildDateTime.ToShortDateString();
+
+            AELogger.Log("Build Date: " + buildDateTime.ToShortDateString(), false);
+            App.OpenedFiles.Log = AELogger.Logger;
+            this.PreviewKeyDown += this.Base_PreviewKeyDown;
+
+            //Re-Use Already build function
+            RecentOpen(openPath);
+        }
+
+        #region ButtonClicks
+
+        void exButtonHitBox_OnClick(object sender, EventArgs e)
+        {
+            new HitboxDataWindow().Show();
+        }
+
+        void exButtonVFX_OnClick(object sender, EventArgs e)
+        {
+            new ScriptWindow("VFXScripts").Show();
+        }
+
+        void exButtonScripts_OnClick(object sender, EventArgs e)
+        {
+            new ScriptWindow("Scripts").Show();
+        }
+
+        void exButtonCancels_OnClick(object sender, EventArgs e)
+        {
+            new CancelListWindow().Show();
+        }
+
+        void exButtonMoves_OnClick(object sender, EventArgs e)
+        {
+            new MoveWindow().Show();
+        }
+
+        void exButtonInput_OnClick(object sender, EventArgs e)
+        {
+            new InputWindow().Show();
+        }
+
+        void exButtonCharge_OnClick(object sender, EventArgs e)
+        {
+            new ChargeWindow().Show();
+        }
+
+        #endregion
 
         private void Base_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -151,21 +290,8 @@ namespace OnoEdit
         {
             e.CanExecute = App.OpenedFiles.FilesOpened;
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // App.OpenedFiles.FileOpened = false;   
-        }
 
-        private void ClickCharges(object sender, RoutedEventArgs e)
-        {
-            new ChargeWindow().Show();
-        }
-        private void ClickInputs(object sender, RoutedEventArgs e)
-        {
-            new InputWindow().Show();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var result = MessageBox.Show("Are you sure you want to quit Ono!?", "Quitting?", MessageBoxButton.YesNo);
 
@@ -183,31 +309,9 @@ namespace OnoEdit
             // end anotak edit
         }
 
-        private void ClickCancels(object sender, RoutedEventArgs e)
-        {
-            new CancelListWindow().Show();
-        }
-
-        private void ClickMoves(object sender, RoutedEventArgs e)
-        {
-            new MoveWindow().Show();
-        }
-        private void ClickScripts(object sender, RoutedEventArgs e)
-        {
-            new ScriptWindow("Scripts").Show();
-        }
-        private void ClickVFXScripts(object sender, RoutedEventArgs e)
-        {
-            new ScriptWindow("VFXScripts").Show();
-        }
-        private void ClickHitboxTable(object sender, RoutedEventArgs e)
-        {
-            new HitboxDataWindow().Show();
-        }
         private void ClickOpen(object sender, RoutedEventArgs e)
         {
-            var sb = new OpenFileDialog();
-            sb.Filter = "SF4AE BCM Files|*.bcm";
+            var sb = new OpenFileDialog {Filter = "SF4AE BCM Files|*.bcm"};
             var result = sb.ShowDialog(this);
             if ((bool)result.Value)
             {
@@ -218,13 +322,28 @@ namespace OnoEdit
                 App.OpenedFiles.BACFile = BACFile.FromFilename(bacfile, App.OpenedFiles.BCMFile);
                 _opened = sb.FileName;
                 RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(_opened));
-                App.OpenedFiles.FilesOpened = true;
+                App.OpenedFiles.FilesOpened = true; // yay
+                recentFileList.InsertFile(sb.FileName);
                 AELogger.Log("Opened BAC " + System.IO.Path.GetFileName(_opened));
-                this.Title = "Ono! " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version + " - " +  System.IO.Path.GetFileName(_opened);
+                this.Title = "Editing " + Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0,3)) + " -Ono!";
             }
             
         }
-        
+
+        private void RecentOpen(String file)
+        {
+            AELogger.Log("Opening BCM " + System.IO.Path.GetFileName(_opened));
+                App.OpenedFiles.BCMFile = BCMFile.FromFilename(file);
+                string bacfile = file.Replace(".bcm", ".bac");
+                AELogger.Log("Opened BCM, Opening BAC " + System.IO.Path.GetFileName(_opened));
+                App.OpenedFiles.BACFile = BACFile.FromFilename(bacfile, App.OpenedFiles.BCMFile);
+                _opened = file;
+                RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(_opened));
+                App.OpenedFiles.FilesOpened = true;
+                AELogger.Log("Opened BAC " + System.IO.Path.GetFileName(_opened));
+                this.Title = "Editing " + Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0, 3)) + " -Ono!";        
+        }
+
         private void ClickSave(object sender, RoutedEventArgs e)
         {
             /*
@@ -262,9 +381,25 @@ namespace OnoEdit
             }
         }
 
-        private void About_Click(object sender, RoutedEventArgs e)
+        [Obsolete]
+        private void AboutClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("#sf4-modding@irc.synirc.net\n code.google.com/p/ssf4ae-tools/");
+        }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation = new Point(Left, Top);
+        }
+
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = e.NewSize;
+        }
+
+        private void PrefClick(object sender, RoutedEventArgs e)
+        {
+            //Add new preference window
         }
 
         // start anotak

@@ -262,6 +262,7 @@ namespace OnoEdit
                 }
             }
         }
+
     }
 
     public class ScriptConverter : IValueConverter
