@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
 using System.Security.Principal;
@@ -21,7 +22,10 @@ namespace OnoEdit
         private static string _opened = null;
         public static string Opened
         {
-            get { return Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0, 3)); }
+            get
+            {
+                return !UserSettings.CurrentSettings.ShowFriendlyNames ? System.IO.Path.GetFileName(_opened) : Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0, 3));
+            }
         }
 
         public static String Aopened
@@ -37,7 +41,7 @@ namespace OnoEdit
         public MainWindow()
         {
             // start anotak
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
             // end anotak
             InitializeComponent();
             //CommandBindings
@@ -212,6 +216,29 @@ namespace OnoEdit
 
         #endregion
 
+        private void RunGameClick(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(UserSettings.CurrentSettings.ExecutableLocation))
+            {
+                var result = MessageBox.Show("Executable location has not been set.\nWould you like to set it now?","Ono!", MessageBoxButton.YesNo);
+
+                if (result != MessageBoxResult.Yes) return;
+
+                var ofd = new OpenFileDialog {Filter = "SSFIV.exe|SSFIV.exe", Title = "Super Street Fighter IV Arcade Edition"};
+
+                var oresult = ofd.ShowDialog();
+
+                if (oresult != true) return;
+
+                UserSettings.CurrentSettings.ExecutableLocation = ofd.FileName;
+
+                Process.Start(UserSettings.CurrentSettings.ExecutableLocation);
+                return;
+            }
+
+            Process.Start(UserSettings.CurrentSettings.ExecutableLocation);
+        }
+
         private void Base_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift | ModifierKeys.Alt)) // && IsKeyboardFocused
@@ -349,7 +376,7 @@ namespace OnoEdit
                 App.OpenedFiles.FilesOpened = true; // yay
                 recentFileList.InsertFile(sb.FileName);
                 AELogger.Log("Opened BAC " + System.IO.Path.GetFileName(_opened));
-                this.Title = "Editing " + Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0,3)) + " -Ono!";
+                this.Title = "Editing " + Opened + " -Ono!";
             }
             
         }
@@ -369,7 +396,7 @@ namespace OnoEdit
                 RainbowLib.ResourceManager.LoadCharacterData(System.IO.Path.GetFileNameWithoutExtension(_opened));
                 App.OpenedFiles.FilesOpened = true;
                 AELogger.Log("Opened BAC " + System.IO.Path.GetFileName(_opened));
-                this.Title = "Editing " + Class.CharNames.GetName(System.IO.Path.GetFileName(_opened).Substring(0, 3)) + " -Ono!";        
+                this.Title = "Editing " + Opened + " -Ono!";        
         }
 
         private void ClickSave(object sender, RoutedEventArgs e)

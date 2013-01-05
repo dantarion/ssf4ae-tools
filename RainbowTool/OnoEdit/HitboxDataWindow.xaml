@@ -2,22 +2,28 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="HitboxData" Height="300" Width="700" Icon="/OnoEdit;component/Images/Ono.ico" Name="HitBox" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged">
-    <DockPanel>
+        Title="HitboxData" Height="300" Width="700" Icon="/OnoEdit;component/Images/Ono.ico" Name="HitBox" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged" MinWidth="700" MinHeight="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="240" Width="240" MaxWidth="500" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition MinWidth="300" />
+        </Grid.ColumnDefinitions>
         <DockPanel DockPanel.Dock="Left">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch">
                 <Button Click="AddHB">Add New</Button>
                 <Button IsEnabled="False" Click="RemoveHB">Remove</Button>
                 <Button IsEnabled="False">Import...</Button>
                 <Button IsEnabled="False">Export...</Button>
             </StackPanel>
-            <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" Width="240" />
+            <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" MinWidth="220" />
         </DockPanel>
-        <GroupBox Header="Move Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}">
+        <GridSplitter Background="DarkGray" ResizeDirection="Columns" Grid.Column="1" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Width="5" />
+        <GroupBox Header="Move Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}" Margin="5" Grid.Column="2">
             <DockPanel>
                 <Label DockPanel.Dock="Top" Height="30" Content="{Binding Path=UsageString}"/>
-                <ono:OnoGrid DataContext="{Binding Path=Data}" EditEnabled="False"/>
+                <ono:OnoGrid DataContext="{Binding Path=Data}" EditEnabled="False" x:Name="odgrid" />
             </DockPanel>
             </GroupBox>
-    </DockPanel>
+    </Grid>
 </Window>

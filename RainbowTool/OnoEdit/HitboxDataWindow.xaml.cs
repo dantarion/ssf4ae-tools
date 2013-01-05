@@ -33,6 +33,8 @@ namespace OnoEdit
                 Width = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Width;
                 Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
             }
+
+            odgrid.ShowCommandButtons = false;
             this.Title = Title + " - " + MainWindow.Opened;
         }
 

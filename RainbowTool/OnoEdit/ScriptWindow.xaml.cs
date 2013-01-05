@@ -34,6 +34,9 @@ namespace OnoEdit
             binding.Source = App.OpenedFiles.BACFile;
             this.SetBinding(Window.DataContextProperty, binding);
             InitializeComponent();
+
+            this.ListBox.WorkingType = path;
+
             if (!UserSettings.CurrentSettings.WindowCollection.ContainsKey(Name))
                 UserSettings.CurrentSettings.WindowCollection.Add(Name, new TypeSettings());
             else

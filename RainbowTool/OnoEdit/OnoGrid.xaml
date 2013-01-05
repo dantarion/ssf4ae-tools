@@ -17,14 +17,14 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
             <CheckBox Name="RawCheckbox" Checked="RawCheckbox_Checked" Unchecked="RawCheckbox_Checked" VerticalAlignment="Center">Raw Display?</CheckBox>
-            <Button Click="AddCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=EditEnabled}">
+            <Button Click="AddCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=EditEnabled}" Name="btnnew">
                 <WrapPanel>
                     <Image Height="20" Source="/OnoEdit;component/Images/add.png" />
                     <TextBlock VerticalAlignment="Center">New</TextBlock>
                 </WrapPanel>
 
             </Button>
-            <Button Click="PasteCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=EditEnabled}">
+            <Button Click="PasteCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=EditEnabled}" Name="btnpaste">
                 <WrapPanel>
                     <Image Height="20" Source="/OnoEdit;component/Images/paste_plain.png" />
                     <TextBlock VerticalAlignment="Center">Paste</TextBlock>
@@ -32,7 +32,7 @@
             </Button>
             <TextBlock Text="{Binding ElementName=Base,Path=Copy,Converter={x:Static my:ClipboardToStringConverter.Instance}}"/>
         </StackPanel>
-        <DataGrid ContextMenuOpening="ContextMenuOpening"  Name="myDataGrid" ItemsSource="{Binding Source={StaticResource ItemView}}" AutoGeneratingColumn="ColumnGeneration" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=FrozenColumns}" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="10" ColumnWidth="SizeToCells" DataContextChanged="myDataGrid_DataContextChanged">
+        <DataGrid ContextMenuOpening="ContextMenuOpening"  Name="myDataGrid" ItemsSource="{Binding Source={StaticResource ItemView}}" AutoGeneratingColumn="ColumnGeneration" AutoGenerateColumns="True" CanUserReorderColumns="False" CanUserSortColumns="False" FrozenColumnCount="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:OnoGrid, AncestorLevel=1}, Path=FrozenColumns}" CanUserDeleteRows="True" CanUserResizeRows="False" CanUserAddRows="False" MinColumnWidth="20" ColumnWidth="Auto" DataContextChanged="myDataGrid_DataContextChanged">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Copy" Click="CopyCommand"/>

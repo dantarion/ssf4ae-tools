@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:OnoEdit"
         Title="Scripts" Height="450" Width="750" Icon="/OnoEdit;component/Images/Ono.ico" Name="Script" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged">
-    <Window.Resources>
+    <Window.Resources>                      
         <CollectionViewSource x:Key="myView" Source="{Binding}" Filter="myFilter"/>
         <Style TargetType="ListBox">
             <Style.Resources>

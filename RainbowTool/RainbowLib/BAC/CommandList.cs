@@ -62,7 +62,7 @@ namespace RainbowLib.BAC
     [Serializable]
     public class CommandList<T> : ObservableCollection<T>, ICloneable where T:BaseCommand, INotifyPropertyChanged 
     {
-        internal CommandList()
+        public CommandList()
         {
         }
 

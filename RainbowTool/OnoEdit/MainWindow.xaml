@@ -135,6 +135,9 @@
                 <MenuItem Header="About" Click="GC_Click" IsEnabled="True" />
                 <MenuItem Header="Log" Click="Log_Click" IsEnabled="True" />
             </MenuItem>
+            
+            <MenuItem Header="Launch SSFIV AE" Click="RunGameClick" />
+            
         </Menu>
         <StackPanel Grid.Row="1" IsEnabled="{Binding Source={StaticResource OpenedFiles}, Path=FilesOpened}">
             <StackPanel.Resources>

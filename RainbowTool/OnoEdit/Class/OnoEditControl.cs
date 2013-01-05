@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Collections;
 using System.Windows.Input;
+using RainbowLib.BAC;
 
 namespace OnoEdit
 {
@@ -144,16 +145,58 @@ namespace OnoEdit
             ScrollCurrent();
         }
 
+        //Used for new script
+        public String WorkingType { get; set; }
+
         protected virtual void AddCommand(object sender, RoutedEventArgs e)
         {
-            try
+
+            if(WorkingType != null)
             {
+                //New script
+
+                Console.WriteLine(WorkingType);
+
+                var newscript = new Script(App.OpenedFiles.BACFile.VFXScripts.Count, "New Script")
+                                    {
+                                        FirstHitboxFrame = 0,
+                                        LastHitboxFrame = 0,
+                                        IASAFrame = 0,
+                                        TotalFrames = 100,
+                                        UnknownFlags1 = 0,
+                                        UnknownFlags2 = 0,
+                                        UnknownFlags3 = 0
+                                    };
+
+
+                foreach (var type in Enum.GetValues(typeof(CommandListType)))
+                {
+                    var cmd = CommandListFactory.ByType((CommandListType) type);
+                    cmd.Type = (CommandListType)type;
+                    newscript.CommandLists.Add(cmd);
+                }
+                switch(WorkingType)
+                {
+                    case "VFXScripts":
+                        App.OpenedFiles.BACFile.VFXScripts.Add(newscript);
+                        break;
+                    case "Scripts":
+                        App.OpenedFiles.BACFile.Scripts.Add(newscript);
+                        break;
+                    default:
+                        Console.WriteLine("No valid ID"); break;
+                }
+                return;
+            }
+
+            try
+            {                              
                 ListCollectionView lc = ListCollectionView;
-                
-            Console.WriteLine(lc.CanAddNew);
+                            
+                if(!lc.CanAddNew) return;
 
                 var newObj = lc.AddNew();
-                checkScriptIndex(newObj);
+                CheckScriptIndex(newObj);
                 ScrollCurrent();
             }
             catch
@@ -162,7 +205,7 @@ namespace OnoEdit
             }
         }
 
-        private void checkScriptIndex(object newObj)
+        private void CheckScriptIndex(object newObj)
         {
             var script = newObj as RainbowLib.BAC.Script;
             if (script != null)
@@ -204,7 +247,7 @@ namespace OnoEdit
                 foreach (var item in items)
                 {
                     var clone = RainbowLib.Cloner.Clone(item);
-                    checkScriptIndex(clone);
+                    CheckScriptIndex(clone);
                     if (source.Count == 0)
                     {
                         source.Add(clone);

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
-        xmlns:OnoEdit="clr-namespace:OnoEdit" Title="Preferences" Height="199" Width="300" Icon="/OnoEdit;component/Images/Ono.ico" ResizeMode="NoResize" xmlns:my="clr-namespace:OnoEdit.Controls" WindowStartupLocation="CenterScreen">
+        xmlns:OnoEdit="clr-namespace:OnoEdit" Title="Preferences" Height="237" Width="300" Icon="/OnoEdit;component/Images/Ono.ico" ResizeMode="NoResize" xmlns:my="clr-namespace:OnoEdit.Controls" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="AeroStyle" TargetType="{x:Type OnoEdit:OptionsWindow}">
             <Setter Property="shell:WindowChrome.WindowChrome">
@@ -51,6 +51,32 @@
         <CheckBox Content="Check for updates" Height="16" HorizontalAlignment="Left" Margin="12,56,0,0" Name="cbupdates" VerticalAlignment="Top" IsEnabled="False" />
         <CheckBox Content="Show friendly names" Height="16" HorizontalAlignment="Left" Margin="12,78,0,0" Name="cbfriendlyname" VerticalAlignment="Top" />
         <CheckBox Content="Use Aero Style" Height="16" HorizontalAlignment="Left" Margin="12,100,0,0" Name="cbuseaero" VerticalAlignment="Top" />
+        <Rectangle Height="23" Margin="{Binding ElementName=tbexe, Path=Margin}" Width="{Binding ElementName=tbexe, Path=Width}" Fill="White" VerticalAlignment="Bottom" /> <!-- For Textbox styling -->
+        <TextBox x:Name="tbexe" Height="23" Margin="12,0,39,50" TextWrapping="Wrap" VerticalAlignment="Bottom" BorderBrush="{x:Null}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Executable Location" Foreground="LightGray" Background="White" />
+                                </VisualBrush.Visual>
+                        </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>            
+        </TextBox>
+        <Button x:Name="btnofd" Content="..." HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="27" Margin="0,0,8,50" BorderBrush="{x:Null}" Click="BtnofdClick"/>
         <my:ExButton Height="20" HorizontalAlignment="Stretch" x:Name="exButtonsave" VerticalAlignment="Bottom" Text="Save" HorizontalContentAlignment="Stretch" />
     </Grid>
 </Window>

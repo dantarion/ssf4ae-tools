@@ -22,6 +22,18 @@ namespace OnoEdit
     /// </summary>
     public partial class OnoGrid : OnoEditControl
     {
+        public bool ShowCommandButtons //For Hitbox window, hide unused buttons, I prefer to do things in code, feel free to translate to xaml
+        {
+            set
+            { if (!value)
+            {
+
+                btnnew.Visibility = System.Windows.Visibility.Hidden;
+                btnpaste.Visibility = System.Windows.Visibility.Hidden;
+            }
+            }
+        }
+
         public OnoGrid()
         {
             InitializeComponent();

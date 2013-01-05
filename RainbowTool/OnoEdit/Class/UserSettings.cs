@@ -47,6 +47,7 @@ namespace OnoEdit
         public bool ShowFriendlyNames { get; set; }
         public bool UseAeroScheme { get; set; }
 
+        public String ExecutableLocation { get; set; }
         public String LastOpenedFile { get; set; }
 
         public Settings()
@@ -58,6 +59,7 @@ namespace OnoEdit
             LearnLinkEnabled = true;
             RememberLastFile = false;
             CheckForUpdates = false;
+            ExecutableLocation = String.Empty;
             LastOpenedFile = String.Empty;
             ShowFriendlyNames = true;
             UseAeroScheme = true;
