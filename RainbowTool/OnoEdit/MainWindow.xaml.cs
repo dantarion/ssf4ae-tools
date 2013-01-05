@@ -41,7 +41,7 @@ namespace OnoEdit
         public MainWindow()
         {
             // start anotak
-            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ApplicationThreadException);
             // end anotak
             InitializeComponent();
             //CommandBindings
