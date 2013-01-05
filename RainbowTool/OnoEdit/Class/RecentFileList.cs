@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -67,22 +68,22 @@ namespace Common
 
 		void HookFileMenu()
 		{
-			MenuItem parent = Parent as MenuItem;
+			var parent = Parent as MenuItem;
 			if ( parent == null ) throw new ApplicationException( "Parent must be a MenuItem" );
 
 			if ( FileMenu == parent ) return;
 
-			if ( FileMenu != null ) FileMenu.SubmenuOpened -= _FileMenu_SubmenuOpened;
+			if ( FileMenu != null ) FileMenu.SubmenuOpened -= FileMenuSubmenuOpened;
 
 			FileMenu = parent;
-			FileMenu.SubmenuOpened += _FileMenu_SubmenuOpened;
+			FileMenu.SubmenuOpened += FileMenuSubmenuOpened;
 		}
 
 		public List<string> RecentFiles { get { return Persister.RecentFiles( MaxNumberOfFiles ); } }
 		public void RemoveFile( string filepath ) { Persister.RemoveFile( filepath, MaxNumberOfFiles ); }
 		public void InsertFile( string filepath ) { Persister.InsertFile( filepath, MaxNumberOfFiles ); }
 
-		void _FileMenu_SubmenuOpened( object sender, RoutedEventArgs e )
+		void FileMenuSubmenuOpened( object sender, RoutedEventArgs e )
 		{
 			SetMenuItems();
 		}
@@ -101,9 +102,8 @@ namespace Common
 			if ( _Separator != null ) FileMenu.Items.Remove( _Separator );
 
 			if ( _RecentFiles != null )
-				foreach ( RecentFile r in _RecentFiles )
-					if ( r.MenuItem != null )
-						FileMenu.Items.Remove( r.MenuItem );
+				foreach (var r in _RecentFiles.Where(r => r.MenuItem != null))
+				    FileMenu.Items.Remove( r.MenuItem );
 
 			_Separator = null;
 			_RecentFiles = null;
@@ -114,10 +114,10 @@ namespace Common
 			if ( _RecentFiles == null ) return;
 			if ( _RecentFiles.Count == 0 ) return;
 
-			int iMenuItem = FileMenu.Items.IndexOf( this );
-			foreach ( RecentFile r in _RecentFiles )
+			var iMenuItem = FileMenu.Items.IndexOf( this );
+			foreach ( var r in _RecentFiles )
 			{
-				string header = GetMenuItemText( r.Number + 1, r.Filepath, r.DisplayPath );
+				var header = GetMenuItemText( r.Number + 1, r.Filepath, r.DisplayPath );
 
 				r.MenuItem = new MenuItem { Header = header };
 				r.MenuItem.Click += MenuItem_Click;
@@ -163,8 +163,9 @@ namespace Common
 			if ( pathname.Length <= maxLength )
 				return pathname;
 
-			string root = Path.GetPathRoot( pathname );
-			if ( root.Length > 3 )
+			var root = Path.GetPathRoot( pathname );
+		    Debug.Assert(root != null, "root != null");
+		    if ( root.Length > 3 )
 				root += Path.DirectorySeparatorChar;
 
 			string[] elements = pathname.Substring( root.Length ).Split( Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar );

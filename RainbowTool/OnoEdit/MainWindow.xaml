@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Ono! - Dantarion" Width="210" Closing="WindowClosing" xmlns:my="clr-namespace:OnoEdit" Icon="/OnoEdit;component/Images/Ono.ico" ResizeMode="NoResize" WindowStartupLocation="Manual" xmlns:my1="clr-namespace:Common"
         xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
-        LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" Name="Main" xmlns:my2="clr-namespace:OnoEdit.Controls" FontSize="12" SizeToContent="Height">
+        LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" Loaded="MainLoaded" Name="Main" xmlns:my2="clr-namespace:OnoEdit.Controls" FontSize="12" SizeToContent="Height">
     <!-- Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332 -->
     
     <Window.Resources>
@@ -123,12 +123,15 @@
         <Menu Grid.Column="0" Grid.Row="0" Style="{DynamicResource MenuStyle}" BorderThickness="1,1,1,0" Background="{x:Null}" BorderBrush="White">
 
             <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Command="Open"/>              
-                <my1:RecentFileList Height="5" x:Name="recentFileList" Width="120" /> <!-- Leave this here? Put it in a new subitem? -->
+                <MenuItem Header="_Open..." Command="Open"/>
+                <MenuItem Header="Recent Files">
+                    <my1:RecentFileList Height="5" x:Name="recentFileList" Width="120" />
+                    <!-- Leave this here? Put it in a new subitem? -->
+                </MenuItem>
                 <MenuItem Header="_Save" Command="Save"/>
                 <MenuItem Header="Save _As.." Command="SaveAs"/>
                 <Separator />
-                <MenuItem Header="Preferances" Click="PrefClick" Visibility="Collapsed" />
+                <MenuItem Header="Preferances" Click="PrefClick" />
                 <MenuItem Header="About" Click="GC_Click" IsEnabled="True" />
                 <MenuItem Header="Log" Click="Log_Click" IsEnabled="True" />
             </MenuItem>

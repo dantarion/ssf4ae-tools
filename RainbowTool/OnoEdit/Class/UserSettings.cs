@@ -42,6 +42,12 @@ namespace OnoEdit
         public Dictionary<String, TypeSettings> WindowCollection { get; set; }
 
         public bool LearnLinkEnabled { get; set; }
+        public bool RememberLastFile { get; set; }
+        public bool CheckForUpdates  { get; set; }
+        public bool ShowFriendlyNames { get; set; }
+        public bool UseAeroScheme { get; set; }
+
+        public String LastOpenedFile { get; set; }
 
         public Settings()
         {
@@ -50,7 +56,11 @@ namespace OnoEdit
 
             WindowCollection = new Dictionary<string, TypeSettings>();
             LearnLinkEnabled = true;
-
+            RememberLastFile = false;
+            CheckForUpdates = false;
+            LastOpenedFile = String.Empty;
+            ShowFriendlyNames = true;
+            UseAeroScheme = true;
         }
     }
 
@@ -58,6 +68,10 @@ namespace OnoEdit
 
     class UserSettings
     {
+        #region Delegates
+        public delegate void SettingsChanged(object sender, object oVar, Type pType); // __void(void &sender, const char[] *oVar, TypeDef &pType)
+        #endregion
+
         #region IO
 
         /// <summary>
@@ -117,7 +131,15 @@ namespace OnoEdit
 
         #region Events
 
+        public static event SettingsChanged OnSettingsChanged;
         public static event EventHandler OnSettingsSaved;
+
+
+        public static void RaiseEvent(Object sender, Object oVar, Type pType)
+        {
+            if (OnSettingsChanged != null)
+                OnSettingsChanged(sender, oVar, pType);
+        }
 
         #endregion
 

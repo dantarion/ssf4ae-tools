@@ -44,7 +44,8 @@ namespace OnoEdit
 
             //Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332
 
-            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(CurrentPropertyChanged);
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if(UserSettings.CurrentSettings.UseAeroScheme)
             if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
                 Style = (Style)FindResource("AeroStyle");
 
@@ -89,6 +90,7 @@ namespace OnoEdit
             this.PreviewKeyDown += this.Base_PreviewKeyDown;            
         }
 
+        //Used for command line file opening, registering .bcm not a bad idea
         public MainWindow(String openPath)
         {
             // start anotak
@@ -99,7 +101,8 @@ namespace OnoEdit
 
             //Find Shell Library at http://archive.msdn.microsoft.com/WPFShell/Release/ProjectReleases.aspx?ReleaseId=4332
 
-            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(CurrentPropertyChanged);
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if(UserSettings.CurrentSettings.UseAeroScheme)
             if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
                 Style = (Style)FindResource("AeroStyle");
 
@@ -147,11 +150,24 @@ namespace OnoEdit
             RecentOpen(openPath);
         }
 
+        private void MainLoaded(object sender, RoutedEventArgs e)
+        {
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+
+            if (UserSettings.CurrentSettings.RememberLastFile)
+                RecentOpen(UserSettings.CurrentSettings.LastOpenedFile);
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
+
         void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (!e.PropertyName.Equals("IsGlassEnabled")) return;
 
-            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
                 Style = (Style)FindResource("AeroStyle");
             else
                 Style = null;
@@ -321,6 +337,8 @@ namespace OnoEdit
             var result = sb.ShowDialog(this);
             if ((bool)result.Value)
             {
+                UserSettings.CurrentSettings.LastOpenedFile = sb.FileName;
+
                 AELogger.Log("Opening BCM " + System.IO.Path.GetFileName(_opened));
                 App.OpenedFiles.BCMFile = BCMFile.FromFilename(sb.FileName);
                 string bacfile = sb.FileName.Replace(".bcm", ".bac");
@@ -338,6 +356,10 @@ namespace OnoEdit
 
         private void RecentOpen(String file)
         {
+            if (String.IsNullOrEmpty(file)) return;
+
+            UserSettings.CurrentSettings.LastOpenedFile = file;
+
             AELogger.Log("Opening BCM " + System.IO.Path.GetFileName(_opened));
                 App.OpenedFiles.BCMFile = BCMFile.FromFilename(file);
                 string bacfile = file.Replace(".bcm", ".bac");
@@ -405,7 +427,8 @@ namespace OnoEdit
 
         private void PrefClick(object sender, RoutedEventArgs e)
         {
-            //Add new preference window
+            var prefwin = new OptionsWindow();
+            prefwin.ShowDialog();
         }
 
         // start anotak
@@ -436,6 +459,7 @@ namespace OnoEdit
             #endif
         }
 
+        [Obsolete]
         private void IRC_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://widget.mibbit.com/?server=irc.synirc.net&nick=ono_user%3F%3F%3F&channel=%23sf4-modding");

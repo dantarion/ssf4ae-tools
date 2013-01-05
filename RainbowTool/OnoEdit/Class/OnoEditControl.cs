@@ -32,7 +32,15 @@ namespace OnoEdit
         {
             get
             {
-                return ObjectExtensions.Clone((object[])GetValue(CopyProperty));
+                //Just deep copy the ECT
+
+                var obj = GetValue(CopyProperty) as Object[];
+
+                if (obj[0].GetType().ToString() == "RainbowLib.BAC.EtcCommand")
+                    return ObjectExtensions.Clone((object[])GetValue(CopyProperty));
+                else
+                    return (GetValue(CopyProperty) as Object[]);
+
             }
             set { SetValue(CopyProperty, value); }
         }
@@ -141,6 +149,8 @@ namespace OnoEdit
             try
             {
                 ListCollectionView lc = ListCollectionView;
+                
+            Console.WriteLine(lc.CanAddNew);
 
                 var newObj = lc.AddNew();
                 checkScriptIndex(newObj);

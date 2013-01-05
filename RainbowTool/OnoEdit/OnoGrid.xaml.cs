@@ -30,7 +30,7 @@ namespace OnoEdit
         private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             //Change to a fixed width font
-            myDataGrid.FontFamily = new FontFamily("Consolas");
+            myDataGrid.FontFamily = new FontFamily("Lucida Console");
 
             /*
              * Comboboxes 
