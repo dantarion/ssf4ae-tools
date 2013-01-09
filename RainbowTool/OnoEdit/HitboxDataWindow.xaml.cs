@@ -35,7 +35,47 @@ namespace OnoEdit
             }
 
             odgrid.ShowCommandButtons = false;
-            this.Title = Title + " - " + MainWindow.Opened;
+            this.Title = "Hitbox Tables - " + MainWindow.Opened;
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    Style = (Style)FindResource("AeroStyle");
+                    btnnew.Style = (Style)FindResource("BorderlessButton");
+                    btnrem.Style = (Style)FindResource("BorderlessButton");
+                    btnimp.Style = (Style)FindResource("BorderlessButton");
+                    btnexp.Style = (Style)FindResource("BorderlessButton");
+                    btnplace.Margin = new Thickness(5, 35, 5, 5);
+                }
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+            {
+                Style = (Style)FindResource("AeroStyle"); btnplace.Margin = new Thickness(5, 35, 5, 5);
+                btnnew.Style = (Style)FindResource("BorderlessButton");
+                btnrem.Style = (Style)FindResource("BorderlessButton");
+                btnimp.Style = (Style)FindResource("BorderlessButton");
+                btnexp.Style = (Style)FindResource("BorderlessButton");
+            }
+            else
+            {
+                Style = null; ListBox.Margin = new Thickness(0);
+                btnplace.Margin = new Thickness(5);
+                btnnew.Style = null;
+                btnrem.Style = null;
+                btnimp.Style = null;
+                btnexp.Style = null;
+            }
         }
 
         private void AddHB(object sender, RoutedEventArgs e)
@@ -44,7 +84,6 @@ namespace OnoEdit
             Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
             App.OpenedFiles.BACFile.HitboxTable.Add(new HitBoxDataset(BACFile.LoadedHitBoxCount+1));
             Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
-            //Copy / Paste : D
 
             var dataset = App.OpenedFiles.BACFile.HitboxTable[App.OpenedFiles.BACFile.HitboxTable.Count-1];
 
@@ -75,8 +114,8 @@ namespace OnoEdit
                 data.JuggleStart = 1;
                 data.TgtAnimTime = 10;
                 data.MiscFlag = HitBoxData.MiscFlags.NONE;
-                data.VelX = -0.005f;
-                data.VelY = -0.005f;
+                data.VelX = 0.05f;
+                data.VelY = 0.05f;
                 data.VelZ = 0;
                 data.PushbackDist = 0.5f;
                 data.AccX = 0;

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnoEdit.Class;
 
 namespace OnoEdit
 {
@@ -32,7 +33,59 @@ namespace OnoEdit
                 Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
             }
             this.Title = Title + " - " + MainWindow.Opened;
+            Loaded += CancelListWindowLoaded;
         }
+
+        void CancelListWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    Style = (Style)FindResource("AeroStyle");
+                    ListBox.Margin = new Thickness(0, 35, 0, 0);
+                    Grid.Margin = new Thickness(0, 5, 0, 0);
+                    btnnew.Style = (Style)FindResource("BorderlessButton");
+                    btnrem.Style = (Style)FindResource("BorderlessButton");
+                    CrossSection();
+                }
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+            {
+                Style = (Style)FindResource("AeroStyle"); ListBox.Margin = new Thickness(0, 35, 0, 0);
+                Grid.Margin = new Thickness(0,5,0,0);
+                btnnew.Style = (Style)FindResource("BorderlessButton");
+                btnrem.Style = (Style)FindResource("BorderlessButton");
+                CrossSection();
+            }
+            else
+            {
+                Style = null; ListBox.Margin = new Thickness(0);
+                btnnew.Style = null;
+                btnrem.Style = null;
+            }
+        }
+
+        void CrossSection()
+        {
+            var titleoffset = Util.MeasureString(Title, 44);
+            var buttonoffset = buttonplace.TransformToAncestor(Ancestor).Transform(new Point(0, 0));
+
+            if (titleoffset.Width >= buttonoffset.X)
+                buttonplace.Margin = new Thickness(Math.Abs(titleoffset.Width - buttonoffset.X), 0, 0, 0);
+        }
+
         private void AddCancelList(object sender, RoutedEventArgs e)
         {
             var tmp = new RainbowLib.BCM.CancelList();

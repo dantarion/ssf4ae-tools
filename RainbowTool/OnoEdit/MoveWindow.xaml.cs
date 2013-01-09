@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnoEdit.Class;
 
 namespace OnoEdit
 {
@@ -32,6 +33,38 @@ namespace OnoEdit
                 Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
             }
             this.Title = Title + " - " + MainWindow.Opened;
+
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    Style = (Style) FindResource("AeroStyle");
+                    var stringsize = Util.MeasureString(Title,54);
+                    Grid.IndentInterActPanel = stringsize.Width;
+                }
+
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+            {
+                Style = (Style)FindResource("AeroStyle");
+                var stringsize = Util.MeasureString(Title,54);
+                Grid.IndentInterActPanel = stringsize.Width;
+            }
+            else
+            {
+                Style = null; Grid.IndentInterActPanel = 5;
+            }
         }
 
         private void WindowLocationChanged(object sender, EventArgs e)
@@ -53,14 +86,5 @@ namespace OnoEdit
             UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = RestoreBounds.Size;
         }
 
-        private void AddMove(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RemoveMove(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

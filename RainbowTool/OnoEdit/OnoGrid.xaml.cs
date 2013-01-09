@@ -34,10 +34,47 @@ namespace OnoEdit
             }
         }
 
+        //Indent button when using aero style
+        public double IndentInterActPanel
+        {
+            set { btnpanel.Margin = new Thickness(value, 5, 5, 5); }
+        }
+
         public OnoGrid()
         {
             InitializeComponent();
-        }       
+
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    btnnew.Style = (Style)FindResource("BorderlessButton");
+                    btnpaste.Style = (Style)FindResource("BorderlessButton");
+                }
+
+        }
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+            {
+                btnnew.Style = (Style)FindResource("BorderlessButton");
+                btnpaste.Style = (Style)FindResource("BorderlessButton");
+            }
+            else
+            {
+                btnnew.Style = null;
+                btnpaste.Style = null;
+            }
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
 
         private void ColumnGeneration(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {

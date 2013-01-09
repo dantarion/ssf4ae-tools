@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnoEdit.Class;
 
 namespace OnoEdit
 {
@@ -32,11 +33,34 @@ namespace OnoEdit
                 Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
             }
             this.Title = Title + " - " + MainWindow.Opened;
+
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    Style = (Style)FindResource("AeroStyle");
+                    ListBox.Margin = new Thickness(0,35,0,0);
+                }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
         {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
 
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+            {
+                Style = (Style)FindResource("AeroStyle"); ListBox.Margin = new Thickness(0, 35, 0, 0);
+            }
+            else
+            {
+                Style = null; ListBox.Margin = new Thickness(0);
+            }
         }
 
         private void AddInputMotion(object sender, RoutedEventArgs e)

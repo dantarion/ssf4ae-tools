@@ -6,72 +6,73 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:RainbowLib;assembly=RainbowLib">
     <Application.Resources>
-        <!--start anotak-->
-        <Style TargetType = "TextBox"  x:Key="RawStringBox">
-            <Setter Property="AcceptsReturn" Value="true"/>
-        </Style>
-        <!--end anotak-->
-        <my:OpenedFiles x:Key="OpenedFiles" />
+    	<ResourceDictionary>
+    		<ResourceDictionary.MergedDictionaries>
+    			<ResourceDictionary Source="Styles.xaml"/>
+    		</ResourceDictionary.MergedDictionaries>
+    		<!--start anotak-->
+    		<Style TargetType = "{x:Type TextBox}"  x:Key="RawStringBox">
+    			<Setter Property="AcceptsReturn" Value="true"/>
+    		</Style>
+    		<!--end anotak-->        
+    		<ResourceDictionary x:Key="Styles" Source="Styles.xaml" />
+    		<my:OpenedFiles x:Key="OpenedFiles" />
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="InputTypeValues">
             <ObjectDataProvider.MethodParameters>
                 <x:Type  Type="local:BCM.InputType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <Style TargetType="DockPanel">
-            <Setter Property="LastChildFill" Value="true"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style TargetType="TabControl">
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style TargetType="ListBox">
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style TargetType="DataGrid">
-            <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style TargetType="DataGridCell">
-            <Setter Property="Padding" Value="2"/>
-        </Style>
-        <Style TargetType="GroupBox">
-            <Setter Property="Margin" Value="5"/>
-        </Style>
-        <my:IndexReferenceTypeConverter x:Key="IRTC"/>
-        <my:AnimationTypeConverter x:Key="TTL"/>
-        <DataTemplate x:Key="AnimationViewTemplate">
-                <Label Margin="0" Padding="0">
-                    <Label.Content>
-                        <MultiBinding  Converter="{StaticResource IRTC}">
-                            <Binding Path="Type" Mode="OneWay"/>
-                            <Binding Path="Animation" />
-                        </MultiBinding>
-                    </Label.Content>
-                </Label>
-        </DataTemplate>
-        <DataTemplate x:Key="AnimationEditTemplate">
-            <ComboBox>
-                <ComboBox.ItemsSource>
-                    <Binding Path="Type" Converter="{StaticResource TTL}" Mode="OneWay"/>
-                </ComboBox.ItemsSource>
-                <ComboBox.SelectedValue>
-                    <MultiBinding  Converter="{StaticResource IRTC}">
-                        <Binding Path="Type" Mode="OneWay"/>
-                        <Binding Path="Animation" />
-                    </MultiBinding>
-                </ComboBox.SelectedValue>
-            </ComboBox>
-        </DataTemplate>
-        <DataTemplate x:Key="DumbEditTemplate">
-            <TextBox Text="{Binding ShortParam}"/>
-        </DataTemplate>
+    		<Style TargetType="{x:Type DockPanel}">
+    			<Setter Property="LastChildFill" Value="true"/>
+    		</Style>
+    		<Style TargetType="{x:Type Button}">
+    			<Setter Property="Padding" Value="2"/>
+    			<Setter Property="Margin" Value="2"/>
+    		</Style>
+    		<Style TargetType="{x:Type TabControl}">
+    			<Setter Property="Padding" Value="10"/>
+    			<Setter Property="Margin" Value="5"/>
+    		</Style>
+    		<Style TargetType="{x:Type ComboBox}">
+    			<Setter Property="Padding" Value="2"/>
+    			<Setter Property="Margin" Value="2"/>
+    		</Style>
+    		<Style TargetType="{x:Type ListBox}">
+    			<Setter Property="Padding" Value="2"/>
+    			<Setter Property="Margin" Value="2"/>
+    		</Style>
+    		<Style TargetType="{x:Type DataGrid}">
+    			<Setter Property="Margin" Value="2"/>
+    		</Style>
+    		<Style TargetType="{x:Type DataGridCell}">
+    			<Setter Property="Padding" Value="2"/>
+    		</Style>
+    		<Style TargetType="{x:Type GroupBox}">
+    			<Setter Property="Margin" Value="5"/>
+    		</Style>
+    		<my:IndexReferenceTypeConverter x:Key="IRTC"/>
+    		<my:AnimationTypeConverter x:Key="TTL"/>
+    		<DataTemplate x:Key="AnimationViewTemplate">
+    			<Label Margin="0" Padding="0">
+    				<MultiBinding  Converter="{StaticResource IRTC}">
+    					<Binding Path="Type" Mode="OneWay"/>
+    					<Binding Path="Animation" />
+    				</MultiBinding>
+    			</Label>
+    		</DataTemplate>
+    		<DataTemplate x:Key="AnimationEditTemplate">
+    			<ComboBox ItemsSource="{Binding Type, Converter={StaticResource TTL}, Mode=OneWay}">
+    				<ComboBox.SelectedValue>
+    					<MultiBinding  Converter="{StaticResource IRTC}">
+    						<Binding Path="Type" Mode="OneWay"/>
+    						<Binding Path="Animation" />
+    					</MultiBinding>
+    				</ComboBox.SelectedValue>
+    			</ComboBox>
+    		</DataTemplate>
+    		<DataTemplate x:Key="DumbEditTemplate">
+    			<TextBox Text="{Binding ShortParam}"/>
+    		</DataTemplate>
+    	</ResourceDictionary>
     </Application.Resources>
 </Application>

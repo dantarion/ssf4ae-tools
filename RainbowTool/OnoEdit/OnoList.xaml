@@ -14,14 +14,13 @@
     </ono:OnoEditControl.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-            <Button Click="AddCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ono:OnoEditControl, AncestorLevel=1}, Path=EditEnabled}">
+            <Button Click="AddCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ono:OnoEditControl, AncestorLevel=1}, Path=EditEnabled}" Margin="5,0,0,0" Name="btnnew">
                 <WrapPanel>
                     <Image Height="20" Source="/OnoEdit;component/Images/add.png" />
                     <TextBlock VerticalAlignment="Center">New</TextBlock>
                 </WrapPanel>
-
             </Button>
-            <Button Click="PasteCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ono:OnoEditControl, AncestorLevel=1}, Path=EditEnabled}">
+            <Button Click="PasteCommand" IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ono:OnoEditControl, AncestorLevel=1}, Path=EditEnabled}" Margin="5,0,0,0" Name="btnpaste">
                 <WrapPanel>
                     <Image Height="20" Source="/OnoEdit;component/Images/paste_plain.png" />
                     <TextBlock VerticalAlignment="Center">Paste</TextBlock>
@@ -35,22 +34,42 @@
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Copy" Click="CopyCommand"/>
+                    <MenuItem Header="Copy" Click="CopyCommand">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/copy.png" MaxHeight="16" MaxWidth="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="Duplicate" Click="DuplicateCommand">
                         <MenuItem.Icon>
-                            <Image Source="/OnoEdit;component/Images/application_double.png" />
+                            <Image Source="/OnoEdit;component/Images/application_double.png" MaxWidth="16" MaxHeight="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Remove" Click="RemoveCommand">
                         <MenuItem.Icon>
-                            <Image Source="/OnoEdit;component/Images/delete.png" />
+                            <Image Source="/OnoEdit;component/Images/delete.png" MaxWidth="16" MaxHeight="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="Move to Top" Click="MoveToTopCommand"/>
-                    <MenuItem Header="Move Up" Click="MoveUpCommand"/>
-                    <MenuItem Header="Move Down" Click="MoveDownCommand"/>
-                    <MenuItem Header="Move to Bottom" Click="MoveToBottomCommand"/>
+                    <MenuItem Header="Move to Top" Click="MoveToTopCommand">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/movetotop.png" MaxWidth="16" MaxHeight="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Move Up" Click="MoveUpCommand">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/up.png" MaxHeight="16" MaxWidth="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Move Down" Click="MoveDownCommand">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/down.png" MaxWidth="16" MaxHeight="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Move to Bottom" Click="MoveToBottomCommand">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/movetobottom.png" MaxWidth="16" MaxHeight="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

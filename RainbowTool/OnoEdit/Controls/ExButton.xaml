@@ -51,16 +51,16 @@
 		
 		<Storyboard x:Key="menter">
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="Transparent"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="#99FFFFFF">
+                <EasingColorKeyFrame KeyTime="0" Value="#0000adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#9900adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseOut"/>
 					</EasingColorKeyFrame.EasingFunction>
 				</EasingColorKeyFrame>
 			</ColorAnimationUsingKeyFrames>
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="Transparent"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="#99FFFFFF">
+                <EasingColorKeyFrame KeyTime="0" Value="#0000adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#9900adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseOut"/>
 					</EasingColorKeyFrame.EasingFunction>
@@ -89,18 +89,16 @@
 		</Storyboard>
 		<Storyboard x:Key="mleave">
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="#99FFFFFF"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.3" Value="sc#0.6, 1, 1, 1"/>
-				<EasingColorKeyFrame KeyTime="0:0:1" Value="Transparent">
+                <EasingColorKeyFrame KeyTime="0" Value="#9900adFF"/>				
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#0000adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseInOut"/>
 					</EasingColorKeyFrame.EasingFunction>
 				</EasingColorKeyFrame>
 			</ColorAnimationUsingKeyFrames>
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="#99FFFFFF"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.3" Value="sc#0.6, 1, 1, 1"/>
-				<EasingColorKeyFrame KeyTime="0:0:1" Value="Transparent">
+                <EasingColorKeyFrame KeyTime="0" Value="#9900adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#0000adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseInOut"/>
 					</EasingColorKeyFrame.EasingFunction>
@@ -139,26 +137,26 @@
 		</Storyboard>
 		<Storyboard x:Key="mentertype2">
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="Transparent"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="#99FFFFFF"/>
+                <EasingColorKeyFrame KeyTime="0" Value="#0000adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#9900adFF"/>
 			</ColorAnimationUsingKeyFrames>
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="Transparent"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="#99FFFFFF"/>
+                <EasingColorKeyFrame KeyTime="0" Value="#0000adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#9900adFF"/>
 			</ColorAnimationUsingKeyFrames>
 		</Storyboard>
 		<Storyboard x:Key="mleavetype2">
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="#99FFFFFF"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="Transparent">
+                <EasingColorKeyFrame KeyTime="0" Value="#9900adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#0000adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseOut"/>
 					</EasingColorKeyFrame.EasingFunction>
 				</EasingColorKeyFrame>
 			</ColorAnimationUsingKeyFrames>
 			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
-				<EasingColorKeyFrame KeyTime="0" Value="#99FFFFFF"/>
-				<EasingColorKeyFrame KeyTime="0:0:0.4" Value="Transparent">
+                <EasingColorKeyFrame KeyTime="0" Value="#9900adFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.4" Value="#0000adFF">
 					<EasingColorKeyFrame.EasingFunction>
 						<CircleEase EasingMode="EaseOut"/>
 					</EasingColorKeyFrame.EasingFunction>

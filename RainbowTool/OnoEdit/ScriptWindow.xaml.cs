@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Globalization;
 using RainbowLib.BAC;
 namespace OnoEdit
@@ -24,7 +16,7 @@ namespace OnoEdit
     {
         void myFilter(object sender, FilterEventArgs e)
         {
-            RainbowLib.BAC.Script script = e.Item as RainbowLib.BAC.Script;
+            var script = e.Item as RainbowLib.BAC.Script;
             e.Accepted = script != RainbowLib.BAC.Script.NullScript;
 
         }
@@ -48,21 +40,63 @@ namespace OnoEdit
                 Height = UserSettings.CurrentSettings.WindowCollection[Name].ThisSize.Height;
             }
             this.Title = path + " - " + MainWindow.Opened;
+            
+            UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
+            Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
+            if (UserSettings.CurrentSettings.UseAeroScheme)
+                if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled)
+                {
+                    Style = (Style) FindResource("AeroStyle");
+                    ListBox.Margin = new Thickness(1, 35, 1, 1);
+                }
+
         }
-        private int nextIndex = 0;
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        void CurrentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals("IsGlassEnabled")) return;
+
+            if (Microsoft.Windows.Shell.SystemParameters2.Current.IsGlassEnabled && UserSettings.CurrentSettings.UseAeroScheme)
+                Style = (Style)FindResource("AeroStyle");
+            else
+                Style = null;
+        }
+
+        void UserSettings_OnSettingsChanged(object sender, object oVar, Type pType)
+        {
+            CurrentPropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs("IsGlassEnabled"));
+        }
+
+        private int _nextIndex = 0;
+        private void ComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.RemovedItems.Count > 0)
-                nextIndex = (int)((dynamic)(e.RemovedItems[0])).Type;
+                _nextIndex = (int)((dynamic)(e.RemovedItems[0])).Type;
         }
 
         private void ScriptSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && ComboBox != null)
-                ComboBox.SelectedIndex = nextIndex;
+                ComboBox.SelectedIndex = _nextIndex;
+
+            tbscrcnt.Text = String.Format("{0} Scripts", ListBox.ItemCount);
+
+            try
+            {
+                var scr = ListBox.SelectedValue as Script;
+                var converter = new RealFrameCounter { Target=scr };
+
+                statlbl.Content = converter.GetHumanFrames;
+
+            }
+            catch(Exception er)
+            {
+                Console.WriteLine(er);
+            }
+
         }
 
-        private void timelineDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void TimelineDataGridAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.Column.Header.ToString() == "FrameIndex")
             {
@@ -102,7 +136,7 @@ namespace OnoEdit
         public object ConvertBack(object value, Type targetType,
             object parameter, CultureInfo culture)
         {
-            Int32 val = Int32.Parse((string)value, System.Globalization.NumberStyles.HexNumber);
+            Int32 val = Int32.Parse((string)value, NumberStyles.HexNumber);
 
             return val;
         }
@@ -153,50 +187,138 @@ namespace OnoEdit
         }
     }
 
-    public class RealFrameConverter : DependencyObject, IValueConverter
+    public class RealFrameCounter
     {
 
+        public Script Target { get; set; }
 
-        public RainbowLib.BAC.Script Target
+        public object GetHumanFrames
         {
-            get { return (RainbowLib.BAC.Script)GetValue(TargetProperty); }
-            set { SetValue(TargetProperty, value); }
+            get
+            {
+                var hitboxcalc = GetHitboxFrameCalculations;
+                var peram = new Object[] {(int)hitboxcalc[0],(int)hitboxcalc[1],(int)hitboxcalc[2],(int)GetCalculatedFrames}; //round everything
+
+                return String.Format("Frames* -> Approx [ Start Up {0}, Active {1}, Recovery {2}, Total {3} ]",peram);
+            }
         }
 
-        // Using a DependencyProperty as the backing store for Target.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TargetProperty =
-            DependencyProperty.Register("Target", typeof(RainbowLib.BAC.Script), typeof(RealFrameConverter), new UIPropertyMetadata(null));
-
-
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public float GetCalculatedFrames
         {
-            BaseCommand cmd = value as BaseCommand;
-            if (value == null||parameter == null)
-                return "";
-            float curFrame = 0;
-            float speed = 0;
-            for (int i = 0; i < cmd.StartFrame; i++)
+            get
             {
-                foreach (SpeedCommand speedCommand in Target.CommandLists[(int)CommandListType.SPEED])
+                ushort realFrames = Target.TotalFrames;
+                var speed = (ObservableCollection<SpeedCommand>) Target.CommandLists[4];
+
+                if (speed == null || speed.Count <= 0) return realFrames;
+
+                var totalframesskipped = 0f;
+
+                for (var i = 0; i < speed.Count; i++)
                 {
-                    if (i > speedCommand.StartFrame)
-                        if (speedCommand.Multiplier == 0)
-                            speed = 0;
-                        else
-                            speed = 1.0f / speedCommand.Multiplier;
-                    curFrame += speed;
+                    var appliedframes = 0;
+
+                    if (i < speed.Count - 1)
+                    {
+                        appliedframes = speed[i + 1].StartFrame - speed[i].StartFrame;
+                    }
+                    else
+                    {
+                        appliedframes = realFrames - speed[i].StartFrame;
+                    }
+
+                    if (speed[i].Multiplier == 0)
+                        totalframesskipped += appliedframes;
+                    else
+                        totalframesskipped += appliedframes/speed[i].Multiplier;
+                }
+
+                return totalframesskipped;
+
+            }
+        }
+
+        public float[] GetHitboxFrameCalculations
+        {
+            get
+            {
+                var hitboxs = (ObservableCollection<HitboxCommand>)Target.CommandLists[7];
+
+                float startup = 0f, active = 0f, recovery = 0f;
+
+                foreach (var itm in hitboxs)
+                {
+                    if (itm.Type == HitboxCommand.HitboxType.PROXIMITY) continue;
+                    active += (itm.EndFrame - itm.StartFrame)/GetFrameSpeedMulty(itm.StartFrame);
+
+                    if (startup == 0)
+                        startup = GetSpeedModifiedFramesUpTo(itm.StartFrame);
+                }
+
+
+                recovery = GetCalculatedFrames - active - startup;
+                
+                return new[]{startup,active,recovery};
+            }
+        }
+
+        public float GetSpeedModifiedFramesUpTo(int frame)
+        {
+            var speed = (ObservableCollection<SpeedCommand>)Target.CommandLists[4];
+
+            if (speed == null || speed.Count <= 0) return frame;
+
+            var totalframesskipped = 0f;
+
+            for (var i = 0; i < speed.Count; i++)
+            {
+                var appliedframes = 0;
+
+                if (i < speed.Count - 1)
+                {
+                    if (speed[i].EndFrame >= frame) continue;
+                    appliedframes = speed[i + 1].StartFrame - speed[i].StartFrame;
+                }
+                else
+                {
+                    if (speed[speed.Count - 1].EndFrame >= frame) continue;
+                    appliedframes = frame - speed[i].StartFrame;
+                }              
+
+                if (speed[i].Multiplier == 0)
+                    totalframesskipped += appliedframes;
+                else
+                    totalframesskipped += appliedframes / speed[i].Multiplier;
+            }
+
+            return totalframesskipped;          
+        }
+
+        public float GetFrameSpeedMulty(int frame)
+        {
+            var speed = (ObservableCollection<SpeedCommand>) Target.CommandLists[4];
+
+            if (speed == null || speed.Count <= 0) return 1f;
+
+            for (int i = 0; i < speed.Count; i++)
+            {
+
+                if (i < speed.Count - 1)
+                {
+                    if (frame >= speed[i].EndFrame && frame <= speed[i + 1].StartFrame)
+                        return speed[i].Multiplier;
+                }
+                else
+                {
+                    var lastmult = speed[speed.Count - 1].Multiplier;
+                    return lastmult == 0 ? 1f : lastmult;
                 }
             }
-            return String.Format("Actual StartFrame: {0}", curFrame);
 
+            return 1f;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    }    
 
     public class TimelineFrame
     {

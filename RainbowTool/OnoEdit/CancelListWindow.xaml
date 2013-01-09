@@ -2,8 +2,47 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="CancelList" Height="300" Width="450" Icon="/OnoEdit;component/Images/Ono.ico" Name="Cancel" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged">
-    <DockPanel>
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell" Title="CancelList" Height="300" Width="450" Icon="/OnoEdit;component/Images/Ono.ico" Name="Cancel" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged">
+    <Window.Resources>
+        <Style x:Key="AeroStyle" TargetType="{x:Type ono:CancelListWindow}">
+            <Setter Property="shell:WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <shell:WindowChrome GlassFrameThickness="-1" 
+                                        ResizeBorderThickness="4"
+                                        CornerRadius="6"
+                                        CaptionHeight="32"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ono:CancelListWindow}">
+                        <Grid>
+
+                            <!-- This is the ContentPresenter that displays the window contents. -->
+                            <Border Margin="5" >
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </Border>
+
+                            <!-- Window Border Content -->
+                            <!-- System Icon -->
+                            <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" 
+                                       Width="32" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0"
+                                       shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+                            <!-- Window Title -->
+                            <TextBlock VerticalAlignment="Top" TextAlignment="Left" Padding="44,9,0,0" FontSize="16" Foreground="Black"
+                                       Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Left" >
+                            	        	<TextBlock.Effect>
+        		                             <DropShadowEffect Color="White" ShadowDepth="0"/>
+        	                                </TextBlock.Effect>
+                            </TextBlock>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel x:Name="Ancestor">
         <DockPanel DockPanel.Dock="Left" >
             <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Click="AddCancelList">Add New</Button>
@@ -12,9 +51,19 @@
             <ListBox Name="ListBox" ItemsSource="{Binding Path=BCMFile.CancelLists, Source={StaticResource OpenedFiles}}" DisplayMemberPath="Name" SelectedIndex="0" />-->
             <ono:OnoList Width="150" DockPanel.Dock="Left" x:Name="ListBox" DataContext="{Binding Path=BCMFile.CancelLists, Source={StaticResource OpenedFiles}}"/>
         </DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Click="AddMove">Add New</Button>
-            <Button Click="RemoveMove">Remove</Button>
+        <StackPanel x:Name="buttonplace" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Click="AddMove" x:Name="btnnew" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <WrapPanel>
+                    <Image Height="20" Source="/OnoEdit;component/Images/add.png" />
+                    <TextBlock VerticalAlignment="Center">New</TextBlock>
+                </WrapPanel>
+            </Button>
+            <Button Click="RemoveMove" x:Name="btnrem" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <WrapPanel>
+                    <Image Height="20" Source="/OnoEdit;component/Images/delete.png" />
+                    <TextBlock VerticalAlignment="Center">Remove</TextBlock>
+                </WrapPanel>
+            </Button>
         </StackPanel>    
         <ListBox Name="Grid" ItemsSource="{Binding Path=SelectedValue.Moves,ElementName=ListBox}">
             <ListBox.ItemTemplate>

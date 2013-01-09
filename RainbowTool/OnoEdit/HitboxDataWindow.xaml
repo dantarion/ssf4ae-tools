@@ -2,27 +2,79 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ono="clr-namespace:OnoEdit"
-        Title="HitboxData" Height="300" Width="700" Icon="/OnoEdit;component/Images/Ono.ico" Name="HitBox" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged" MinWidth="700" MinHeight="300">
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell" Title="HitboxData" Height="300" Width="700" Icon="/OnoEdit;component/Images/Ono.ico" Name="HitBox" LocationChanged="WindowLocationChanged" SizeChanged="WindowSizeChanged" StateChanged="WindowStateChanged" MinWidth="700" MinHeight="300">
+    <Window.Resources>
+        <Style x:Key="AeroStyle" TargetType="{x:Type ono:HitboxDataWindow}">
+            <Setter Property="shell:WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <shell:WindowChrome GlassFrameThickness="-1" 
+                                        ResizeBorderThickness="4"
+                                        CornerRadius="0"
+                                        CaptionHeight="36"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ono:HitboxDataWindow}">
+                        <Grid>
+
+                            <!-- This is the ContentPresenter that displays the window contents. -->
+                            <Border Margin="5,5,3,5" >
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </Border>
+
+                            <!-- Window Border Content -->
+                            <!-- System Icon -->
+                            <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" 
+                                       Width="32" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0"
+                                       shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+                            <!-- Window Title -->
+                            <TextBlock VerticalAlignment="Top" TextAlignment="Left" FontSize="12" Foreground="Black"
+                                       Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" Margin="40,9,0,0">
+                            	        	<TextBlock.Effect>
+        		                             <DropShadowEffect Color="White" ShadowDepth="0"/>
+        	                                </TextBlock.Effect>
+                            </TextBlock>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="240" Width="240" MaxWidth="500" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition MinWidth="300" />
         </Grid.ColumnDefinitions>
-        <DockPanel DockPanel.Dock="Left">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <Button Click="AddHB">Add New</Button>
-                <Button IsEnabled="False" Click="RemoveHB">Remove</Button>
-                <Button IsEnabled="False">Import...</Button>
-                <Button IsEnabled="False">Export...</Button>
+        <DockPanel DockPanel.Dock="Left" Margin="0,0,2,0">
+            <StackPanel x:Name="btnplace" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5">
+                <Button x:Name="btnnew" Click="AddHB">
+                	 <WrapPanel>
+                    <Image Height="20" Source="/OnoEdit;component/Images/add.png" />
+                    <TextBlock VerticalAlignment="Center">New</TextBlock>
+                </WrapPanel>            
+				</Button>
+                <Button x:Name="btnrem" IsEnabled="False" Click="RemoveHB" Visibility="Hidden">
+                	 <WrapPanel>
+                    <Image Height="20" Source="/OnoEdit;component/Images/delete.png" />
+                    <TextBlock VerticalAlignment="Center">Remove</TextBlock>
+                </WrapPanel>            
+				</Button>
+                <Button x:Name="btnimp" IsEnabled="False" Visibility="Hidden">Import</Button>
+                <Button x:Name="btnexp" IsEnabled="False" Visibility="Hidden">Export</Button>
             </StackPanel>
             <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" MinWidth="220" />
         </DockPanel>
         <GridSplitter Background="DarkGray" ResizeDirection="Columns" Grid.Column="1" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Width="5" />
-        <GroupBox Header="Move Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}" Margin="5" Grid.Column="2">
+        <GroupBox Header="Table Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}" Grid.Column="2" BorderBrush="{x:Null}" Template="{DynamicResource GroupBoxControlTemplate}" Margin="-2,-2,-2,-5" >
             <DockPanel>
-                <Label DockPanel.Dock="Top" Height="30" Content="{Binding Path=UsageString}"/>
-                <ono:OnoGrid DataContext="{Binding Path=Data}" EditEnabled="False" x:Name="odgrid" />
+                <Label DockPanel.Dock="Top" Height="30" Content="{Binding Path=UsageString}">
+                	<Label.Effect>
+                		<DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="White"/>
+                	</Label.Effect>
+                </Label>
+                <ono:OnoGrid DataContext="{Binding Path=Data}" EditEnabled="False" x:Name="odgrid" Margin="-2,0,0,0"/>
             </DockPanel>
             </GroupBox>
     </Grid>

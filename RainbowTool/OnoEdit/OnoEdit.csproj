@@ -98,6 +98,7 @@
     <Compile Include="Class\EnumTemplateGenerator.cs" />
     <Compile Include="Class\RecentFileList.cs" />
     <Compile Include="Class\UserSettings.cs" />
+    <Compile Include="Class\Util.cs" />
     <Compile Include="Controls\ExButton.xaml.cs">
       <DependentUpon>ExButton.xaml</DependentUpon>
     </Compile>
@@ -194,6 +195,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MoveWindow.xaml.cs">
@@ -271,9 +276,41 @@
   <ItemGroup>
     <Resource Include="Images\Ono.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\down.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="BinaryResources\Microsoft.Windows.Shell.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\movetobottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\movetotop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\log.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\options.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\recent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\saveas.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

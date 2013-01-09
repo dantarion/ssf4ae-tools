@@ -19,6 +19,7 @@ namespace Common
 			List<string> RecentFiles( int max );
 			void InsertFile( string filepath, int max );
 			void RemoveFile( string filepath, int max );
+		    void Clean(int max);
 		}
 
 		public IPersist Persister { get; set; }
@@ -52,6 +53,7 @@ namespace Common
 		public event EventHandler<MenuClickEventArgs> MenuClick;
 
 		Separator _Separator = null;
+        MenuItem _clean = null;
 		List<RecentFile> _RecentFiles = null;
 
 		public RecentFileList()
@@ -101,7 +103,13 @@ namespace Common
 		{
 			if ( _Separator != null ) FileMenu.Items.Remove( _Separator );
 
-			if ( _RecentFiles != null )
+            if (_clean != null)
+            {
+                FileMenu.Items.Remove(_clean);
+                _clean.Click -= _clean_Click;
+            }
+
+		    if ( _RecentFiles != null )
 				foreach (var r in _RecentFiles.Where(r => r.MenuItem != null))
 				    FileMenu.Items.Remove( r.MenuItem );
 
@@ -112,9 +120,17 @@ namespace Common
 		void InsertMenuItems()
 		{
 			if ( _RecentFiles == null ) return;
-			if ( _RecentFiles.Count == 0 ) return;
 
-			var iMenuItem = FileMenu.Items.IndexOf( this );
+		    var iMenuItem = FileMenu.Items.IndexOf( this );
+
+                        if (_RecentFiles.Count == 0)
+            {
+                var mi = new MenuItem {Header="Empty", IsEnabled=false};
+                FileMenu.Items.Clear();
+                FileMenu.Items.Add(mi);
+                return;
+            }
+
 			foreach ( var r in _RecentFiles )
 			{
 				var header = GetMenuItemText( r.Number + 1, r.Filepath, r.DisplayPath );
@@ -127,7 +143,15 @@ namespace Common
 
 			_Separator = new Separator();
 			FileMenu.Items.Insert( ++iMenuItem, _Separator );
+		    _clean = new MenuItem() { Header="Clear"};
+            _clean.Click += _clean_Click;
+		    FileMenu.Items.Insert(++iMenuItem, _clean);
 		}
+
+        void _clean_Click(object sender, RoutedEventArgs e)
+        {
+            Persister.Clean(9);
+        }
 
 		string GetMenuItemText( int index, string filepath, string displaypath )
 		{
@@ -417,7 +441,18 @@ namespace Common
 
 			string Key( int i ) { return i.ToString( "00" ); }
 
-			public List<string> RecentFiles( int max )
+            public void Clean(int max)
+            {
+                var list = RecentFiles(max);
+
+                foreach (var itm in list)
+                {
+                    RemoveFile(itm, max);
+                }
+
+            }
+
+		    public List<string> RecentFiles( int max )
 			{
 				RegistryKey k = Registry.CurrentUser.OpenSubKey( RegistryKey );
 				if ( k == null ) k = Registry.CurrentUser.CreateSubKey( RegistryKey );
@@ -513,7 +548,11 @@ again:
 						"RecentFileList.xml" );
 			}
 
-			public XmlPersister( string filepath )
+            public void Clean(int max)
+            {
+            }
+
+		    public XmlPersister( string filepath )
 			{
 				Filepath = filepath;
 			}
