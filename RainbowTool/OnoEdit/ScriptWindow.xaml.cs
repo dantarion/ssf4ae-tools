@@ -197,7 +197,7 @@ namespace OnoEdit
             get
             {
                 var hitboxcalc = GetHitboxFrameCalculations;
-                var peram = new Object[] {(int)hitboxcalc[0],(int)hitboxcalc[1],(int)hitboxcalc[2],(int)GetCalculatedFrames}; //round everything
+                var peram = new Object[] {(int)hitboxcalc[0],(int)hitboxcalc[1],(int)hitboxcalc[2],(int)hitboxcalc[3]}; //round everything
 
                 return String.Format("Frames* -> Approx [ Start Up {0}, Active {1}, Recovery {2}, Total {3} ]",peram);
             }
@@ -207,16 +207,16 @@ namespace OnoEdit
         {
             get
             {
-                ushort realFrames = Target.TotalFrames;
+                float realFrames = Target.TotalFrames;
                 var speed = (ObservableCollection<SpeedCommand>) Target.CommandLists[4];
 
                 if (speed == null || speed.Count <= 0) return realFrames;
 
-                var totalframesskipped = 0f;
+                var totalframesskipped = (float)speed[0].StartFrame;
 
                 for (var i = 0; i < speed.Count; i++)
                 {
-                    var appliedframes = 0;
+                    var appliedframes = 0f;
 
                     if (i < speed.Count - 1)
                     {
@@ -227,13 +227,13 @@ namespace OnoEdit
                         appliedframes = realFrames - speed[i].StartFrame;
                     }
 
-                    if (speed[i].Multiplier == 0)
+                    if (speed[i].Multiplier == 0f)
                         totalframesskipped += appliedframes;
                     else
-                        totalframesskipped += appliedframes/speed[i].Multiplier;
+                        totalframesskipped += (float)Math.Ceiling(appliedframes/speed[i].Multiplier);
                 }
 
-                return totalframesskipped;
+                return (float)Math.Ceiling(totalframesskipped);
 
             }
         }
@@ -249,16 +249,16 @@ namespace OnoEdit
                 foreach (var itm in hitboxs)
                 {
                     if (itm.Type == HitboxCommand.HitboxType.PROXIMITY) continue;
-                    active += (itm.EndFrame - itm.StartFrame)/GetFrameSpeedMulty(itm.StartFrame);
+                    active += (float)Math.Ceiling((itm.EndFrame - itm.StartFrame)/GetFrameSpeedMulty(itm.StartFrame));
 
                     if (startup == 0)
                         startup = GetSpeedModifiedFramesUpTo(itm.StartFrame);
                 }
 
+                recovery = GetCalculatedFrames -((startup + active) - 1);
+                var total = GetCalculatedFrames;
 
-                recovery = GetCalculatedFrames - active - startup;
-                
-                return new[]{startup,active,recovery};
+                return new[]{startup,active,recovery,total};
             }
         }
 
@@ -270,28 +270,31 @@ namespace OnoEdit
 
             var totalframesskipped = 0f;
 
+            //check if first speed is after frame
+            if (speed[0].StartFrame > frame) return frame;
+
             for (var i = 0; i < speed.Count; i++)
             {
-                var appliedframes = 0;
+                var appliedframes = 0;               
 
                 if (i < speed.Count - 1)
                 {
-                    if (speed[i].EndFrame >= frame) continue;
+                    if (speed[i].EndFrame > frame) continue;
                     appliedframes = speed[i + 1].StartFrame - speed[i].StartFrame;
                 }
                 else
                 {
-                    if (speed[speed.Count - 1].EndFrame >= frame) continue;
+                    if (speed[speed.Count - 1].EndFrame > frame) continue;
                     appliedframes = frame - speed[i].StartFrame;
                 }              
 
                 if (speed[i].Multiplier == 0)
                     totalframesskipped += appliedframes;
                 else
-                    totalframesskipped += appliedframes / speed[i].Multiplier;
+                    totalframesskipped += (float)Math.Ceiling(appliedframes / speed[i].Multiplier);
             }
 
-            return totalframesskipped;          
+            return (float)Math.Ceiling(totalframesskipped);          
         }
 
         public float GetFrameSpeedMulty(int frame)
@@ -305,8 +308,12 @@ namespace OnoEdit
 
                 if (i < speed.Count - 1)
                 {
-                    if (frame >= speed[i].EndFrame && frame <= speed[i + 1].StartFrame)
+                    if (frame > speed[i].EndFrame && frame < speed[i + 1].StartFrame)
                         return speed[i].Multiplier;
+
+                    if (frame == speed[i].StartFrame)
+                        return speed[i].Multiplier;
+
                 }
                 else
                 {

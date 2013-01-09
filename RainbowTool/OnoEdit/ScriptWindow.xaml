@@ -106,7 +106,7 @@
             	</Label.Effect>
             </Label>
         </StatusBar>
-            <local:OnoList SelectionChanged="ScriptSelectionChanged" x:Name="ListBox" DataContext="{Binding}" MinWidth="180" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1" />
+            <local:OnoList SelectionChanged="ScriptSelectionChanged" x:Name="ListBox" DataContext="{Binding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="1" />
         <TabControl Name="tabControl1" Padding="0" TabStripPlacement="Top" Grid.Column="1" SnapsToDevicePixels="True" shell:WindowChrome.IsHitTestVisibleInChrome="True" Margin="1,5,5,5">
             <TabItem Header="Header" SnapsToDevicePixels="True" DataContext="{Binding ElementName=ListBox,Path=SelectedValue}" Name="headerTab" shell:WindowChrome.IsHitTestVisibleInChrome="True">
                 <Grid>
