@@ -64,7 +64,27 @@
                 <Button x:Name="btnimp" IsEnabled="False" Visibility="Hidden">Import</Button>
                 <Button x:Name="btnexp" IsEnabled="False" Visibility="Hidden">Export</Button>
             </StackPanel>
-            <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" MinWidth="220" />
+            <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" MinWidth="220">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Copy" Click="CopyMenuItem">
+                            <MenuItem.Icon>
+                                <Image Source="/OnoEdit;component/Images/copy.png" MaxHeight="16" MaxWidth="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Paste" Click="PasteMenuItem">
+                            <MenuItem.Icon>
+                                <Image Source="/OnoEdit;component/Images/paste_plain.png" MaxHeight="16" MaxWidth="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Duplicate" Click="DupMenuItem">
+                            <MenuItem.Icon>
+                                <Image Source="/OnoEdit;component/Images/application_double.png" MaxWidth="16" MaxHeight="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
         </DockPanel>
         <GridSplitter Background="DarkGray" ResizeDirection="Columns" Grid.Column="1" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Width="5" />
         <GroupBox Header="Table Data" DataContext="{Binding Path=SelectedItem,ElementName=ListBox}" Grid.Column="2" BorderBrush="{x:Null}" Template="{DynamicResource GroupBoxControlTemplate}" Margin="-2,-2,-2,-5" >

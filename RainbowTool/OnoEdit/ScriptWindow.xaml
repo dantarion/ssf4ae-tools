@@ -145,7 +145,7 @@
                     <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding Path=UnknownFlags3}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Data" Name="dataTab" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+            <TabItem Header="Data" Name="dataTab" shell:WindowChrome.IsHitTestVisibleInChrome="True" IsSelected="True">
                 <DockPanel>
                     <GroupBox DockPanel.Dock="Left" Header="CommandList">
                         <ListBox Width="90" Name="ComboBox" ItemsSource="{Binding ElementName=ListBox,Path=SelectedValue.CommandLists}" DisplayMemberPath="Type" SelectedIndex="0" 

@@ -39,10 +39,9 @@ namespace OnoEdit
             + "Main Programming: Dantarion\nProgramming: Anotak, razor5070, Waterine\n"
             + "File format info:\nACCELERATOR, Anotak, Dantarion, Gojira, Error1, Illitirit, Piecemontee, Polarity,\nProvidenceangle, Sindor, Waterine, yeb, Zeipher\n"
             + "\nBug Reports:\nBebopfan, Comeback Mechanic, Error1, Mnszyk, Polarity, razor5070, yeb, Zeipher\n"
-            + "Special thanks:\nahfb, Banana Ken, combovid.com, Dandy J, hunterk (aemods.pbworks.com),\nsonichurricane.com, SSJ George Bush, xentax.com, Zandwich\n"
-            + "Google code: http://code.google.com/p/ssf4ae-tools/ \n"
+            + "Special thanks:\nahfb, Banana Ken, combovid.com, Dandy J, Eternal(Modding Wiki), hunterk (aemods.pbworks.com),\nsonichurricane.com, SSJ George Bush, xentax.com, Zandwich\n"
             + "IRC: #sf4-modding on irc.synirc.net\n"
-            + "If you contributed and Anotak missed your name when making this window,\nplease let him know on IRC or shoryuken.com, thank you.";
+            + "If you contributed and Anotak or razor5070 missed your name when making this window,\nplease let them know on IRC or shoryuken.com, thank you.";
             if (App.OpenedFiles.FilesOpened)
             {
                 // charges, input, moves, cancels, scripts, vfx scripts, hitbox table

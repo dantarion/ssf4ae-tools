@@ -34,6 +34,11 @@ namespace OnoEdit
             }
         }
 
+        public bool Allowdeleterows
+        {
+            set { myDataGrid.CanUserDeleteRows = value; }
+        }
+
         //Indent button when using aero style
         public double IndentInterActPanel
         {

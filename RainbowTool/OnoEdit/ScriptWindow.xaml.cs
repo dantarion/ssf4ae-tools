@@ -197,7 +197,7 @@ namespace OnoEdit
             get
             {
                 var hitboxcalc = GetHitboxFrameCalculations;
-                var peram = new Object[] {(int)hitboxcalc[0],(int)hitboxcalc[1],(int)hitboxcalc[2],(int)hitboxcalc[3]}; //round everything
+                var peram = new Object[] {(int)hitboxcalc[0],(int)hitboxcalc[1],(int)hitboxcalc[2],(int)hitboxcalc[3]};
 
                 return String.Format("Frames* -> Approx [ Start Up {0}, Active {1}, Recovery {2}, Total {3} ]",peram);
             }
@@ -246,13 +246,12 @@ namespace OnoEdit
 
                 float startup = 0f, active = 0f, recovery = 0f;
 
-                foreach (var itm in hitboxs)
+                foreach (var itm in hitboxs.Where(itm => itm.Type != HitboxCommand.HitboxType.PROXIMITY))
                 {
-                    if (itm.Type == HitboxCommand.HitboxType.PROXIMITY) continue;
                     active += (float)Math.Ceiling((itm.EndFrame - itm.StartFrame)/GetFrameSpeedMulty(itm.StartFrame));
 
                     if (startup == 0)
-                        startup = GetSpeedModifiedFramesUpTo(itm.StartFrame);
+                        startup = GetSpeedModifiedFramesUpTo(itm);
                 }
 
                 recovery = GetCalculatedFrames -((startup + active) - 1);
@@ -262,31 +261,54 @@ namespace OnoEdit
             }
         }
 
-        public float GetSpeedModifiedFramesUpTo(int frame)
+        public float GetSpeedModifiedFramesUpTo(HitboxCommand frame)
         {
-            var speed = (ObservableCollection<SpeedCommand>)Target.CommandLists[4];
+            var speed = (ObservableCollection<SpeedCommand>)Target.CommandLists[4];           
 
-            if (speed == null || speed.Count <= 0) return frame;
+            if (speed == null || speed.Count <= 0) return frame.StartFrame;
 
             var totalframesskipped = 0f;
 
             //check if first speed is after frame
-            if (speed[0].StartFrame > frame) return frame;
+            if (speed[0].StartFrame > frame.StartFrame) return frame.StartFrame;
 
             for (var i = 0; i < speed.Count; i++)
             {
-                var appliedframes = 0;               
+                var appliedframes = 0f;               
 
                 if (i < speed.Count - 1)
                 {
-                    if (speed[i].EndFrame > frame) continue;
+                    if (speed[i].StartFrame == frame.StartFrame)
+                    {
+                        appliedframes = speed[i].EndFrame - speed[i].StartFrame;
+                        goto CALC;
+                    }
+
+                    if (i > 0)
+                    {
+                        if (speed[i].EndFrame == frame.StartFrame)
+                        {
+                            appliedframes = frame.StartFrame - speed[i].StartFrame;
+                            goto CALC;
+                        }
+                    }
+
+                    if (speed[i].StartFrame > frame.StartFrame) continue;
                     appliedframes = speed[i + 1].StartFrame - speed[i].StartFrame;
                 }
                 else
                 {
-                    if (speed[speed.Count - 1].EndFrame > frame) continue;
-                    appliedframes = frame - speed[i].StartFrame;
+                    if (speed[speed.Count - 1].StartFrame == frame.StartFrame)
+                    {
+                        appliedframes = speed[speed.Count - 1].EndFrame - speed[speed.Count - 1].StartFrame;
+                        goto CALC;
+                    }
+
+                    if (speed[speed.Count - 1].EndFrame > frame.StartFrame) continue;
+                    appliedframes = frame.StartFrame - speed[i].StartFrame;
                 }              
+
+            CALC:
 
                 if (speed[i].Multiplier == 0)
                     totalframesskipped += appliedframes;

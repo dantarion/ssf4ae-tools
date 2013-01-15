@@ -35,6 +35,7 @@ namespace OnoEdit
             }
 
             odgrid.ShowCommandButtons = false;
+            odgrid.Allowdeleterows = false;
             this.Title = "Hitbox Tables - " + MainWindow.Opened;
             UserSettings.OnSettingsChanged += UserSettings_OnSettingsChanged;
             Microsoft.Windows.Shell.SystemParameters2.Current.PropertyChanged += CurrentPropertyChanged;
@@ -84,7 +85,7 @@ namespace OnoEdit
             Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
             App.OpenedFiles.BACFile.HitboxTable.Add(new HitBoxDataset(BACFile.LoadedHitBoxCount+1));
             Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
-
+            BACFile.LoadedHitBoxCount++;
             var dataset = App.OpenedFiles.BACFile.HitboxTable[App.OpenedFiles.BACFile.HitboxTable.Count-1];
 
             for (var j = 0; j < 12; j++)
@@ -125,6 +126,24 @@ namespace OnoEdit
 
         }
 
+        private void AddHB(object[] item)
+        {
+            //debug stuff
+            Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
+            App.OpenedFiles.BACFile.HitboxTable.Add(new HitBoxDataset(BACFile.LoadedHitBoxCount + 1));
+            Console.WriteLine(@"HitBox Count : " + App.OpenedFiles.BACFile.HitboxTable.Count);
+
+            BACFile.LoadedHitBoxCount++;
+
+            var dataset = App.OpenedFiles.BACFile.HitboxTable[App.OpenedFiles.BACFile.HitboxTable.Count - 1];
+
+            for (var j = 0; j < 12; j++)
+            {
+                dataset.Data.Add((HitBoxData)item[j]);
+            }
+
+        }
+
         private void RemoveHB(object sender, RoutedEventArgs e)
         {
 
@@ -151,6 +170,24 @@ namespace OnoEdit
             if (!UserSettings.CurrentSettings.WindowCollection[Name].IsMaximized) return;
             UserSettings.CurrentSettings.WindowCollection[Name].ThisLocation = RestoreBounds.Location;
             UserSettings.CurrentSettings.WindowCollection[Name].ThisSize = RestoreBounds.Size;
+        }
+
+
+        private Object[] BufferItem;
+
+        private void CopyMenuItem(object sender, RoutedEventArgs e)
+        {
+            BufferItem = ((HitBoxDataset)ListBox.SelectedItem).Data.ToArray();
+        }
+
+        private void DupMenuItem(object sender, RoutedEventArgs e)
+        {
+            AddHB(((HitBoxDataset) ListBox.SelectedItem).Data.ToArray());
+        }
+
+        private void PasteMenuItem(object sender, RoutedEventArgs e)
+        {
+            AddHB(BufferItem);
         }
 
     }
