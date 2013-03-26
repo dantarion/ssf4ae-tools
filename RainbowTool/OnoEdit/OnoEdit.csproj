@@ -99,6 +99,9 @@
     <Compile Include="Class\RecentFileList.cs" />
     <Compile Include="Class\UserSettings.cs" />
     <Compile Include="Class\Util.cs" />
+    <Compile Include="Controls\BoxMIndxSelect.xaml.cs">
+      <DependentUpon>BoxMIndxSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExButton.xaml.cs">
       <DependentUpon>ExButton.xaml</DependentUpon>
     </Compile>
@@ -131,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ChargeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BoxMIndxSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,6 +318,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\saveas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrowright.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -70,6 +70,12 @@
                             <Image Source="/OnoEdit;component/Images/movetobottom.png" MaxWidth="16" MaxHeight="16" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Move To Index" Click="MoveToIndex_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/OnoEdit;component/Images/arrowright.png" MaxWidth="16" MaxHeight="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

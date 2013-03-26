@@ -61,8 +61,8 @@
                     <TextBlock VerticalAlignment="Center">Remove</TextBlock>
                 </WrapPanel>            
 				</Button>
-                <Button x:Name="btnimp" IsEnabled="False" Visibility="Hidden">Import</Button>
-                <Button x:Name="btnexp" IsEnabled="False" Visibility="Hidden">Export</Button>
+                <Button x:Name="btnimp" IsEnabled="False" Visibility="Hidden" Click="btnimp_Click">Import</Button>
+                <Button x:Name="btnexp" IsEnabled="False" Visibility="Hidden" Click="btnexp_Click">Export</Button>
             </StackPanel>
             <ListBox Name="ListBox" ItemsSource="{Binding Path=BACFile.HitboxTable, Source={StaticResource OpenedFiles}}" SelectedIndex="0" MinWidth="220">
                 <ListBox.ContextMenu>

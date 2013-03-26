@@ -190,5 +190,15 @@ namespace OnoEdit
             AddHB(BufferItem);
         }
 
+        private void btnimp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnexp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

@@ -105,5 +105,19 @@ namespace OnoEdit
         {
             e.Accepted =  !e.Item.GetType().GetProperty("Name").GetValue(e.Item, null).Equals("NONE");
         }
+
+        private void MoveToIndex_Click(object sender, RoutedEventArgs e)
+        {
+            //App.OpenedFiles.BACFile.Scripts.Move(0,0);
+            var uiind = myDataGrid.SelectedIndex + 1;
+            var indwin = new Controls.BoxMIndxSelect(uiind);
+            indwin.ShowDialog();
+
+            if (!indwin.DialogResult == true) return;
+
+            var selind = indwin.NewIndex;
+
+            App.OpenedFiles.BACFile.Scripts[uiind].Index = selind;
+        }
     }
 }
