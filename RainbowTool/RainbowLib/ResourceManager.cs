@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using IronPython.Runtime;
 using System.ComponentModel;
 namespace RainbowLib
@@ -58,9 +59,21 @@ namespace RainbowLib
         {
             string baseDir = "../../../python_scripts/out/";
             if (!System.IO.Directory.Exists(baseDir))
-                baseDir = "data/";
+                baseDir = Application.StartupPath + "\\data\\";
             if (!System.IO.Directory.Exists(baseDir))
-                System.Windows.Forms.MessageBox.Show("Couldn't find data dir!!");
+            {
+              var result =  MessageBox.Show("Couldn't find data Directory!\nLocated at [ " + baseDir + " ]\n\nBrowse for folder manually?", "Ono! Edit",
+                                MessageBoxButtons.YesNo);
+
+              if (result == DialogResult.Yes)
+              {
+                  var ofd = new FolderBrowserDialog {Description = "Ono! Edit Data Directory"};
+
+                  var res = ofd.ShowDialog();
+
+                  if (res == DialogResult.OK) baseDir = ofd.SelectedPath;
+              }
+            }
             IronPythonHelper.Reset();
             _data["VFX"] = initDictionary();
             _data["VFX2"] = initDictionary();
